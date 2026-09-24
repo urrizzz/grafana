@@ -40,7 +40,9 @@ carrier. `instance`, `name`, `ifName`, `ifAlias`, `ifDescr`, and `ifIndex` are l
 The synthetic `ifMetadata` carrier is not a standard IF-MIB metric. Source mappings will eventually
 allow different production representations. Descriptions and aliases are strings, not numeric gauges.
 
-Counters integrate repeatable minute-by-minute traffic profiles in octets; they are not instantaneous rates.
+Counters integrate seeded irregular minute-by-minute profiles in octets: variable loads, quiet periods and
+bursts, independently seeded per channel and direction. Profiles repeat after seven days, not hourly.
+They remain deterministic so live scrapes and generated history agree; they are not instantaneous rates.
 DOWN counters stop increasing. Missing data is omitted, not emitted as zero. Restarting with the same
 persisted anchor preserves the scenario and counter model. Historical gaps and reset events age naturally;
 stop the exporter and supply a new `--anchor` to both serving and history commands to replay them.
@@ -85,3 +87,6 @@ VictoriaMetrics instance and its data-source plugin. Canvas integration remains 
 The initial development run was started in a hidden process. Its PID is recorded in
 `data/mock-exporter.pid`; stdout/stderr logs are in the same ignored directory. Verify the PID still
 belongs to this exporter before stopping it. The exporter does not start automatically after a PC restart.
+
+Changing the mock generator model changes synthetic counter values. Regenerate fixtures and use a clean
+development database when switching models to avoid mixing counter histories. No history is imported automatically.

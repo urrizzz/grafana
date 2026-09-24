@@ -2,6 +2,10 @@
 import argparse
 import json
 import math
+import random
+import hashlib
+from functools import lru_cache
+from itertools import accumulate
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -38,25 +42,47 @@ def labels(case):
                 job="cisco-mock")
 
 
+PROFILE_MINUTES = 7 * 24 * 60
+
+
+@lru_cache(maxsize=32)
 def rate_profile(case, outgoing=False):
-    """A repeatable hourly profile of 60 piecewise-constant minute rates."""
+    """Seeded week-long minute profile: irregular loads, quiet periods and bursts."""
     if case[3] == "zero":
-        return [0] * 60
+        return (0,) * PROFILE_MINUTES
+    seed = hashlib.sha256((repr(case) + str(outgoing)).encode()).digest()
+    rng = random.Random(int.from_bytes(seed[:8], "big"))
     capacity = case[4] * 1_000_000
-    return [int(capacity * ((0.07 if outgoing else 0.2) +
-            (0.04 if outgoing else 0.12) * (1 + math.sin(i * math.tau / 60 +
-             (1.7 if outgoing else 0))) / 2)) for i in range(60)]
+    profile = []
+    while len(profile) < PROFILE_MINUTES:
+        level = rng.uniform(0.015, 0.16 if outgoing else 0.35)
+        if rng.random() < 0.18:
+            level *= 0.08
+        for _ in range(rng.randint(3, 45)):
+            load = level * rng.uniform(0.55, 1.45)
+            if rng.random() < 0.055:
+                load += rng.uniform(0.12, 0.5)
+            # Even integer bit/s gives exact octets for whole-minute integration.
+            profile.append(int(min(0.92, load) * capacity / 2) * 2)
+            if len(profile) == PROFILE_MINUTES:
+                break
+    return tuple(profile)
+
+
+@lru_cache(maxsize=32)
+def cumulative_profile(case, outgoing=False):
+    return tuple(accumulate(rate_profile(case, outgoing), initial=0))
 
 
 def integrated_octets(case, start, end, outgoing=False):
-    """Exact integral of the minute profile; counters do not depend on scrape frequency."""
+    """Counter integral independent of scrape count, including week boundaries."""
     profile = rate_profile(case, outgoing)
+    prefix = cumulative_profile(case, outgoing)
     def primitive(t):
         minute = math.floor(t / 60)
-        cycles, index = divmod(minute, 60)
-        return (cycles * sum(profile) * 60 + sum(profile[:index]) * 60 +
-                profile[index] * (t - minute * 60)) / 8
-    return max(0, int(primitive(end) - primitive(start)))
+        cycles, index = divmod(minute, PROFILE_MINUTES)
+        return (cycles * prefix[-1] + prefix[index]) * 60 + profile[index] * (t - minute * 60)
+    return max(0, int((primitive(end) - primitive(start)) / 8))
 
 
 def samples(timestamp, anchor):

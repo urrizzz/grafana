@@ -19,12 +19,24 @@ class MockTests(unittest.TestCase):
 
     def test_counters_grow_and_octets_convert_to_expected_rate(self):
         case = CASES[1]
-        from mock_metrics import integrated_octets, rate_profile
+        from mock_metrics import integrated_octets, rate_profile, PROFILE_MINUTES
         start = ANCHOR
         self.assertEqual(integrated_octets(case, start, start + 60) * 8 / 60,
-                         rate_profile(case)[(start // 60) % 60])
+                         rate_profile(case)[(start // 60) % PROFILE_MINUTES])
         self.assertGreater(values(ANCHOR + 60, "up")["ifHCInOctets"],
                            values(ANCHOR, "up")["ifHCInOctets"])
+
+    def test_irregular_repeatable_profiles_and_boundary_integral(self):
+        from mock_metrics import rate_profile, integrated_octets, PROFILE_MINUTES
+        a, b = rate_profile(CASES[1]), rate_profile(CASES[1], True)
+        self.assertEqual(a, rate_profile(CASES[1]))
+        self.assertNotEqual(a[:60], a[60:120])
+        self.assertNotEqual(a[:1440], a[1440:2880])
+        self.assertNotEqual(a, b)
+        self.assertNotEqual(a, rate_profile(CASES[2]))
+        boundary = PROFILE_MINUTES * 60
+        expected = (a[-1] + a[0]) * 60 // 8
+        self.assertEqual(integrated_octets(CASES[1], boundary-60, boundary+60), expected)
 
     def test_down_preserves_historical_counters(self):
         self.assertEqual(values(ANCHOR, "down")["ifOperStatus"], 2)

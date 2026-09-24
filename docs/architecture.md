@@ -58,7 +58,7 @@ Data from one element must never leak into another. Verify reload/duplication pr
 
 ## Rendering and configuration requirements
 
-Implement proportional scaling within the component, including typography, margins, indicators, axes, bars,
+Implement proportional scaling within the component, including traffic typography, margins, axes, bars,
 and overlays. Do not leave labels or padding at fixed screen-pixel sizes while only the plot shrinks.
 Keep the visual hierarchy, text alignment, and shared IN/OUT geometry consistent at different sizes.
 
@@ -90,3 +90,11 @@ Use SVG or another supported rendering primitive with blue/purple bars and foreg
 specification illustration, not an embeddable runtime implementation. No tooltips are required.
 Benchmark multiple elements at 12-24 hours (up to 576 bars per element at 24 hours) and longer user-selected ranges.
 A seven-day hard limit and a fixed minimum size are not confirmed requirements.
+
+## Revised compact layout
+
+The primary traffic area is 120 x 70 CSS pixels. Design readable IN/OUT values at that native size
+and scale upward proportionally. Put identity fields, status and capacity in a separate block to its right,
+with readable independent typography. The block consumes additional space. This supersedes whole-card
+downscaling and metadata/status/capacity overlays inside the graph. Keep the blocks bound to the same
+interface; validate placement and lifecycle together in the eventual Canvas integration.

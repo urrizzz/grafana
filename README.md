@@ -15,19 +15,19 @@ Each display has its own router/interface selection and can be positioned and re
 - Prometheus collects every **60 seconds** and forwards metrics to VictoriaMetrics.
 - Grafana uses the **VictoriaMetrics data source plugin**.
 - Each Canvas traffic display selects `instance` and `ifName`, using fixed values or dashboard variables.
-- Show `ifName`, `ifAlias`, and `ifDescr` by default. Router `instance` and `name` are hidden by default.
+- Put `ifName`, `ifAlias`, `ifDescr`, status and capacity in an information block to the right of the graph. Router fields stay hidden by default.
 - Source metric/label mappings and individual identity-field visibility are configurable.
 - Capacity comes from `ifHighSpeed`, expressed in Mbit/s at the source.
 - Incoming blue bars rise above the middle; outgoing purple bars extend below it.
 - Bars represent five-minute average bit rates, using one symmetric scale based on visible traffic.
 - Text overlays the graph. Central IN/OUT values are five-minute averages at the dashboard range end.
 - Follow dashboard time range and refresh; typical history is 12-24 hours.
-- Top-left status circle and label: green UP, red DOWN, gray UNKNOWN (including stale status).
+- Right-hand status circle and label: green UP, red DOWN, gray UNKNOWN (including stale status).
 - DOWN retains history, adds a red middle line, and shows dashes for central values.
 - UNKNOWN retains history and shows dashes for central values.
 - Display information directly; no tooltips.
-- Scale the entire component proportionally, including fonts, spacing, status circle, bars, and axes.
-- Preserve the layout in a very small space; avoid fixed-size text crowding the component.
+- Design the traffic area at **120 x 70 pixels**, with readable IN/OUT values; scale it proportionally upward.
+- Keep channel details outside that traffic area; the right-hand block takes additional space.
 - Configure through normal settings; dashboard authors do not write or paste scripts.
 
 ## Documentation

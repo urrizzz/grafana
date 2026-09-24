@@ -30,8 +30,8 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
 3. **Prove queries.** Independently select multiple channels, interpolate variables, customize mappings, and follow
    dashboard range/refresh. Validate 300-second history, current rates, resets, freshness, cancellation, and error handling.
 4. **Implement visualization.** Design for very small placement from the start. Scale the full component,
-   including fonts, spacing, status circle, bars, axes and overlays, while preserving relative layout.
-   Include blue/purple mirrored bars, symmetric autoscale, capacity, top-left state, retained history,
+   including traffic fonts, spacing, bars, axes and overlays, while preserving relative layout.
+   Include blue/purple mirrored bars, symmetric autoscale, capacity, right-hand state, retained history,
    red DOWN line, and central dashes for DOWN/UNKNOWN. No tooltips or dashboard-author scripts.
    Expose ordinary settings for selectors, mappings and visibility; no per-size font tuning is required.
 5. **Validate and package.** Execute the acceptance criteria on Grafana 13.2.2, test multiple 12-24-hour elements,
@@ -45,3 +45,11 @@ Canvas integration, and do not deploy a core modification without an explicit de
 
 Validate local Markdown links, SVG XML, consistency with confirmed decisions, encryption of changed files,
 and `git diff --check`. Mock exporter tests cover counter behavior and history consistency; visualization and Canvas integration tests remain pending.
+
+## Revised compact layout
+
+The primary traffic area is 120 x 70 CSS pixels. Design readable IN/OUT values at that native size
+and scale upward proportionally. Put identity fields, status and capacity in a separate block to its right,
+with readable independent typography. The block consumes additional space. This supersedes whole-card
+downscaling and metadata/status/capacity overlays inside the graph. Keep the blocks bound to the same
+interface; validate placement and lifecycle together in the eventual Canvas integration.

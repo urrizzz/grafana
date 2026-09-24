@@ -13,7 +13,8 @@ empty values, multi-select/All variables, and duplicate matches is an explicit c
 Do not aggregate different interfaces or choose an arbitrary first match.
 
 Use the dashboard time range, time zone, and refresh interval. Normal viewing is **12-24 hours**.
-There is no confirmed hard range limit or minimum display size. Determine practical limits through testing;
+The primary traffic area is **120 x 70 CSS pixels**, excluding the information block on its right.
+There is no confirmed hard range limit or minimum size below this target. Determine practical limits through testing;
 do not silently replace five-minute bars with coarser intervals.
 
 ## Configurable fields
@@ -38,8 +39,9 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 
 ## Layout
 
-- Keep the circle and UP/DOWN/UNKNOWN word in the top-left corner.
-- Show enabled identity fields and capacity directly in the display, above the background bars.
+- Place the status circle and UP/DOWN/UNKNOWN label in the information block to the right of the traffic area.
+- Move all enabled channel/router identity fields and capacity into that right-hand block, outside the graph.
+- Keep only the traffic graph, IN/OUT rates and their axis/direction labels inside the 120 x 70 traffic area.
 - Incoming traffic is **blue**, occupies the upper half, and grows upward.
 - Outgoing traffic is **purple**, occupies the lower half, and grows downward.
 - Center the current IN and OUT values within their respective plot halves.
@@ -52,24 +54,23 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 No hover tooltips are requested. Identity, rates, status, units, and time context must be available directly.
 Text must have clear contrast over bars in light and dark themes. Status also has a word, not only a color.
 
-The [interactive wireframe](assets/scalable-wireframe.html) illustrates the proposed layout at several sizes
-and in UP/DOWN/UNKNOWN states. Its 360 x 210 reference proportion and typography are design proposals,
-not approved minimum dimensions. It is a self-contained design preview, not a running Grafana component.
+The [interactive wireframe](assets/scalable-wireframe.html) shows the revised split layout at native size.
+The older combined-header illustration and community comparison are superseded layout explorations.
 
-## Proportional scaling and compact use
+## Compact size and scaling
 
-Very small placement is a primary requirement. Scale the **entire component together**: channel metadata,
-capacity, IN/OUT values, status label and circle, font sizes, spacing, margins, bars, axes, and axis labels.
-Preserve relative positions and the visual hierarchy as the component shrinks or grows. Fixed-size fonts
-or padding must not consume the chart area and cause crowding, clipping, or overlap when resized smaller.
-Do not require manual font adjustments for each size or replace the visualization with a resize warning
-solely because it has been made small. Keep enabled content in the layout; size alone must not hide fields.
+Design the traffic area at **120 x 70 CSS pixels first**, with readable current rates at normal browser zoom.
+Do not achieve that size by shrinking a larger design until its fonts become unreadable. The revised wireframe
+proposes 11.5 px central values, 8 px direction labels and 7 px axes; exact typography remains for visual review.
+Scale the traffic area proportionally when enlarging it, including typography, spacing, bars and axes.
+Do not introduce overlap, distorted glyphs, or per-size font adjustments by the dashboard author.
 
-Text will naturally become harder to read at very small physical sizes. Proportional scaling preserves
-alignment and composition; it does not guarantee readability at arbitrarily small dimensions.
-No exact minimum size or aspect ratio has been selected. Non-proportional width/height changes and unusually
-long metadata need visual validation; they must not distort glyphs or cause content to collide.
-The earlier proposed resize-hint fallback is superseded by proportional scaling as the normal resize behavior.
+The right-hand information block contains ifName, ifAlias, ifDescr, status and capacity. Router fields remain
+optional and hidden by default. This block uses additional space: 120 x 70 describes the traffic area only.
+Its typography must remain readable independently of the graph size. Exact information-block width and
+wrapping are proposed layout details, not fixed requirements. Enabled fields must not silently disappear.
+There is no promised readability below the primary size. Validate long metadata and arbitrary resize proportions.
+No tooltips or dashboard-author rendering scripts are required.
 
 ## Configuration without author-written scripts
 
@@ -98,7 +99,7 @@ At 12 hours there are up to 144 complete buckets per direction; at 24 hours, up 
 
 ## State behavior
 
-| Range-end state | Top-left indicator | Historical bars | Central IN/OUT | Middle line |
+| Range-end state | Indicator in right-hand block | Historical bars | Central IN/OUT | Middle line |
 | --- | --- | --- | --- | --- |
 | Fresh UP | Green circle + UP | Available history remains | Valid five-minute averages | Neutral |
 | Fresh DOWN | Red circle + DOWN | Available history remains | Dashes | Red |

@@ -6,7 +6,9 @@ Each display has its own router/interface selection and can be positioned and re
 **Target:** Grafana **13.2.2**. **Status:** requirements, design, and runnable mock metrics; no traffic visualization plugin yet.
 **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Changes remain local at the owner's request.
 
-![UP, DOWN, and UNKNOWN traffic displays](docs/assets/panel-wireframe.svg)
+![Proposed scalable traffic component](docs/assets/compact-component.svg)
+
+[Open the interactive scaling wireframe](docs/assets/scalable-wireframe.html) to compare sizes and states.
 
 ## Confirmed behavior
 

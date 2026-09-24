@@ -52,6 +52,10 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 No hover tooltips are requested. Identity, rates, status, units, and time context must be available directly.
 Text must have clear contrast over bars in light and dark themes. Status also has a word, not only a color.
 
+The [interactive wireframe](assets/scalable-wireframe.html) illustrates the proposed layout at several sizes
+and in UP/DOWN/UNKNOWN states. Its 360 x 210 reference proportion and typography are design proposals,
+not approved minimum dimensions. It is a self-contained design preview, not a running Grafana component.
+
 ## Proportional scaling and compact use
 
 Very small placement is a primary requirement. Scale the **entire component together**: channel metadata,

@@ -1,41 +1,41 @@
 # Acceptance criteria
 
-These are tests to implement in the next phase, not tests that have already passed.
-Proposed defaults remain subject to the [decision log](decisions.md).
+These are future implementation checks, not tests already passed. Canvas feasibility must be resolved first.
 
 | ID | Scenario | Expected result |
 | --- | --- | --- |
-| AC-01 | Select one instance and ifName | Only that interface's data is displayed |
-| AC-02 | Change either identifier during an in-flight query | Old responses cannot overwrite the new selection |
-| AC-03 | Missing selector, multi-value variable, or duplicate match | Explicit configuration/ambiguity state; no aggregation |
-| AC-04 | ifDescr is available | Header displays ifDescr, including safe handling of special characters |
-| AC-05 | ifDescr missing | ifName appears as a documented fallback; long text remains readable via tooltip |
-| AC-06 | Fresh operational UP | Green circle and UP label appear |
-| AC-07 | Fresh confirmed non-UP status | Red DOWN label, original state in tooltip, no traffic background or numeric rates |
-| AC-08 | Missing/unknown/stale status or query error | Neutral state distinct from DOWN; no falsely fresh values |
-| AC-09 | Capacity metric or override available | Correct positive capacity and decimal bit/s unit; override provenance is visible |
-| AC-10 | Capacity unavailable or unreliable | Unknown capacity; valid traffic is still usable |
-| AC-11 | Equal IN/OUT values | Equal bar heights in opposite halves of the same scale |
-| AC-12 | Different incoming/outgoing values | IN is above zero, OUT below; labels and tooltips remain positive |
-| AC-13 | Five-minute windows | Every full bar covers 300 seconds; no silent coarser aggregation |
-| AC-14 | Latest range-end averages | IN/OUT values are centered in their own halves and show the correct evaluation window |
-| AC-15 | Non-aligned range end | Complete bars stay aligned; newer current values have accurate timestamps |
-| AC-16 | 1,000 octets/s input rate | Displayed rate equals 8,000 bit/s (8 kbit/s) |
-| AC-17 | kbit/Mbit/Gbit boundaries and large capacity | Decimal scaling, limited precision, and stable axis labels |
-| AC-18 | All-zero valid traffic | Show 0 bit/s and a valid scale, not a no-data state |
-| AC-19 | Missing direction, missing bucket, or long scrape gap | Missing values remain gaps/“—”; no artificial zeros or connections |
-| AC-20 | Counter reset/discontinuity | No false traffic spike; affected windows follow the quality policy |
-| AC-21 | Traffic above reported capacity | Axis expands to contain traffic; capacity remains a separate value |
-| AC-22 | Historical time range | Values and freshness refer to range end and use the dashboard time zone for labels |
-| AC-23 | Compact and larger panels in light/dark themes | Text remains above bars, axes stay sparse, and content does not overlap |
-| AC-24 | Range exceeds the supported bucket budget | Explain the limit without silently changing the five-minute interval |
-| AC-25 | Grafana 13.2.2 integration | Plugin loads, options work, refresh updates data, and unmount cleans up requests |
+| AC-01 | Host integration | Traffic display operates inside the built-in Canvas on Grafana 13.2.2 |
+| AC-02 | Multiple displays | Each retains independent instance/ifName settings and data |
+| AC-03 | Fixed selectors or dashboard variables | Both work, including changes during in-flight requests |
+| AC-04 | Empty/ambiguous selection | Clear configuration state; no arbitrary channel selection or aggregation |
+| AC-05 | Default metadata visibility | ifName, ifAlias, ifDescr visible; router instance/name hidden |
+| AC-06 | Mapping/visibility changes | Custom source names and individual field visibility work without code edits |
+| AC-07 | Metadata safety and missing fields | Text is safe; missing enabled fields are explicit; no hover required |
+| AC-08 | Capacity value 100 | ifHighSpeed displays 100 Mbit/s; no manual override or ifSpeed fallback assumed |
+| AC-09 | Missing capacity | Explicit unknown capacity; history remains usable |
+| AC-10 | Fresh UP | Green circle and UP in top-left; valid current rates visible |
+| AC-11 | Fresh DOWN | Red circle and DOWN in top-left, red middle line, both current values dashes; history retained |
+| AC-12 | Missing/stale/unknown status | Gray circle and UNKNOWN, current dashes, history retained; no red DOWN line |
+| AC-13 | Status changes | DOWN/UNKNOWN do not clear history or replace it with zero |
+| AC-14 | Direction and color | Blue IN upward; purple OUT downward; text remains above bars |
+| AC-15 | Equal rates | Equal magnitude produces equal heights above/below zero |
+| AC-16 | Autoscale | Same scale in both halves based on visible traffic, independent of capacity |
+| AC-17 | Rates and units | Five-minute averages in decimal bit units; 1,000 octets/s becomes 8 kbit/s |
+| AC-18 | Historical range | Central averages evaluated at range end; visible time labels use dashboard zone |
+| AC-19 | History resolution | Five-minute intervals preserved; no silent coarsening |
+| AC-20 | Missing traffic/reset | Gaps/dashes, no fabricated zeros or reset spikes; zero remains valid traffic |
+| AC-21 | No tooltips | Required fields/rates/time context directly visible without hover |
+| AC-22 | Placement and resize | Element moves/resizes inside Canvas; plot/text adapt; settings persist on reload |
+| AC-23 | Dashboard refresh | Data follows dashboard refresh with no independent timer or accumulating subscriptions |
+| AC-24 | Real backend | Works through the VictoriaMetrics data-source plugin with 60-second collected data |
+| AC-25 | Normal history load | Multiple elements remain readable and responsive over 12-24 hours |
+| AC-26 | Query failure | Visible error/staleness; no false DOWN state or cross-interface cached data |
+| AC-27 | Themes and accessibility | Foreground is legible, status has words, and colors preserve IN/OUT distinction |
 
-## Test layers
+## Validation layers
 
-1. Unit tests for units, capacity precedence, status mapping, alignment, shared scale, missing values, and validation.
-2. Query-adapter tests using synthetic data frames, timestamps, duplicates, failures, and cancellation.
-3. Browser tests for the compact panel, option changes, UP/DOWN/UNKNOWN states, and themes on Grafana 13.2.2.
-4. A controlled integration check with sanitized production-shaped port/tunnel samples after the metric contract is confirmed.
-
-A release must include meaningful tests of the traffic implementation; a scaffold that merely starts or has no unit tests is not sufficient.
+First prove the Canvas host and VictoriaMetrics query contracts on the target installation.
+Then test pure rate/axis/unit/state logic, query cancellation and data isolation, and browser-level Canvas interactions.
+Use synthetic counter fixtures for normal rates, resets, missing samples, and state transitions; supplement them
+with sanitized production-shaped port/tunnel samples. Validate 12-24 hours and multiple independent elements.
+Documentation checks do not constitute plugin compatibility or implementation tests.

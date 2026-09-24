@@ -1,116 +1,96 @@
 # Metrics and query contract
 
-**Integration status:** Prometheus plus `snmp_exporter` is a draft assumption. Confirm the actual data source
-and metric samples before implementing queries. The names below are examples, not a claim about production.
+## Confirmed pipeline
 
-## Interface identity
+Cisco IF-MIB -> existing collection pipeline -> Prometheus -> VictoriaMetrics ->
+**VictoriaMetrics Grafana data source plugin** -> Canvas traffic display.
+Prometheus collects every **60 seconds**. The exact collector/exporter is not confirmed; do not assume snmp_exporter.
+VictoriaMetrics is the query engine; a Prometheus-compatible query is not evidence of identical evaluation semantics.
 
-The logical key is the selected `instance` plus `ifName`, within the configured data source and any disambiguating labels.
-Resolve a unique interface, then use its `ifIndex` for joins when metadata and counter series have different labels.
-Do not treat `ifIndex` as a permanent identity across a router restart. Never sum duplicate devices or pick a random series.
+## Selection and mappings
 
-Prometheus exporters may expose textual IF-MIB objects as labels on numeric metrics. Configure and verify
-lookups for the fields needed by the panel; a string description is not inherently a numeric Prometheus sample.
-See the [snmp_exporter generator documentation](https://github.com/prometheus/snmp_exporter/blob/main/generator/README.md).
+Each display has its own fixed/variable `instance` and `ifName`. Router `instance` and `name` are labels
+attached by Prometheus. Channel fields are `ifName`, `ifAlias`, and `ifDescr`.
+The user confirmed the standard names and wants configurable source names and field visibility.
+A sample with full labels is still needed to establish how channel metadata joins to the counters.
 
-## Source fields
+| Logical role | Default source name | Meaning |
+| --- | --- | --- |
+| Router identity | `instance` | Router label; hidden by default |
+| Router name | `name` | Router label; hidden by default |
+| Channel selection/name | `ifName` | Selected channel; visible by default |
+| Channel alias | `ifAlias` | Visible by default |
+| Channel description | `ifDescr` | Visible by default |
+| Operational status | `ifOperStatus` | IF-MIB state code |
+| Capacity | `ifHighSpeed` | Millions of bit/s; multiply by 1,000,000 |
+| Incoming counter | `ifHCInOctets` | Cumulative 64-bit incoming octets |
+| Outgoing counter | `ifHCOutOctets` | Cumulative 64-bit outgoing octets |
 
-| Source | Meaning / conversion |
-| --- | --- |
-| `ifName` | Interface selection name |
-| `ifDescr` | Description displayed as the title |
-| `ifOperStatus` | Operational-state enumeration |
-| `ifHighSpeed` | Capacity estimate in millions of bit/s; multiply by 1,000,000 |
-| `ifSpeed` | Capacity estimate in bit/s; saturated maximum is not a usable high-speed capacity |
-| `ifHCInOctets`, `ifHCOutOctets` | Preferred 64-bit incoming/outgoing octet counters |
-| `ifInOctets`, `ifOutOctets` | 32-bit counter fallback only after validating wrap risk |
-| `ifCounterDiscontinuityTime` | Signal that interface counters experienced a discontinuity |
+IF-MIB object definitions: [RFC 2863](https://www.rfc-editor.org/rfc/rfc2863.html).
+Descriptions/aliases may be labels on a numeric metadata series rather than independently queryable numeric metrics.
+Support explicit field mapping after inspecting the exported shape; do not invent numeric string metrics.
+Preserve router identity and any required job/site labels when joining. If needed, resolve `ifIndex` for joins;
+it must not be treated as a permanent identity across restarts. Ambiguous matches must not be silently summed.
+Validate configurable metric identifiers and escape selector values; display metadata as text, never executable HTML.
 
-These IF-MIB definitions come from [RFC 2863](https://www.rfc-editor.org/rfc/rfc2863.html).
-Capacity selection for this panel is: configured positive override, positive `ifHighSpeed`, valid positive
-`ifSpeed`, otherwise unknown. Interface-reported speed is an estimate, not proof of a tunnel's end-to-end throughput.
+Capacity uses the mapped `ifHighSpeed` only. A positive source value of 100 means 100 Mbit/s.
+Missing, invalid, or zero capacity is proposed to display as unknown, not to trigger an unrequested fallback.
+Reported capacity does not determine the plotted Y limit. Real traffic can exceed the device's estimate.
 
-## Proposed status mapping
+## Five-minute averages
 
-| `ifOperStatus` | Panel state |
-| --- | --- |
-| 1: up | UP, green |
-| 2: down; 3: testing; 5: dormant; 6: notPresent; 7: lowerLayerDown | DOWN, red; preserve the original state in the tooltip |
-| 4: unknown; missing; unrecognized value | UNKNOWN, gray |
-
-The enum meanings are from RFC 2863; collapsing known non-UP states into the red badge is a panel design decision.
-Collector availability alone does not establish interface operational status.
-
-## Five-minute traffic rates
-
-Draft interpretation: one five-minute **average bit rate**, not total transferred bits and not peak rate.
-Use the original octet counters and calculate rates in the data source, before rendering.
-
-Illustrative PromQL for one router/interface:
+Illustrative expressions, assuming `instance` and `ifName` exist on counter series:
 
 ```promql
 8 * rate(ifHCInOctets{instance="router-a.example:161", ifName="Tunnel10"}[5m])
 8 * rate(ifHCOutOctets{instance="router-a.example:161", ifName="Tunnel10"}[5m])
 ```
 
-`rate` produces an average per-second counter rate and adjusts for counter resets;
-it also extrapolates to range boundaries. It is not an exact packet-accounting total.
-See [Prometheus rate documentation](https://prometheus.io/docs/prometheus/latest/querying/functions/#rate).
-The factor 8 converts octets/s to bit/s. Do not apply `rate` to an already-derived bit/s gauge.
-Do not use `irate` for the requested five-minute average.
+Metric and label identifiers must come from the configured mappings. The factor 8 converts octets/s to bit/s.
+Use a five-minute average counter rate, not peak, `irate`, transferred-byte totals, or a rate of an already-derived gauge.
+Validate VictoriaMetrics rate-window, reset, missing-data, and query-step behavior against known synthetic counters.
+Do not claim Prometheus extrapolation rules describe VictoriaMetrics without a backend-specific check.
 
-These selectors assume `ifName` is present on both counters. If it is only in a metadata series,
-first resolve the interface index and query/join with that index. Preserve router and other identifying labels.
-Selector values must be correctly escaped as label literals; raw panel text must not be pasted into PromQL.
+Proposed bucket algorithm for dashboard range `[T0, T1]` in epoch seconds:
 
-For a historical range `[T0, T1]`:
+1. First complete bucket endpoint: `ceil((T0 + 300) / 300) * 300`.
+2. Last complete endpoint: `floor(T1 / 300) * 300`.
+3. Evaluate five-minute rates every 300 seconds; draw each interval `(endpoint - 300, endpoint]`.
+4. Evaluate current IN/OUT separately at `T1`, over the five minutes ending there.
+5. Format visible time labels in the dashboard time zone; keep a visible current-window caption.
 
-1. Complete bar end times are multiples of 300 seconds since the Unix epoch.
-2. The first complete bar ends at `ceil((T0 + 300) / 300) * 300`; the last ends at `floor(T1 / 300) * 300`.
-3. Evaluate each counter's `rate(...[5m])` at those endpoints with a 300-second query step.
-4. Draw a bar over the interval `(endpoint - 300 seconds, endpoint]`.
-5. Evaluate the same five-minute expression separately at `T1` for the central current values.
+If there are no complete bars, show a short visible range hint; a valid current value may still be shown when UP.
+Never relabel coarser returned samples as five-minute buckets. The data-source request must preserve 300-second resolution.
+Refresh follows the dashboard; the collector's 60-second interval is not an independent UI refresh timer.
 
-If there is no complete five-minute bucket in the selected range, show a “Range too short for complete bars”
-hint; a valid current five-minute value can still be displayed. Do not silently widen the selected chart range.
-If Grafana or the data source returns a coarser step than 300 seconds, report that the five-minute resolution
-is unavailable instead of labeling coarser samples as five-minute buckets.
+## Status and quality
 
-## Data quality
+Proposed raw-state mapping, subject to fixtures: 1 = UP; 2/3/5/6/7 = DOWN; 4, missing, or invalid = UNKNOWN.
+These codes include non-UP IF-MIB states such as testing/dormant, so the raw distinction can be exposed as a
+visible diagnostic if needed. No tooltip is required. Missing or stale status maps to UNKNOWN, never inferred DOWN.
+DOWN/UNKNOWN show central dashes but do not suppress available history. DOWN alone adds the red middle line.
 
-- A counter rate requires enough valid samples in the window; unavailable results are missing, not zero.
-- A long scrape gap must not become a fabricated zero or a bar bridging the missing interval.
-- Proposed coverage rule: use a configured expected scrape interval `S` (must be <=150 seconds),
-  require at least two samples and 80% of `floor(300/S)` expected samples per rate window,
-  and require a recent source sample. Confirm the production scrape interval before implementing this gate.
-- Proposed freshness threshold: `max(3*S, 120 seconds)`, configurable. Compare source-sample time to `T1`.
-  Query-result evaluation time is not proof that the underlying sample is fresh.
-- Query a companion source timestamp (for example `timestamp(ifOperStatus{...})`) when the data source's
-  lookback behavior could otherwise make an old gauge appear current.
-- An observed counter discontinuity should invalidate its affected bucket when that metadata is available.
-  A reset-adjusted result alone is not evidence of uninterrupted observations.
-- Never use negative or non-finite values as traffic. Keep a gap and expose a quality hint.
-- Do not combine a 32-bit counter with a 64-bit counter for the same direction. The MVP should report
-  unsupported/missing counters unless a safe 32-bit fallback has been explicitly validated.
+Proposed quality defaults (engineering policies, not user-confirmed thresholds):
 
-Coverage and freshness are panel policies proposed for review, not guarantees made by Prometheus.
+- With a 60-second scrape, require at least four valid samples in a five-minute window and fresh source data.
+- Treat a status source sample older than 180 seconds relative to range end as stale.
+- Inspect real source timestamps; evaluation timestamps can conceal stale observations.
+- Reject negative/non-finite rates and preserve missing windows as gaps rather than zero.
+- Validate counter resets/discontinuities. Use optional discontinuity metadata when present; do not invent it.
+- Do not silently switch to 32-bit counters or fabricate data across long scrape gaps.
 
-## Normalized data passed to the renderer
+Exact sample coverage and freshness checks require testing against VictoriaMetrics and the installed data-source plugin.
+A stale status does not make otherwise valid historical traffic disappear.
 
-| Field | Contract |
-| --- | --- |
-| `identity` | Resolved data-source UID, instance, ifName, and optional ifIndex |
-| `description` | ifDescr or an explicitly marked ifName fallback |
-| `status` | Display state, raw operational code, and source-sample timestamp |
-| `capacityBps` | Positive number or null, with reported/configured provenance |
-| `history` | Ordered five-minute buckets with end time and nullable nonnegative IN/OUT bit/s |
-| `current` | Nullable IN/OUT five-minute bit/s, evaluation time, and source freshness |
-| `quality` | Query errors, ambiguity, missing series, stale fields, and coverage gaps |
+## Renderer contract
 
-Formatting and graph inversion belong to the renderer. Normalized data always keeps rates in bit/s.
+Pass resolved identity, enabled metadata values, normalized state, nullable capacity in bit/s, positive-or-zero
+IN/OUT history, current rates with their evaluation window, and per-field quality into the renderer.
+Keep both directions nonnegative in the model; only OUT drawing coordinates are inverted.
+Include enough visible quality information to distinguish zero, missing, stale, and failed queries without hover.
 
-## Information needed from production
+## Remaining technical evidence
 
-Provide sanitized examples for one port and one tunnel: status, both counters, speed fields, and metadata
-carrying `ifName`, `ifDescr`, and `ifIndex`. Include the data-source type, scrape interval, label names,
-and whether the same instance/interface can appear under multiple jobs. Do not include SNMP secrets or tokens.
+Inspect one sanitized port and tunnel with full label sets, metadata representation, timestamps, and duplicate job/site cases.
+Record the installed VictoriaMetrics data-source plugin ID/version. Neither the confirmed field names nor the data-source name
+alone proves the exported label layout or query API contract. Do not include credentials in examples.

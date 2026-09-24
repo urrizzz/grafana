@@ -1,82 +1,77 @@
-# Proposed architecture
+# Architecture and Canvas feasibility
 
-## Plugin and compatibility
+## Required host
 
-Build a **panel plugin** for Grafana 13.2.2 using TypeScript and React 19, with matching Grafana SDK packages.
-Proposed display name: **Compact Interface Traffic**.
-Provisional plugin ID: `urrizzz-compacttraffic-panel`; confirm this before implementation/signing.
-The GitHub repository name can remain `grafana` regardless of the plugin ID.
+The user explicitly requires multiple independently configured, movable, resizable traffic displays
+**inside Grafana's built-in Canvas panel**, running Grafana **13.2.2**.
+A standalone panel on the dashboard is not an agreed substitute.
+The earlier standalone panel-plugin architecture is superseded by this requirement.
 
-Grafana distinguishes visualization panels from data-source plugins; see
-[plugin types](https://grafana.com/developers/plugin-tools/key-concepts/plugin-types-usage).
-This project consumes existing collected data. It does not introduce a new SNMP collector or require a Go backend for the MVP.
+## Extension feasibility: unresolved
 
-## Data flow
+The [Canvas documentation](https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/canvas/)
+describes built-in element types, placement, and data bindings. It does not establish an external plugin API
+for registering a new time-series Canvas element. The
+[upstream Canvas registry](https://github.com/grafana/grafana/blob/main/public/app/features/canvas/registry.ts)
+examined during this review imports internal element implementations and initializes their registry.
+
+**Inference:** ordinary panel-plugin scaffolding is not sufficient proof of Canvas-element support.
+These sources describe current documentation/main; the exact 13.2.2 implementation has not been verified.
+The attempted version-pinned source fetch was unavailable, which is not evidence that the version lacks the capability.
+
+Before scaffolding:
+
+1. Inspect the exact installed 13.2.2 Canvas implementation and supported extension APIs.
+2. Prove a minimal custom element can be registered, rendered, resized, saved, and reloaded in the built-in Canvas.
+3. Prove access to time-series frames and per-element configuration, dashboard variables, range, and refresh.
+4. Determine whether the route is supported without modifying Grafana core.
+5. If only a core patch/fork or replacement panel can satisfy the visuals, document the concrete tradeoffs and
+   obtain a delivery decision. Such changes are not authorized by the current documentation task.
+
+Do not label an ordinary dashboard panel, static SVG image, or replacement Canvas plugin as satisfying the built-in Canvas requirement.
+The traffic renderer can be designed independently while the host integration is investigated.
+
+## Data flow and query ownership
 
 ```mermaid
 flowchart LR
-  A[Cisco IF-MIB] --> B[Existing collector]
-  B --> C[Metrics storage]
-  C --> D[Configured Grafana data source]
-  E[instance + ifName + time range] --> F[Panel query adapter]
+  A[Cisco IF-MIB collection] --> B[Prometheus: 60-second collection]
+  B --> C[VictoriaMetrics]
+  C --> D[Grafana VictoriaMetrics data source]
+  E[Dashboard range, variables and refresh] --> F[Canvas integration: to verify]
+  G[Independent element selectors and mappings] --> F
   F --> D
-  D --> G[Normalize identity, rates and quality]
-  G --> H[Mirrored bars and text overlay]
+  D --> H[Normalize metadata, status, rates and quality]
+  H --> I[Blue IN / purple OUT with text overlay]
 ```
 
-The storage/data-source type is still to be confirmed. The first adapter is proposed for Prometheus.
+Use the existing data source's Grafana query/authentication path. Do not query routers or collect SNMP in this project.
+The feasibility spike must decide whether Canvas-owned queries can supply separately keyed frames or whether a supported
+host adapter can generate them per element. Per-element settings do not automatically become data-source query variables.
+The user should not have to manually synchronize several query expressions after selecting another channel.
 
-## Query ownership: proposed decision
+Use configured source mappings, resolve fixed values/dashboard variables, and preserve exactly one channel per element.
+Deduplicate identical requests where useful, cancel obsolete subscriptions, and ignore late responses for old selections.
+Keep history requests (300-second resolution), range-end current rates, and metadata/status logically distinct.
+Use dashboard refresh events, not a second polling clock. Preserve valid history on DOWN/UNKNOWN transitions.
+Data from one element must never leak into another. Verify reload/duplication preserves independent settings.
 
-The requested user experience is to change `instance` and `ifName` in panel options and have the whole report update.
-Ordinary panel option values are not automatically substituted into arbitrary queries in Grafana's query editor.
-Therefore the proposal is a **panel-managed query adapter** using an existing selected Grafana data-source UID.
-It generates the required queries and calls the configured data source through Grafana's supported runtime APIs.
+## Proposed implementation boundaries
 
-Before implementation proceeds, validate the Grafana 13.2.2 data-source query API and subscription lifecycle in a small integration spike.
-The adapter must:
-
-- Resolve single-valued dashboard variables and the current panel time range.
-- React to refresh, time-range, variable, identity, and data-source changes.
-- Use the data source's authentication/proxy path; never query router IPs or arbitrary metric-server URLs directly.
-- Cancel/unsubscribe when inputs change or the panel unmounts. Ignore late responses from previous selections.
-- Keep metadata/current queries distinct from fixed-step historical queries; request enough data points for 300-second resolution.
-- Normalize Grafana data frames and their source timestamps into the contract in [metrics-contract.md](metrics-contract.md).
-- Return clear errors and avoid multiple active refresh loops or duplicated panel-editor queries.
-
-If this integration cannot satisfy Grafana's lifecycle reliably, the alternative is native panel queries with dashboard
-variables plus a provisioned dashboard. That alternative changes where the parameters live and must be documented
-and agreed before replacing the requested two-option workflow.
-
-Variable interpolation guidance: [Grafana variable support](https://grafana.com/developers/plugin-tools/how-to-guides/data-source-plugins/add-support-for-variables).
-
-## Proposed module boundaries
-
-| Module | Responsibility |
+| Area | Responsibility |
 | --- | --- |
-| `options` | Instance, ifName, data source, validation, and optional capacity override |
-| `query` | Backend-specific selectors, query execution, time alignment, and cancellation |
-| `data` | Unique-interface resolution, source timestamps, rate quality, status and capacity normalization |
-| `format` | Decimal bit-rate units, significant digits, timestamps, and accessible labels |
-| `chart` | Shared symmetric axis, five-minute rectangles, gaps, and responsive tick layout |
-| `components` | Header, state display, foreground IN/OUT values, and tooltips |
+| Host integration | Canvas element registration, editing, persistence, resize, dashboard lifecycle |
+| Options | Selectors, mappings, visibility, data-source reference and validation |
+| Queries | VictoriaMetrics plugin requests, interpolation, fixed-step history, cancellation |
+| Normalization | Unique identity, metadata, rates, capacity, source freshness and errors |
+| Rendering | Mirrored bars, shared scale, text overlay, state circle and DOWN middle line |
+| Formatting | Decimal bit units and directly visible time/quality information |
 
-Keep rate conversion, bucket alignment, and status mapping as pure functions so they can be tested with fixed inputs.
-Use synthetic fixtures rather than live routers for routine tests.
+TypeScript with React and matching Grafana packages is a candidate after the host API is established.
+The provisional display name is Compact Interface Traffic. Packaging, plugin ID, signing, and code layout depend on
+that decision; the old provisional standalone panel ID is not an accepted Canvas delivery model.
 
-## Rendering approach
-
-Proposed MVP: one SVG plot with bars and axes, plus foreground text positioned above it.
-SVG suits a small chart, scales with panel dimensions, and is easy to inspect in browser tests.
-At the proposed seven-day maximum, evaluate performance with 4,032 bars; move to canvas if measurements require it.
-Rendering technology may change without changing the display contract.
-
-Use positive values in the data model and a sign inversion only for OUT coordinates.
-Choose the scale once for both halves. Use text content rather than HTML injection for interface descriptions.
-Make the foreground readable in both themes and prevent decorative layers from blocking useful hover targets.
-
-## Delivery boundaries
-
-The repository currently contains design documents only. No runtime dependency manifest or implementation has been added.
-Scaffolding, fixtures, tests, a development server definition, and CI will be introduced in the implementation phase.
-Signing/publishing will require the final plugin identity and the owner's Grafana account; GitHub ownership alone does not establish a signing namespace.
+Use SVG or another supported rendering primitive with blue/purple bars and foreground text. The wireframe is a static
+specification illustration, not an embeddable runtime implementation. No tooltips are required.
+Benchmark multiple elements at 12-24 hours (up to 576 bars per element at 24 hours) and longer user-selected ranges.
+A seven-day hard limit and a fixed minimum size are not confirmed requirements.

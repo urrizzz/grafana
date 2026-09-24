@@ -1,40 +1,55 @@
-# Decisions and open questions
+# Decisions and remaining technical checks
 
-## Confirmed requirements
+## Confirmed during the requirements interview
 
-| ID | Decision | Basis |
-| --- | --- | --- |
-| R-01 | Use `urrizzz/grafana` | Repository supplied by the owner |
-| R-02 | Target Grafana 13.2.2 | Match the owner's production version |
-| R-03 | Display one Cisco port or tunnel selected by instance and ifName | Requested panel scope |
-| R-04 | Display ifDescr, operational state, and bandwidth capacity | Requested panel information |
-| R-05 | UP/DOWN uses green/red circles; draw traffic only when UP | Requested state behavior |
-| R-06 | IN bars above center; OUT bars inverted below; text overlays the background graph | Requested visual layout |
-| R-07 | Five-minute bars, bottom time labels, automatic Y limits, readable bit-rate units | Requested graph behavior |
-| R-08 | Central IN/OUT five-minute rates in their respective halves | Requested foreground values |
-| R-09 | Begin with repository setup and documentation | Current authorized phase |
+| Topic | Decision |
+| --- | --- |
+| Target | Grafana 13.2.2 |
+| Data path | Prometheus collects, forwards to VictoriaMetrics; Grafana uses the VictoriaMetrics data-source plugin |
+| Collection | Every 60 seconds |
+| Rates | Five-minute average bit/s for bars and central numbers, with automatic decimal units |
+| Capacity | ifHighSpeed, with its standard millions-of-bit/s meaning |
+| Selection | Fixed instance/ifName values and dashboard variables |
+| Placement | Inside Grafana's built-in Canvas panel |
+| Multiple channels | Independent router/channel settings for every traffic display in the same Canvas |
+| Size | Freely resizable, adapting text and chart |
+| Time and refresh | Dashboard range and refresh; usually 12-24 hours |
+| Router metadata | instance and name are router labels; hidden by default, configurable |
+| Channel metadata | ifName, ifAlias, ifDescr all shown by default |
+| Configuration | Source metric/label names and identity-field visibility can be changed |
+| Standard defaults | ifOperStatus, ifHighSpeed, ifHCInOctets, ifHCOutOctets, and standard identity names |
+| Plot | IN blue above zero; OUT purple below zero; foreground text over background bars |
+| Axis | Shared symmetric autoscale from visible traffic, separate from capacity |
+| Current values | Center of each half; five-minute averages ending at dashboard range end |
+| UP | Green circle and UP in top-left |
+| DOWN | Red circle and DOWN in top-left, red middle line, retained history, central dashes |
+| UNKNOWN | Gray circle and UNKNOWN for missing/stale status, retained history, central dashes |
+| Interaction | No tooltips; information directly visible |
+| Repository | Keep documentation local for now |
 
-## Proposed defaults awaiting confirmation
+These decisions supersede the initial assumptions of a standalone panel, Prometheus Grafana data source,
+hidden history while DOWN/UNKNOWN, ifDescr-only heading, capacity overrides/fallbacks, and hover tooltips.
 
-| ID | Proposal | Reason / what could change |
-| --- | --- | --- |
-| D-01 | Prometheus-compatible data source with snmp_exporter | Common IF-MIB pipeline; actual storage is not yet confirmed |
-| D-02 | Five-minute average bit/s | Defines both bar meaning and central value; peak would need a different query |
-| D-03 | Name: Compact Interface Traffic; ID: urrizzz-compacttraffic-panel | Working names only; signing namespace must be checked separately |
-| D-04 | Panel-managed queries through an existing data source | Makes instance/ifName options drive all values without manual query edits; needs an API spike |
-| D-05 | Shared symmetric autoscale based on observed traffic | Makes IN/OUT directly comparable while keeping quiet traffic visible |
-| D-06 | Prefer reported capacity, with explicit configured override | Tunnel speed may not describe the intended service capacity |
-| D-07 | Gray UNKNOWN/STALE state and gaps for unavailable metrics | Prevents confusing missing telemetry with a confirmed outage or zero traffic |
-| D-08 | 320 x 180 minimum content size; seven-day maximum range | Concrete starting targets for layout and rendering tests |
-| D-09 | Aligned complete bars plus current rate at range end | Preserves exact five-minute historical intervals and a fresh central value |
-| D-10 | Freshness/coverage policy from the metrics contract | Requires the real scrape interval before implementation |
+## Proposed engineering defaults, not confirmed requirements
 
-## Needed next
+- Single-valued dashboard variables; explicit errors for All/multiselect or ambiguous identity.
+- Complete UTC-aligned five-minute history buckets and a separate range-end current query.
+- Four samples per five-minute window and 180-second status freshness threshold, pending backend tests.
+- Raw IF-MIB non-UP states 2/3/5/6/7 mapped to DOWN; code 4/invalid/missing to UNKNOWN.
+- Missing enabled metadata shown as a dash; missing capacity shown as unknown.
+- Rounded common axis with modest headroom; responsive text with a visible resize hint if needed.
 
-1. Confirm the data-source type and five-minute average/peak interpretation.
-2. Provide sanitized metric samples for one port and one tunnel, including labels and scrape interval.
-3. Confirm whether interface-reported tunnel capacity is useful or a configured value is needed.
-4. Review the wireframe and proposed compact dimensions.
-5. Confirm the plugin identity and choose a software license before distributing code.
+No fixed minimum dimensions, seven-day maximum range, or exact color hex values have been approved.
 
-These open items do not prevent documenting the project. They must not be silently treated as verified production facts.
+## Technical checks before implementation
+
+1. **Canvas extension route:** verify a supported custom element on the exact Grafana 13.2.2 installation.
+   A standard panel plugin is not assumed embeddable. See [architecture](architecture.md).
+2. **Exported data shape:** inspect full labels and channel metadata for one port and one tunnel; names alone
+   do not establish whether metadata is stored as labels or separate series, or how joins remain unique.
+3. **Data-source contract:** identify VictoriaMetrics plugin version and prove queries, time steps, rate semantics,
+   dashboard events, and per-element isolation.
+4. **Packaging:** determine final identity, license, and signing/delivery after the Canvas route is known.
+
+The product interview is sufficient to update the design. Remaining items are concrete technical evidence
+or delivery decisions; they are not reasons to silently weaken the built-in Canvas requirement.

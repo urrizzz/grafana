@@ -1,51 +1,47 @@
 # Compact Interface Traffic
 
-A Grafana panel for a compact traffic report on one Cisco router port or tunnel.
-Select a router by `instance` and an interface by `ifName`; see its description,
-operational status, bandwidth capacity, and mirrored incoming/outgoing traffic in one small panel.
+A compact Cisco port/tunnel traffic display intended to live **inside Grafana's built-in Canvas panel**.
+Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
-**Status:** project specification and design. The traffic plugin is not implemented yet.
-**Target:** Grafana **13.2.2**. **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana).
+**Target:** Grafana **13.2.2**. **Status:** requirements and design only; no executable traffic plugin yet.
+**Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Changes remain local at the owner's request.
 
-![Proposed compact panel, showing up and down examples](docs/assets/panel-wireframe.svg)
+![UP, DOWN, and UNKNOWN traffic displays](docs/assets/panel-wireframe.svg)
 
-The wireframe uses fictional data. Bars sit behind the text. Incoming traffic rises above the
-center line; outgoing traffic extends below it. Current five-minute rates are centered in their respective halves.
+## Confirmed behavior
 
-## Required behavior
-
-- Select exactly one router (`instance`) and one port/tunnel (`ifName`).
-- Display `ifDescr`, an UP/DOWN label with a green/red circle, and interface bandwidth capacity.
-- When UP, show incoming and outgoing traffic as five-minute bars in the panel background.
-- Keep all text above the bars, including the current IN and OUT five-minute rates.
-- Show a small number of time labels along the bottom and an automatically scaled Y axis.
-- Format rates and capacity using decimal bit units: bit/s, kbit/s, Mbit/s, Gbit/s.
-- Keep missing or stale data distinguishable from a confirmed DOWN state and from zero traffic.
+- Prometheus collects every **60 seconds** and forwards metrics to VictoriaMetrics.
+- Grafana uses the **VictoriaMetrics data source plugin**.
+- Each Canvas traffic display selects `instance` and `ifName`, using fixed values or dashboard variables.
+- Show `ifName`, `ifAlias`, and `ifDescr` by default. Router `instance` and `name` are hidden by default.
+- Source metric/label mappings and individual identity-field visibility are configurable.
+- Capacity comes from `ifHighSpeed`, expressed in Mbit/s at the source.
+- Incoming blue bars rise above the middle; outgoing purple bars extend below it.
+- Bars represent five-minute average bit rates, using one symmetric scale based on visible traffic.
+- Text overlays the graph. Central IN/OUT values are five-minute averages at the dashboard range end.
+- Follow dashboard time range and refresh; typical history is 12-24 hours.
+- Top-left status circle and label: green UP, red DOWN, gray UNKNOWN (including stale status).
+- DOWN retains history, adds a red middle line, and shows dashes for central values.
+- UNKNOWN retains history and shows dashes for central values.
+- Display information directly; no tooltips.
 
 ## Documentation
 
 | Document | Purpose |
 | --- | --- |
-| [Product specification](docs/product-spec.md) | Layout, configuration, display rules, and state behavior |
-| [Metrics contract](docs/metrics-contract.md) | IF-MIB mapping, rate calculation, queries, and data quality |
-| [Architecture](docs/architecture.md) | Proposed query integration, rendering, and component boundaries |
-| [Acceptance criteria](docs/acceptance-criteria.md) | Observable conditions for accepting the implementation |
-| [Development plan](docs/development.md) | Environment, repository structure, and implementation milestones |
-| [Decisions and open questions](docs/decisions.md) | Confirmed requirements versus proposed defaults |
+| [Product specification](docs/product-spec.md) | Confirmed configuration, layout, and state behavior |
+| [Metrics contract](docs/metrics-contract.md) | Source mappings, rates, capacity, and proposed quality rules |
+| [Architecture](docs/architecture.md) | Canvas integration feasibility and query boundaries |
+| [Acceptance criteria](docs/acceptance-criteria.md) | Conditions the eventual implementation must satisfy |
+| [Development plan](docs/development.md) | Implementation sequence and local environment constraints |
+| [Decisions](docs/decisions.md) | Confirmed answers, proposed defaults, and remaining technical checks |
 
-## Assumptions to confirm before coding
+## Implementation prerequisite
 
-The first draft assumes a Prometheus-compatible Grafana data source fed by `snmp_exporter`,
-and **average bit rate over five minutes**, rather than peak traffic. IF-MIB specifies the
-router objects; it does not determine the storage system, exported metric names, or labels.
-The query examples must be checked against real metric samples.
+Embedding this visualization inside the built-in Canvas panel is a firm requirement.
+A supported custom Canvas-element integration for Grafana 13.2.2 has **not yet been verified**.
+Do not assume a standalone panel plugin can be installed as a Canvas element.
+The architecture document defines the feasibility check before scaffolding or choosing a delivery model.
 
-“Bandwidth” has two meanings here: **capacity** in the header and **observed traffic rate**
-in each half of the chart. Tunnel capacity may need a configured override when the device's
-reported value does not describe the intended service capacity.
-
-## Current repository scope
-
-This initial revision contains documentation, a static wireframe, and repository settings.
-It does not include a runnable plugin, live-router connection, or deployment automation.
-No software license has been selected yet; a public repository alone does not establish one.
+Representative exported series/labels and the installed VictoriaMetrics plugin version remain to be inspected.
+No software license has been selected. No runtime code, deployment, or GitHub push is included in this revision.

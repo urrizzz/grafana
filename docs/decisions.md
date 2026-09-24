@@ -27,6 +27,7 @@
 | DOWN | Red circle and DOWN in the right-hand information block, historical DOWN segments only, retained history, central dashes |
 | UNKNOWN | Gray circle and UNKNOWN in right-hand block for missing/stale status, retained history, central dashes |
 | Outage history | Red center-line segments only where observed status was DOWN, even if the channel has since recovered; gaps/unknown never imply DOWN |
+| Header order | In the right-hand block: channel name, colored circle, status word, on one line (for example TUNNEL01 [circle] UP); existing colors retained |
 | Interaction | No tooltips; information directly visible |
 | Repository | Keep documentation local for now |
 

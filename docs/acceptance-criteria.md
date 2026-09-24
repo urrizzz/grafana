@@ -38,6 +38,7 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-32 | Recovered channel | UP badge/current rates with red segments still visible only at earlier known DOWN times |
 | AC-33 | Intermittent outage and missing status | Red segments align with observed DOWN intervals; no red across UP/UNKNOWN or collection gaps |
 | AC-34 | Native-size color contrast | Bright bars and matching colored current values remain distinguishable at 120 x 70 in both themes |
+| AC-35 | Channel heading | Name is immediately followed on the same line by the colored circle and UP/DOWN/UNKNOWN word; existing colors retained |
 
 ## Validation layers
 

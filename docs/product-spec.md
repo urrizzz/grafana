@@ -39,7 +39,7 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 
 ## Layout
 
-- Place the status circle and UP/DOWN/UNKNOWN label in the information block to the right of the traffic area.
+- In the right-hand information block, put the channel name first, immediately followed on the same line by the colored circle and status word: `TUNNEL01 [circle] UP`. Apply this order to DOWN and UNKNOWN too; retain the existing status colors.
 - Move all enabled channel/router identity fields and capacity into that right-hand block, outside the graph.
 - Keep only the traffic graph, IN/OUT rates and their axis/direction labels inside the 120 x 70 traffic area.
 - Incoming traffic is **blue**, occupies the upper half, and grows upward. Bars must be clearly visible, not dim background decoration.

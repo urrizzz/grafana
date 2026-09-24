@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="310" viewBox="0 0 780 310" role="img" aria-labelledby="title desc">
+  <title id="title">Compact Interface Traffic panel wireframe</title>
+  <desc id="desc">An UP panel with incoming bars above a central zero line and outgoing bars below it. Description, capacity, and current rates are overlaid on the chart. A DOWN example retains its header and hides traffic. All values are fictional.</desc>
+  <rect width="780" height="310" fill="#10151e"/>
+  <g font-family="Arial, sans-serif">
+    <text x="20" y="26" font-size="17" fill="#edf2f7">Compact Interface Traffic — design wireframe</text>
+    <text x="20" y="45" font-size="11" fill="#aab7c7">Illustrative values • proposed layout • not a running plugin</text>
+    <rect x="20" y="60" width="360" height="220" rx="8" fill="#18212e" stroke="#4c596c"/>
+    <rect x="400" y="60" width="360" height="220" rx="8" fill="#18212e" stroke="#4c596c"/>
+    <g fill="#32b4a1" opacity="0.30">
+      <rect x="72" y="145" width="19" height="25"/><rect x="96" y="130" width="19" height="40"/>
+      <rect x="120" y="137" width="19" height="33"/><rect x="144" y="115" width="19" height="55"/>
+      <rect x="168" y="106" width="19" height="64"/><rect x="192" y="126" width="19" height="44"/>
+      <rect x="216" y="135" width="19" height="35"/><rect x="240" y="119" width="19" height="51"/>
+      <rect x="264" y="133" width="19" height="37"/><rect x="288" y="143" width="19" height="27"/>
+      <rect x="312" y="138" width="19" height="32"/><rect x="336" y="150" width="19" height="20"/>
+    </g>
+    <g fill="#6ca8ef" opacity="0.30">
+      <rect x="72" y="170" width="19" height="16"/><rect x="96" y="170" width="19" height="22"/>
+      <rect x="120" y="170" width="19" height="30"/><rect x="144" y="170" width="19" height="25"/>
+      <rect x="168" y="170" width="19" height="39"/><rect x="192" y="170" width="19" height="31"/>
+      <rect x="216" y="170" width="19" height="19"/><rect x="240" y="170" width="19" height="28"/>
+      <rect x="264" y="170" width="19" height="23"/><rect x="288" y="170" width="19" height="37"/>
+      <rect x="312" y="170" width="19" height="27"/><rect x="336" y="170" width="19" height="14"/>
+    </g>
+    <path d="M68 102V243H359 M68 170H359" fill="none" stroke="#69788d" stroke-width="1"/>
+    <g font-size="9" fill="#b9c5d6">
+      <text x="27" y="111">100 Mbit/s</text><text x="53" y="173">0</text><text x="27" y="239">100 Mbit/s</text>
+      <text x="71" y="259">10:00</text><text x="195" y="259">10:30</text><text x="329" y="259">11:00</text>
+    </g>
+    <circle cx="35" cy="80" r="5" fill="#62d791"/>
+    <text x="46" y="84" font-size="11" font-weight="bold" fill="#62d791">UP</text>
+    <text x="80" y="84" font-size="14" font-weight="bold" fill="#f4f7fb">Tunnel10 — branch uplink</text>
+    <text x="80" y="99" font-size="10" fill="#c4cedb">Capacity 100 Mbit/s</text>
+    <g text-anchor="middle" fill="#f7fafc" style="paint-order:stroke" stroke="#18212e" stroke-width="3" stroke-linejoin="round">
+      <text x="214" y="128" font-size="11">IN · 5m average</text>
+      <text x="214" y="150" font-size="24" font-weight="bold">24.6 Mbit/s</text>
+      <text x="214" y="197" font-size="11">OUT · 5m average</text>
+      <text x="214" y="222" font-size="24" font-weight="bold">8.4 Mbit/s</text>
+    </g>
+    <circle cx="415" cy="80" r="5" fill="#f77878"/>
+    <text x="426" y="84" font-size="11" font-weight="bold" fill="#f77878">DOWN</text>
+    <text x="476" y="84" font-size="14" font-weight="bold" fill="#f4f7fb">Tunnel20 — backup link</text>
+    <text x="476" y="99" font-size="10" fill="#c4cedb">Capacity 100 Mbit/s</text>
+    <g text-anchor="middle" fill="#b9c5d6">
+      <text x="580" y="144" font-size="15">IN —</text>
+      <text x="580" y="185" font-size="12">Interface down · traffic hidden</text>
+      <text x="580" y="224" font-size="15">OUT —</text>
+    </g>
+    <text x="20" y="299" font-size="11" fill="#aab7c7">The description comes from ifDescr. Outgoing rates remain positive; only their bars are inverted.</text>
+  </g>
+</svg>

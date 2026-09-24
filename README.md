@@ -24,6 +24,9 @@ Each display has its own router/interface selection and can be positioned and re
 - DOWN retains history, adds a red middle line, and shows dashes for central values.
 - UNKNOWN retains history and shows dashes for central values.
 - Display information directly; no tooltips.
+- Scale the entire component proportionally, including fonts, spacing, status circle, bars, and axes.
+- Preserve the layout in a very small space; avoid fixed-size text crowding the component.
+- Configure through normal settings; dashboard authors do not write or paste scripts.
 
 ## Documentation
 

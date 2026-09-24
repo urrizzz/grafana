@@ -12,7 +12,9 @@
 | Selection | Fixed instance/ifName values and dashboard variables |
 | Placement | Inside Grafana's built-in Canvas panel |
 | Multiple channels | Independent router/channel settings for every traffic display in the same Canvas |
-| Size | Freely resizable, adapting text and chart |
+| Size | Freely resizable; entire component scales proportionally, including fonts, spacing, status circle, bars and axes |
+| Compactness | Preserve layout and alignment at very small sizes; avoid fixed-size text crowding the component |
+| Author experience | Ordinary settings only; no dashboard-author scripts or manual font retuning per size |
 | Time and refresh | Dashboard range and refresh; usually 12-24 hours |
 | Router metadata | instance and name are router labels; hidden by default, configurable |
 | Channel metadata | ifName, ifAlias, ifDescr all shown by default |
@@ -37,9 +39,11 @@ hidden history while DOWN/UNKNOWN, ifDescr-only heading, capacity overrides/fall
 - Four samples per five-minute window and 180-second status freshness threshold, pending backend tests.
 - Raw IF-MIB non-UP states 2/3/5/6/7 mapped to DOWN; code 4/invalid/missing to UNKNOWN.
 - Missing enabled metadata shown as a dash; missing capacity shown as unknown.
-- Rounded common axis with modest headroom; responsive text with a visible resize hint if needed.
+- Rounded common axis with modest headroom; the implementation must honor the confirmed proportional-scaling requirement.
 
-No fixed minimum dimensions, seven-day maximum range, or exact color hex values have been approved.
+No fixed minimum dimensions, aspect ratio, seven-day maximum range, or exact color hex values have been approved.
+The previous resize-hint fallback is superseded as the normal response to shrinking the component.
+Very small text may become difficult to read, but shrinking must preserve composition rather than crowd it.
 
 ## Technical checks before implementation
 

@@ -29,10 +29,14 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
    VictoriaMetrics data-source plugin ID/version. Collection interval and rate meaning are already confirmed.
 3. **Prove queries.** Independently select multiple channels, interpolate variables, customize mappings, and follow
    dashboard range/refresh. Validate 300-second history, current rates, resets, freshness, cancellation, and error handling.
-4. **Implement visualization.** Responsive metadata overlay, blue/purple mirrored bars, symmetric autoscale,
-   capacity, top-left state, retained history, red DOWN line, and central dashes for DOWN/UNKNOWN. No tooltips.
+4. **Implement visualization.** Design for very small placement from the start. Scale the full component,
+   including fonts, spacing, status circle, bars, axes and overlays, while preserving relative layout.
+   Include blue/purple mirrored bars, symmetric autoscale, capacity, top-left state, retained history,
+   red DOWN line, and central dashes for DOWN/UNKNOWN. No tooltips or dashboard-author scripts.
+   Expose ordinary settings for selectors, mappings and visibility; no per-size font tuning is required.
 5. **Validate and package.** Execute the acceptance criteria on Grafana 13.2.2, test multiple 12-24-hour elements,
-   check dependencies, and add build/CI appropriate to the verified delivery model.
+   proportional reductions and independent width/height changes, including long metadata and every state.
+   Check dependencies, and add build/CI appropriate to the verified delivery model.
 
 Choose a license and final identity before distribution. Do not assume the standalone panel generator supplies
 Canvas integration, and do not deploy a core modification without an explicit delivery decision.

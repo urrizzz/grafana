@@ -56,6 +56,21 @@ Keep history requests (300-second resolution), range-end current rates, and meta
 Use dashboard refresh events, not a second polling clock. Preserve valid history on DOWN/UNKNOWN transitions.
 Data from one element must never leak into another. Verify reload/duplication preserves independent settings.
 
+## Rendering and configuration requirements
+
+Implement proportional scaling within the component, including typography, margins, indicators, axes, bars,
+and overlays. Do not leave labels or padding at fixed screen-pixel sizes while only the plot shrinks.
+Keep the visual hierarchy, text alignment, and shared IN/OUT geometry consistent at different sizes.
+
+A proposed implementation is a shared logical coordinate system with a uniform scale derived from available
+width and height, using SVG viewBox behavior or equivalent transforms. This is an engineering option, not a
+confirmed rendering technology or aspect ratio. Validate arbitrary element proportions without stretching
+text. Long metadata needs an explicit fitting policy; shrinking alone must not hide enabled fields.
+
+Package layout, querying, and scaling behavior behind ordinary component settings. Users select the data
+source, router/interface, mappings, and visible fields without editing chart functions or rendering scripts.
+The Business Charts research preview remains a separate scripted comparison, not the intended configuration UX.
+
 ## Proposed implementation boundaries
 
 | Area | Responsibility |

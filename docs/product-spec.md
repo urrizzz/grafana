@@ -4,7 +4,7 @@
 
 Build a compact traffic display **inside the built-in Grafana Canvas panel**, targeting Grafana 13.2.2.
 Support multiple independently configured displays in the same Canvas, placed beside router representations.
-Each display can be freely moved and resized; its chart, text, and time labels adapt to available space.
+Each display can be freely moved and resized; the whole visual scales proportionally, including its fonts.
 Canvas extension feasibility is an implementation prerequisite, not an already-proven capability.
 
 Each display selects exactly one router (`instance`) and channel (`ifName`). Both fixed strings and
@@ -50,9 +50,32 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 - Keep all rate labels nonnegative; inversion is only a plotting operation.
 
 No hover tooltips are requested. Identity, rates, status, units, and time context must be available directly.
-Use responsive wrapping/font layout for enabled metadata; if space is insufficient, provide a visible resize
-hint rather than relying on a tooltip to reveal required content. Exact typography and minimum size are pending visual tests.
-Text must remain legible over bars in light and dark themes. Status also has a word, not only a color.
+Text must have clear contrast over bars in light and dark themes. Status also has a word, not only a color.
+
+## Proportional scaling and compact use
+
+Very small placement is a primary requirement. Scale the **entire component together**: channel metadata,
+capacity, IN/OUT values, status label and circle, font sizes, spacing, margins, bars, axes, and axis labels.
+Preserve relative positions and the visual hierarchy as the component shrinks or grows. Fixed-size fonts
+or padding must not consume the chart area and cause crowding, clipping, or overlap when resized smaller.
+Do not require manual font adjustments for each size or replace the visualization with a resize warning
+solely because it has been made small. Keep enabled content in the layout; size alone must not hide fields.
+
+Text will naturally become harder to read at very small physical sizes. Proportional scaling preserves
+alignment and composition; it does not guarantee readability at arbitrarily small dimensions.
+No exact minimum size or aspect ratio has been selected. Non-proportional width/height changes and unusually
+long metadata need visual validation; they must not distort glyphs or cause content to collide.
+The earlier proposed resize-hint fallback is superseded by proportional scaling as the normal resize behavior.
+
+## Configuration without author-written scripts
+
+Provide a purpose-built component with ordinary settings for the data source, router/channel selection,
+source mappings, and field visibility. Dashboard authors must not write, paste, or maintain JavaScript,
+ECharts options, SVG rendering code, or similar scripts to obtain the required layout and behavior.
+Rendering and scaling logic belong in the component implementation. Standard configuration of the existing
+data source and selectors is still required; no production connection is inferred automatically.
+Community examples demonstrate visual possibilities but do not satisfy this requirement simply by loading
+custom chart scripts into a general-purpose panel.
 
 ## Rates, history, and axes
 

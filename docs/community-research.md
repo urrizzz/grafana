@@ -23,6 +23,15 @@ is acceptable. That would change the agreed host requirement and is not assumed 
 If built-in Canvas is mandatory, continue investigating its exact 13.2.2 extension path before implementing.
 ACE.SVG is an alternative for a code-driven whole-diagram layout, not an automatic way to embed a panel into Canvas.
 
+## Subsequent user clarification
+
+The user emphasized that the component must work in a very small space by scaling fonts and all other
+visual elements proportionally. General-purpose panels that retain fixed text sizes become crowded when
+shrunk. The dashboard author must not need scripts or manual font retuning to obtain the component.
+The comparison remains useful as a rendering experiment, but its scripted configuration and current layout
+do not meet these requirements. No change to the built-in Canvas requirement has been approved.
+See the [product specification](product-spec.md) for the updated acceptance scope.
+
 ## Local preview
 
 Open [Cisco Traffic - Community Comparison](http://localhost:3000/d/cisco-community-preview).

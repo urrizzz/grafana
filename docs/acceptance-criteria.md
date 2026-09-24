@@ -52,3 +52,9 @@ Validate native 120 x 70 traffic at normal browser zoom, plus 150% and 200% enla
 width/height changes. Check all states and long metadata in the right-hand block. No larger-card downscale
 may turn the primary values into unreadable tiny text.
 Documentation checks do not constitute plugin compatibility or implementation tests.
+
+## Accepted reference
+
+Use the [accepted design reference](design-reference.md) for visual and interaction checks at native
+120 x 70, larger sizes, all operational states, and hover. Keep the HTML and both screenshots tracked
+and synchronized with approved changes. Older illustrations and community previews are not the baseline.

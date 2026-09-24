@@ -29,6 +29,7 @@
 | Outage history | Red center-line segments only where observed status was DOWN, even if the channel has since recovered; gaps/unknown never imply DOWN |
 | Header order | In the right-hand block: channel name, colored circle, status word, on one line (for example TUNNEL01 [circle] UP); existing colors retained |
 | Interaction | Hover adds a vertical time cursor plus timestamp/interval and IN/OUT average rates; current information remains directly visible |
+| Design reference | Latest interactive wireframe accepted; source and screenshots tracked in Git; see [design-reference.md](design-reference.md) |
 | Repository | Keep documentation local for now |
 
 These decisions supersede the initial assumptions of a standalone panel, Prometheus Grafana data source,
@@ -44,7 +45,8 @@ hidden history while DOWN/UNKNOWN, ifDescr-only heading, capacity overrides/fall
 - Rounded common axis with modest headroom; the implementation must honor the confirmed proportional-scaling requirement.
 
 120 x 70 is the confirmed primary traffic size, excluding the right-hand block. No minimum below it,
-fixed information-block width, seven-day maximum range, or exact color hex values have been approved.
+fixed information-block width or seven-day maximum range has been approved. The accepted wireframe
+provides the starting theme colors and typography.
 The previous resize-hint fallback is superseded as the normal response to shrinking the component.
 Very small text may become difficult to read, but shrinking must preserve composition rather than crowd it.
 

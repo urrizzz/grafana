@@ -4,7 +4,8 @@
 
 Build a compact traffic display **inside the built-in Grafana Canvas panel**, targeting Grafana 13.2.2.
 Support multiple independently configured displays in the same Canvas, placed beside router representations.
-Each display can be freely moved and resized; the whole visual scales proportionally, including its fonts.
+Each display can be freely moved and resized; its traffic area scales proportionally from 120 x 70,
+while the separate information block and hover tooltip retain readable typography.
 Canvas extension feasibility is an implementation prerequisite, not an already-proven capability.
 
 Each display selects exactly one router (`instance`) and channel (`ifName`). Both fixed strings and
@@ -54,14 +55,16 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 Identity, current rates, status, units, and time context remain visible directly. Hovering adds historical detail.
 Text must have clear contrast over bars in light and dark themes. Status also has a word, not only a color.
 
-The [interactive wireframe](assets/scalable-wireframe.html) shows the revised split layout at native size.
+The owner accepted the [interactive wireframe](assets/scalable-wireframe.html) as the implementation design
+reference. See [design reference](design-reference.md) for the tracked source and screenshots.
 The older combined-header illustration and community comparison are superseded layout explorations.
 
 ## Compact size and scaling
 
 Design the traffic area at **120 x 70 CSS pixels first**, with readable current rates at normal browser zoom.
 Do not achieve that size by shrinking a larger design until its fonts become unreadable. The revised wireframe
-proposes 11.5 px central values, 8 px direction labels and 7 px axes; exact typography remains for visual review.
+uses 11.5 px central values, 8 px direction labels and 7 px axes as the accepted starting visual baseline.
+Validate real-data readability and long labels during implementation.
 Scale the traffic area proportionally when enlarging it, including typography, spacing, bars and axes.
 Do not introduce overlap, distorted glyphs, or per-size font adjustments by the dashboard author.
 

@@ -57,3 +57,9 @@ and scale upward proportionally. Put identity fields, status and capacity in a s
 with readable independent typography. The block consumes additional space. This supersedes whole-card
 downscaling and metadata/status/capacity overlays inside the graph. Keep the blocks bound to the same
 interface; validate placement and lifecycle together in the eventual Canvas integration.
+
+## Accepted reference
+
+Use the [accepted design reference](design-reference.md) for visual and interaction checks at native
+120 x 70, larger sizes, all operational states, and hover. Keep the HTML and both screenshots tracked
+and synchronized with approved changes. Older illustrations and community previews are not the baseline.

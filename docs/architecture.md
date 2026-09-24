@@ -86,8 +86,8 @@ TypeScript with React and matching Grafana packages is a candidate after the hos
 The provisional display name is Compact Interface Traffic. Packaging, plugin ID, signing, and code layout depend on
 that decision; the old provisional standalone panel ID is not an accepted Canvas delivery model.
 
-Use SVG or another supported rendering primitive with blue/purple bars and foreground text. The wireframe is a static
-specification illustration, not an embeddable runtime implementation. Hover inspection is required: a vertical time cursor and tooltip show both rates for the selected bucket.
+Use SVG or another supported rendering primitive with blue/purple bars and foreground text. The [accepted wireframe](design-reference.md) is an interactive
+design reference, not an embeddable Grafana implementation. Hover inspection is required: a vertical time cursor and tooltip show both rates for the selected bucket.
 Benchmark multiple elements at 12-24 hours (up to 576 bars per element at 24 hours) and longer user-selected ranges.
 A seven-day hard limit and a fixed minimum size are not confirmed requirements.
 

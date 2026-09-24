@@ -8,7 +8,8 @@ Each display has its own router/interface selection and can be positioned and re
 
 ![Proposed scalable traffic component](docs/assets/compact-component.svg)
 
-[Open the interactive scaling wireframe](docs/assets/scalable-wireframe.html) to compare sizes and states.
+**Accepted design reference:** [interactive wireframe](docs/assets/scalable-wireframe.html).
+See [reference files and implementation guidance](docs/design-reference.md); the wireframe and screenshots are tracked in Git.
 
 ## Confirmed behavior
 
@@ -34,6 +35,7 @@ Each display has its own router/interface selection and can be positioned and re
 
 | Document | Purpose |
 | --- | --- |
+| [Accepted design reference](docs/design-reference.md) | Approved visual baseline, tracked assets, and superseded explorations |
 | [Product specification](docs/product-spec.md) | Confirmed configuration, layout, and state behavior |
 | [Metrics contract](docs/metrics-contract.md) | Source mappings, rates, capacity, and proposed quality rules |
 | [Architecture](docs/architecture.md) | Canvas integration feasibility and query boundaries |

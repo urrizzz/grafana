@@ -36,6 +36,10 @@ Each display has its own router/interface selection and can be positioned and re
 | [Development plan](docs/development.md) | Implementation sequence and local environment constraints |
 | [Decisions](docs/decisions.md) | Confirmed answers, proposed defaults, and remaining technical checks |
 
+## Community alternatives
+
+See the [research and local preview](docs/community-research.md) for similar plugins and the Canvas placement limitation.
+
 ## Mock metrics
 
 A [local IF-MIB exporter and history generator](docs/mock-metrics.md) provides ten synthetic channels,

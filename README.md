@@ -25,7 +25,7 @@ Each display has its own router/interface selection and can be positioned and re
 - Right-hand status circle and label: green UP, red DOWN, gray UNKNOWN (including stale status).
 - Red middle-line segments mark historical DOWN intervals only, including past outages after recovery. Current DOWN retains history and shows central dashes.
 - UNKNOWN retains history and shows dashes for central values.
-- Display information directly; no tooltips.
+- Keep current information visible; hovering the graph adds a vertical cursor and time-specific IN/OUT rates.
 - Design the traffic area at **120 x 70 pixels**, with readable IN/OUT values; scale it proportionally upward.
 - Keep channel details outside that traffic area; the right-hand block takes additional space.
 - Configure through normal settings; dashboard authors do not write or paste scripts.

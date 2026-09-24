@@ -51,7 +51,7 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 - Format capacity, rates, and axis values automatically in bit/s, kbit/s, Mbit/s, or Gbit/s.
 - Keep all rate labels nonnegative; inversion is only a plotting operation.
 
-No hover tooltips are requested. Identity, rates, status, units, and time context must be available directly.
+Identity, current rates, status, units, and time context remain visible directly. Hovering adds historical detail.
 Text must have clear contrast over bars in light and dark themes. Status also has a word, not only a color.
 
 The [interactive wireframe](assets/scalable-wireframe.html) shows the revised split layout at native size.
@@ -70,7 +70,7 @@ optional and hidden by default. This block uses additional space: 120 x 70 descr
 Its typography must remain readable independently of the graph size. Exact information-block width and
 wrapping are proposed layout details, not fixed requirements. Enabled fields must not silently disappear.
 There is no promised readability below the primary size. Validate long metadata and arbitrary resize proportions.
-No tooltips or dashboard-author rendering scripts are required.
+No dashboard-author rendering scripts are required.
 
 ## Configuration without author-written scripts
 
@@ -81,6 +81,20 @@ Rendering and scaling logic belong in the component implementation. Standard con
 data source and selectors is still required; no production connection is inferred automatically.
 Community examples demonstrate visual possibilities but do not satisfy this requirement simply by loading
 custom chart scripts into a general-purpose panel.
+
+## Hover inspection
+
+Hovering the graph shows a vertical line at the selected time and a tooltip with the time/five-minute
+interval and both incoming (IN) and outgoing (OUT) average rates. Here IN/OUT are traffic directions,
+not the operational UP/DOWN state. Use positive magnitudes and automatic bit-rate units for both.
+The cursor follows the pointer, snapping to the corresponding five-minute bucket, across both plot halves.
+
+Keep the tooltip readable at the native 120 x 70 graph size; it may extend outside the graph and must not
+be scaled down with its SVG. Use dashboard time zone in the implemented component (the fixture uses UTC).
+Missing samples display a dash rather than a fabricated zero. Tooltip values describe the hovered bucket,
+while central values continue to describe the dashboard range end. Historical inspection works even if
+current status is DOWN/UNKNOWN. Leaving the plot removes the cursor and tooltip. This supersedes the earlier
+no-tooltip requirement; current information must still be visible without hover.
 
 ## Rates, history, and axes
 

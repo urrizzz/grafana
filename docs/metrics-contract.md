@@ -67,7 +67,7 @@ Refresh follows the dashboard; the collector's 60-second interval is not an inde
 
 Proposed raw-state mapping, subject to fixtures: 1 = UP; 2/3/5/6/7 = DOWN; 4, missing, or invalid = UNKNOWN.
 These codes include non-UP IF-MIB states such as testing/dormant, so the raw distinction can be exposed as a
-visible diagnostic if needed. No tooltip is required. Missing or stale status maps to UNKNOWN, never inferred DOWN.
+visible diagnostic if needed. Historical traffic hover shows timestamp/interval and both rates. Missing or stale status maps to UNKNOWN, never inferred DOWN.
 DOWN/UNKNOWN at range end show central dashes but do not suppress available history. The red middle line
 is segmented from historical status samples, independently of the latest state. Query mapped ifOperStatus
 history across the dashboard range in addition to range-end status. Use the 60-second collection resolution

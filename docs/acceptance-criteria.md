@@ -24,7 +24,7 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-18 | Historical range | Central averages evaluated at range end; visible time labels use dashboard zone |
 | AC-19 | History resolution | Five-minute intervals preserved; no silent coarsening |
 | AC-20 | Missing traffic/reset | Gaps/dashes, no fabricated zeros or reset spikes; zero remains valid traffic |
-| AC-21 | No tooltips | Required fields/rates/time context directly visible without hover |
+| AC-21 | Hover inspection | Vertical cursor and readable tooltip show hovered five-minute interval and positive IN/OUT average rates; current values remain visible and unchanged |
 | AC-22 | Placement and resize | Element moves/resizes inside Canvas; traffic scales proportionally from native 120 x 70 layout; settings persist on reload |
 | AC-23 | Dashboard refresh | Data follows dashboard refresh with no independent timer or accumulating subscriptions |
 | AC-24 | Real backend | Works through the VictoriaMetrics data-source plugin with 60-second collected data |
@@ -39,6 +39,8 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-33 | Intermittent outage and missing status | Red segments align with observed DOWN intervals; no red across UP/UNKNOWN or collection gaps |
 | AC-34 | Native-size color contrast | Bright bars and matching colored current values remain distinguishable at 120 x 70 in both themes |
 | AC-35 | Channel heading | Name is immediately followed on the same line by the colored circle and UP/DOWN/UNKNOWN word; existing colors retained |
+| AC-36 | Hover at native size and after resize | Cursor stays aligned to the selected bucket; tooltip remains readable outside the plot and leaves with the pointer |
+| AC-37 | Historical hover while DOWN/UNKNOWN or missing traffic | Available historical rates remain inspectable; missing values are dashes, not zero; timestamps use dashboard zone |
 
 ## Validation layers
 

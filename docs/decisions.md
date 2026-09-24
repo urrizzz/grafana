@@ -28,11 +28,11 @@
 | UNKNOWN | Gray circle and UNKNOWN in right-hand block for missing/stale status, retained history, central dashes |
 | Outage history | Red center-line segments only where observed status was DOWN, even if the channel has since recovered; gaps/unknown never imply DOWN |
 | Header order | In the right-hand block: channel name, colored circle, status word, on one line (for example TUNNEL01 [circle] UP); existing colors retained |
-| Interaction | No tooltips; information directly visible |
+| Interaction | Hover adds a vertical time cursor plus timestamp/interval and IN/OUT average rates; current information remains directly visible |
 | Repository | Keep documentation local for now |
 
 These decisions supersede the initial assumptions of a standalone panel, Prometheus Grafana data source,
-hidden history while DOWN/UNKNOWN, ifDescr-only heading, capacity overrides/fallbacks, and hover tooltips.
+hidden history while DOWN/UNKNOWN, ifDescr-only heading, capacity overrides/fallbacks. The later hover requirement supersedes the earlier no-tooltip decision.
 
 ## Proposed engineering defaults, not confirmed requirements
 

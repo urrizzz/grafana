@@ -32,7 +32,7 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
 4. **Implement visualization.** Design for very small placement from the start. Scale the full component,
    including traffic fonts, spacing, bars, axes and overlays, while preserving relative layout.
    Include blue/purple mirrored bars, symmetric autoscale, capacity, right-hand state, retained history,
-   red DOWN line, and central dashes for DOWN/UNKNOWN. No tooltips or dashboard-author scripts.
+   red segments for historical DOWN intervals, and central dashes for DOWN/UNKNOWN. No tooltips or dashboard-author scripts.
    Expose ordinary settings for selectors, mappings and visibility; no per-size font tuning is required.
 5. **Validate and package.** Execute the acceptance criteria on Grafana 13.2.2, test multiple 12-24-hour elements,
    proportional reductions and independent width/height changes, including long metadata and every state.
@@ -40,6 +40,10 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
 
 Choose a license and final identity before distribution. Do not assume the standalone panel generator supplies
 Canvas integration, and do not deploy a core modification without an explicit delivery decision.
+
+The bars must remain clearly visible at native size. Use matching blue/purple current numbers with contrast
+protection. Validate recovered outages and missing status against historical status queries, not just the
+range-end badge.
 
 ## Documentation checks
 

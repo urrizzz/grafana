@@ -20,12 +20,13 @@
 | Channel metadata | ifName, ifAlias, ifDescr shown by default in an information block to the right, outside the traffic area |
 | Configuration | Source metric/label names and identity-field visibility can be changed |
 | Standard defaults | ifOperStatus, ifHighSpeed, ifHCInOctets, ifHCOutOctets, and standard identity names |
-| Plot | IN blue above zero; OUT purple below zero; foreground text over background bars |
+| Plot | Clearly visible IN blue and OUT purple bars; current numbers match direction colors with readable contrast |
 | Axis | Shared symmetric autoscale from visible traffic, separate from capacity |
 | Current values | Center of each half; five-minute averages ending at dashboard range end |
 | UP | Green circle and UP in the right-hand information block |
-| DOWN | Red circle and DOWN in the right-hand information block, red middle line, retained history, central dashes |
+| DOWN | Red circle and DOWN in the right-hand information block, historical DOWN segments only, retained history, central dashes |
 | UNKNOWN | Gray circle and UNKNOWN in right-hand block for missing/stale status, retained history, central dashes |
+| Outage history | Red center-line segments only where observed status was DOWN, even if the channel has since recovered; gaps/unknown never imply DOWN |
 | Interaction | No tooltips; information directly visible |
 | Repository | Keep documentation local for now |
 

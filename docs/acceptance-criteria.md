@@ -14,10 +14,10 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-08 | Capacity value 100 | ifHighSpeed displays 100 Mbit/s in right-hand block; no manual override or ifSpeed fallback assumed |
 | AC-09 | Missing capacity | Explicit unknown capacity; history remains usable |
 | AC-10 | Fresh UP | Green circle and UP in right-hand block; valid current rates visible |
-| AC-11 | Fresh DOWN | Red circle and DOWN in right-hand block, red middle line, both current values dashes; history retained |
-| AC-12 | Missing/stale/unknown status | Gray circle and UNKNOWN in right-hand block, current dashes, history retained; no red DOWN line |
+| AC-11 | Fresh DOWN | Red circle and DOWN in right-hand block, red middle-line segments limited to known DOWN intervals, both current values dashes; history retained |
+| AC-12 | Missing/stale/unknown status | Gray circle and UNKNOWN in right-hand block, current dashes, history retained; unknown intervals not marked red, prior known outages retained |
 | AC-13 | Status changes | DOWN/UNKNOWN do not clear history or replace it with zero |
-| AC-14 | Direction and color | Blue IN upward; purple OUT downward; text remains above bars |
+| AC-14 | Direction and color | Clearly visible blue IN upward and purple OUT downward; current numbers match those colors and stay readable over bars |
 | AC-15 | Equal rates | Equal magnitude produces equal heights above/below zero |
 | AC-16 | Autoscale | Same scale in both halves based on visible traffic, independent of capacity |
 | AC-17 | Rates and units | Five-minute averages in decimal bit units; 1,000 octets/s becomes 8 kbit/s |
@@ -35,6 +35,9 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-29 | Very small component | At 120 x 70, IN/OUT values are readable at normal zoom; metadata/status/capacity stay outside the graph |
 | AC-30 | Non-proportional resize and long metadata | No glyph distortion or overlapping content; fitting policy is visually validated |
 | AC-31 | Dashboard-author setup | Required behavior is available through ordinary settings without JavaScript, ECharts/SVG scripts, or per-size font adjustments |
+| AC-32 | Recovered channel | UP badge/current rates with red segments still visible only at earlier known DOWN times |
+| AC-33 | Intermittent outage and missing status | Red segments align with observed DOWN intervals; no red across UP/UNKNOWN or collection gaps |
+| AC-34 | Native-size color contrast | Bright bars and matching colored current values remain distinguishable at 120 x 70 in both themes |
 
 ## Validation layers
 

@@ -42,11 +42,11 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 - Place the status circle and UP/DOWN/UNKNOWN label in the information block to the right of the traffic area.
 - Move all enabled channel/router identity fields and capacity into that right-hand block, outside the graph.
 - Keep only the traffic graph, IN/OUT rates and their axis/direction labels inside the 120 x 70 traffic area.
-- Incoming traffic is **blue**, occupies the upper half, and grows upward.
+- Incoming traffic is **blue**, occupies the upper half, and grows upward. Bars must be clearly visible, not dim background decoration.
 - Outgoing traffic is **purple**, occupies the lower half, and grows downward.
-- Center the current IN and OUT values within their respective plot halves.
+- Center the current IN and OUT values within their respective plot halves. Use matching blue IN and purple OUT numbers; preserve readability over bars with a contrasting outline or backing.
 - Draw a middle zero line and sparse time labels along the lower axis.
-- When DOWN, make the middle line **red**; retain both directions of historical bars.
+- Draw **red middle-line segments only over known historical DOWN intervals**, aligned to the time axis. Keep the rest of the line neutral and retain traffic history.
 - Use the same symmetric Y-axis magnitude for both directions, based on visible valid traffic.
 - Format capacity, rates, and axis values automatically in bit/s, kbit/s, Mbit/s, or Gbit/s.
 - Keep all rate labels nonnegative; inversion is only a plotting operation.
@@ -101,15 +101,20 @@ At 12 hours there are up to 144 complete buckets per direction; at 24 hours, up 
 
 | Range-end state | Indicator in right-hand block | Historical bars | Central IN/OUT | Middle line |
 | --- | --- | --- | --- | --- |
-| Fresh UP | Green circle + UP | Available history remains | Valid five-minute averages | Neutral |
-| Fresh DOWN | Red circle + DOWN | Available history remains | Dashes | Red |
-| Missing, unknown, or stale status | Gray circle + UNKNOWN | Available history remains | Dashes | Neutral |
-| UP with missing traffic direction | Green circle + UP | Available history remains; missing buckets are gaps | Available direction numeric, missing direction dash | Neutral |
+| Fresh UP | Green circle + UP | Available history remains | Valid five-minute averages | Red only at known historical DOWN intervals |
+| Fresh DOWN | Red circle + DOWN | Available history remains | Dashes | Red only at known historical DOWN intervals |
+| Missing, unknown, or stale status | Gray circle + UNKNOWN | Available history remains | Dashes | Red only at known historical DOWN intervals |
+| UP with missing traffic direction | Green circle + UP | Available history remains; missing buckets are gaps | Available direction numeric, missing direction dash | Red only at known historical DOWN intervals |
 
 A status change alone must never clear history. Historical traffic remains scoped to the selected interface
 and dashboard range. If a history query fails, any retained cached history must be visibly marked stale;
 never reuse a previous interface's data. Separate a query error from a confirmed device DOWN state.
-UNKNOWN does not use the red DOWN line. Capacity can remain visible in every state when trustworthy.
+Unknown/stale intervals never produce red segments. Previously observed DOWN intervals remain red even when
+range-end status is UP or UNKNOWN. Capacity can remain visible in every state when trustworthy.
+
+The range-end badge and dashes describe the latest state; the segmented red line describes status history.
+Do not extend a current DOWN state across the whole selected time range or infer outages from zero traffic.
+Status-history gaps must remain unknown rather than being bridged into a continuous outage.
 
 ## Scope
 

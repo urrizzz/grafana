@@ -18,12 +18,12 @@ Each display has its own router/interface selection and can be positioned and re
 - Put `ifName`, `ifAlias`, `ifDescr`, status and capacity in an information block to the right of the graph. Router fields stay hidden by default.
 - Source metric/label mappings and individual identity-field visibility are configurable.
 - Capacity comes from `ifHighSpeed`, expressed in Mbit/s at the source.
-- Incoming blue bars rise above the middle; outgoing purple bars extend below it.
+- Clearly visible blue bars rise above the middle; purple bars extend below it. Current values use matching direction colors with readable contrast.
 - Bars represent five-minute average bit rates, using one symmetric scale based on visible traffic.
 - Text overlays the graph. Central IN/OUT values are five-minute averages at the dashboard range end.
 - Follow dashboard time range and refresh; typical history is 12-24 hours.
 - Right-hand status circle and label: green UP, red DOWN, gray UNKNOWN (including stale status).
-- DOWN retains history, adds a red middle line, and shows dashes for central values.
+- Red middle-line segments mark historical DOWN intervals only, including past outages after recovery. Current DOWN retains history and shows central dashes.
 - UNKNOWN retains history and shows dashes for central values.
 - Display information directly; no tooltips.
 - Design the traffic area at **120 x 70 pixels**, with readable IN/OUT values; scale it proportionally upward.

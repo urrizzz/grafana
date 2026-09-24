@@ -52,7 +52,7 @@ The user should not have to manually synchronize several query expressions after
 
 Use configured source mappings, resolve fixed values/dashboard variables, and preserve exactly one channel per element.
 Deduplicate identical requests where useful, cancel obsolete subscriptions, and ignore late responses for old selections.
-Keep history requests (300-second resolution), range-end current rates, and metadata/status logically distinct.
+Keep history requests (300-second resolution), range-end current rates, and metadata/status logically distinct. Query status history at collection resolution to derive time-localized DOWN intervals.
 Use dashboard refresh events, not a second polling clock. Preserve valid history on DOWN/UNKNOWN transitions.
 Data from one element must never leak into another. Verify reload/duplication preserves independent settings.
 
@@ -79,7 +79,7 @@ The Business Charts research preview remains a separate scripted comparison, not
 | Options | Selectors, mappings, visibility, data-source reference and validation |
 | Queries | VictoriaMetrics plugin requests, interpolation, fixed-step history, cancellation |
 | Normalization | Unique identity, metadata, rates, capacity, source freshness and errors |
-| Rendering | Mirrored bars, shared scale, text overlay, state circle and DOWN middle line |
+| Rendering | Mirrored bars, shared scale, text overlay, state circle and historical DOWN line segments |
 | Formatting | Decimal bit units and directly visible time/quality information |
 
 TypeScript with React and matching Grafana packages is a candidate after the host API is established.

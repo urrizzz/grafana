@@ -3,7 +3,7 @@
 A compact Cisco port/tunnel traffic display intended to live **inside Grafana's built-in Canvas panel**.
 Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
-**Target:** Grafana **13.2.2**. **Status:** requirements and design only; no executable traffic plugin yet.
+**Target:** Grafana **13.2.2**. **Status:** requirements, design, and runnable mock metrics; no traffic visualization plugin yet.
 **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Changes remain local at the owner's request.
 
 ![UP, DOWN, and UNKNOWN traffic displays](docs/assets/panel-wireframe.svg)
@@ -36,6 +36,11 @@ Each display has its own router/interface selection and can be positioned and re
 | [Development plan](docs/development.md) | Implementation sequence and local environment constraints |
 | [Decisions](docs/decisions.md) | Confirmed answers, proposed defaults, and remaining technical checks |
 
+## Mock metrics
+
+A [local IF-MIB exporter and history generator](docs/mock-metrics.md) provides ten synthetic channels,
+including normal traffic, DOWN, UNKNOWN, missing samples, and counter resets.
+
 ## Implementation prerequisite
 
 Embedding this visualization inside the built-in Canvas panel is a firm requirement.
@@ -44,4 +49,4 @@ Do not assume a standalone panel plugin can be installed as a Canvas element.
 The architecture document defines the feasibility check before scaffolding or choosing a delivery model.
 
 Representative exported series/labels and the installed VictoriaMetrics plugin version remain to be inspected.
-No software license has been selected. No runtime code, deployment, or GitHub push is included in this revision.
+No software license has been selected. The visualization is not implemented. Changes remain local; no GitHub push.

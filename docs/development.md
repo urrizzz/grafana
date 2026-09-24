@@ -5,7 +5,7 @@
 - Remote: `https://github.com/urrizzz/grafana.git`; local branch `main`.
 - Checkout: `C:\Codex\projects\grafana`.
 - Documentation remains local; do not push until requested.
-- No executable traffic plugin or build command exists in this repository yet.
+- The visualization plugin is not implemented. A runnable [mock metrics exporter](mock-metrics.md) and tests are available.
 
 Existing workspace tooling includes Node/npm, Git, Python, Docker/WSL, and browser-testing tools.
 The generic starter in `C:\Codex\projects\local-dashboard-panel` is a reference, not this implementation.
@@ -40,4 +40,4 @@ Canvas integration, and do not deploy a core modification without an explicit de
 ## Documentation checks
 
 Validate local Markdown links, SVG XML, consistency with confirmed decisions, encryption of changed files,
-and `git diff --check`. No application tests are claimed for this documentation-only phase.
+and `git diff --check`. Mock exporter tests cover counter behavior and history consistency; visualization and Canvas integration tests remain pending.

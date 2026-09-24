@@ -24,3 +24,7 @@ test-results/
 .DS_Store
 Thumbs.db
 .idea/
+
+# Python mock exporter
+__pycache__/
+*.pyc

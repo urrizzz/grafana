@@ -1,0 +1,11 @@
+# Native Windows Prometheus example. For Docker connectivity, see mock-metrics.md.
+global:
+  scrape_interval: 60s
+scrape_configs:
+  - job_name: cisco-mock
+    honor_labels: true
+    static_configs:
+      - targets: ['127.0.0.1:9187']
+# Enable only against a LOCAL DEVELOPMENT VictoriaMetrics instance:
+# remote_write:
+#   - url: http://127.0.0.1:8428/api/v1/write

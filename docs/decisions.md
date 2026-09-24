@@ -4,6 +4,7 @@
 
 | Topic | Decision |
 | --- | --- |
+| Grafana deployment | Grafana cannot be modified; no core patches, custom Grafana builds or runtime bundle modifications |
 | Target | Grafana 13.2.2 |
 | Data path | Prometheus collects, forwards to VictoriaMetrics; Grafana uses the VictoriaMetrics data-source plugin |
 | Collection | Every 60 seconds |
@@ -52,8 +53,10 @@ Very small text may become difficult to read, but shrinking must preserve compos
 
 ## Technical checks before implementation
 
-1. **Canvas extension route:** verify a supported custom element on the exact Grafana 13.2.2 installation.
-   A standard panel plugin is not assumed embeddable. See [architecture](architecture.md).
+1. **Canvas delivery decision:** source inspection of installed 13.2.2 found no supported external registration
+   route. The owner ruled out modifying Grafana. A standalone panel is recommended but requires approval
+   of the changed placement requirement.
+   See [implementation investigation](implementation-investigation.md).
 2. **Exported data shape:** inspect full labels and channel metadata for one port and one tunnel; names alone
    do not establish whether metadata is stored as labels or separate series, or how joins remain unique.
 3. **Data-source contract:** identify VictoriaMetrics plugin version and prove queries, time steps, rate semantics,

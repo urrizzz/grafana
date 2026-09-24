@@ -6,7 +6,9 @@ Build a compact traffic display **inside the built-in Grafana Canvas panel**, ta
 Support multiple independently configured displays in the same Canvas, placed beside router representations.
 Each display can be freely moved and resized; its traffic area scales proportionally from 120 x 70,
 while the separate information block and hover tooltip retain readable typography.
-Canvas extension feasibility is an implementation prerequisite, not an already-proven capability.
+Grafana itself must remain unmodified. The investigation found no supported external Canvas-element
+registration route in the installed 13.2.2. This conflicts with the built-in Canvas placement requirement;
+a standalone panel is an alternative awaiting a placement decision, not an approved substitution.
 
 Each display selects exactly one router (`instance`) and channel (`ifName`). Both fixed strings and
 single-valued dashboard variables are supported. Resolve variables before selection. Proposed handling for

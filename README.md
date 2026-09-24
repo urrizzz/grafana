@@ -55,7 +55,10 @@ including normal traffic, DOWN, UNKNOWN, missing samples, and counter resets.
 ## Implementation prerequisite
 
 Embedding this visualization inside the built-in Canvas panel is a firm requirement.
-A supported custom Canvas-element integration for Grafana 13.2.2 has **not yet been verified**.
+Inspection of the installed Grafana 13.2.2 source found **no supported external Canvas-element registration route**.
+**Grafana must remain unmodified**, so a custom build is ruled out. A standalone panel is the recommended
+alternative, subject to agreement on dashboard placement instead of built-in Canvas.
+See the [implementation investigation](docs/implementation-investigation.md) for concrete options.
 Do not assume a standalone panel plugin can be installed as a Canvas element.
 The architecture document defines the feasibility check before scaffolding or choosing a delivery model.
 

@@ -2,34 +2,26 @@
 
 ## Required host
 
+Deployment constraint: Grafana itself must remain unmodified. Do not patch core source, modify runtime
+bundles, or deploy a custom Grafana build.
+
 The user explicitly requires multiple independently configured, movable, resizable traffic displays
 **inside Grafana's built-in Canvas panel**, running Grafana **13.2.2**.
 A standalone panel on the dashboard is not an agreed substitute.
 The earlier standalone panel-plugin architecture is superseded by this requirement.
 
-## Extension feasibility: unresolved
+## Extension feasibility: source investigation complete
 
-The [Canvas documentation](https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/canvas/)
-describes built-in element types, placement, and data bindings. It does not establish an external plugin API
-for registering a new time-series Canvas element. The
-[upstream Canvas registry](https://github.com/grafana/grafana/blob/main/public/app/features/canvas/registry.ts)
-examined during this review imports internal element implementations and initializes their registry.
+Read-only inspection of the exact installed Grafana 13.2.2 source found that the registry, picker and saved
+element resolution use internal element lists, with no supported external Canvas registration route exposed.
+A normal panel plugin cannot satisfy this host requirement through the inspected supported APIs.
+See [implementation investigation](implementation-investigation.md) for version evidence, code locations,
+delivery alternatives and the proposed renderer/query design.
 
-**Inference:** ordinary panel-plugin scaffolding is not sufficient proof of Canvas-element support.
-These sources describe current documentation/main; the exact 13.2.2 implementation has not been verified.
-The attempted version-pinned source fetch was unavailable, which is not evidence that the version lacks the capability.
-
-Before scaffolding:
-
-1. Inspect the exact installed 13.2.2 Canvas implementation and supported extension APIs.
-2. Prove a minimal custom element can be registered, rendered, resized, saved, and reloaded in the built-in Canvas.
-3. Prove access to time-series frames and per-element configuration, dashboard variables, range, and refresh.
-4. Determine whether the route is supported without modifying Grafana core.
-5. If only a core patch/fork or replacement panel can satisfy the visuals, document the concrete tradeoffs and
-   obtain a delivery decision. Such changes are not authorized by the current documentation task.
-
-Do not label an ordinary dashboard panel, static SVG image, or replacement Canvas plugin as satisfying the built-in Canvas requirement.
-The traffic renderer can be designed independently while the host integration is investigated.
+The owner confirmed that Grafana cannot be modified, ruling out source-integrated elements and custom builds.
+A standalone panel is the recommended feasible alternative, but changes the agreed placement requirement
+and has not been approved. No supported route meeting both unmodified Grafana and built-in Canvas placement
+was found. See the investigation for the standalone approach and layout limitations.
 
 ## Data flow and query ownership
 

@@ -1,0 +1,47 @@
+{
+  "grafanaVersion": "13.2.2",
+  "commit": "1bea008f7e4e858b6824c9e364d608bd4d10b13a",
+  "method": "Read-only inspection of source shipped in running local Grafana image; no runtime modification or registration experiment.",
+  "files": [
+    {
+      "path": "public/app/features/canvas/registry.ts",
+      "sha256": "dbe07357307f4365a83da2c9050c4c7afeb5dece74c8d73b7ee157ef98e3bbe3"
+    },
+    {
+      "path": "public/app/features/canvas/element.ts",
+      "sha256": "7c18c5b2441608bc7a31eb6693c297ea7dcc7b26871900ec5c5b3b5642ff9e3f"
+    },
+    {
+      "path": "public/app/features/canvas/runtime/frame.tsx",
+      "sha256": "53cfc573aeda38ce88493bb60e722c2ee9f60fc468c8734d9ba7cc6bdb81b3c6"
+    },
+    {
+      "path": "public/app/features/canvas/runtime/element.tsx",
+      "sha256": "fd283d3858764fa2130af369dea9cc326beac5be4108e64f21db9f3c9768ec3c"
+    },
+    {
+      "path": "public/app/features/canvas/runtime/scene.tsx",
+      "sha256": "1e302a7e11c8097284cf61b5494155f393a6169c626d7912737113eb5ccc3364"
+    },
+    {
+      "path": "public/app/features/dimensions/context.ts",
+      "sha256": "d898cf74f11a3264ff3ad51b98e7a797178fa0658371bf2ef4ba3fa2a131cc08"
+    },
+    {
+      "path": "public/app/plugins/panel/canvas/utils.ts",
+      "sha256": "b6e0ba3d7b6584531deb73ab91f08611ec5511f48b4e7b4dff7797bc5ec49b50"
+    },
+    {
+      "path": "public/app/plugins/panel/canvas/editor/element/elementEditor.tsx",
+      "sha256": "3dbba8c8d9e62f400a12d4a917e8e54c8ca1c16e455163a103198958b9de1cd8"
+    },
+    {
+      "path": "public/app/plugins/panel/canvas/CanvasPanel.tsx",
+      "sha256": "8f11c9f24c4000b93a12a6b3358c2108a88b9da20638193866b3bbf0c3536d7c"
+    },
+    {
+      "path": "public/app/features/plugins/loader/sharedDependencies.ts",
+      "sha256": "9892c29f1a69341b0eab74bb1b3cbac0ba344f8ba53fbf9d00b385020bcac3a3"
+    }
+  ]
+}

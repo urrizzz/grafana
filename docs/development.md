@@ -23,8 +23,9 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
 
 ## Implementation milestones
 
-1. **Prove built-in Canvas integration.** Inspect the exact version, register/render/persist a minimal element,
-   and establish whether this can be supported without modifying Grafana core. Record results before selecting packaging.
+1. **Resolve host placement.** Exact-version source inspection found no supported external Canvas-element
+   registration route, and the owner ruled out Grafana modifications. Agree on a standalone-panel alternative
+   before scaffolding; do not start a core patch. See [investigation](implementation-investigation.md).
 2. **Inspect source data.** Capture sanitized labels/metadata for a port and tunnel and record the installed
    VictoriaMetrics data-source plugin ID/version. Collection interval and rate meaning are already confirmed.
 3. **Prove queries.** Independently select multiple channels, interpolate variables, customize mappings, and follow

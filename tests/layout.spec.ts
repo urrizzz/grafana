@@ -1,7 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import dashboard from '../provisioning/dashboards/development.json';
 
-
 async function openEditor(page: Page, index = 0) {
   const menus = page.getByRole('button', { name: 'Menu for panel Interface Map layout editor', exact: true });
   await page.getByText('Interface Map layout editor', { exact: true }).nth(index).hover();
@@ -89,20 +88,35 @@ test('pointer movement respects zoom, resize and view mode', async ({ page, requ
   await panel.getByRole('button', { name: 'Load fixture layout', exact: true }).click();
   for (const zoom of [0.25, 0.5, 0.75, 1, 1.25, 1.5]) {
     await choose(page, panel, 'Diagram zoom', `${zoom * 100}%`);
-    await choose(page, panel, 'Selected element', 'BRANCH-01');
-    await panel.getByLabel('X', { exact: true }).fill('400');
-    await panel.getByLabel('Y', { exact: true }).fill('100');
-    await panel.locator('.viewport').evaluate((el, scale) => {
-      el.scrollTop = 40 * scale;
-      el.scrollLeft = 60 * scale;
-    }, zoom);
-    const box = await panel.getByTestId('router-r2').boundingBox();
-    await page.mouse.move(box!.x + 30 * zoom, box!.y + 20 * zoom);
-    await page.mouse.down();
-    await page.mouse.move(box!.x + 100 * zoom, box!.y + 60 * zoom, { steps: 8 });
-    await expect(panel.getByTestId('router-r2')).toHaveCSS('left', '470px');
-    await expect(panel.getByTestId('router-r2')).toHaveCSS('top', '140px');
-    await page.mouse.up();
+    for (const [id, label] of [
+      ['router-r2', 'BRANCH-01'],
+      ['traffic-t1', 'Tunnel10'],
+    ]) {
+      await choose(page, panel, 'Selected element', label);
+      await panel.getByLabel('X', { exact: true }).fill('400');
+      await panel.getByLabel('Y', { exact: true }).fill('100');
+      await panel.locator('.viewport').evaluate((el, scale) => {
+        el.scrollTop = 40 * scale;
+        el.scrollLeft = 60 * scale;
+      }, zoom);
+      const node = panel.getByTestId(id);
+      const box = (await node.boundingBox())!;
+      await page.mouse.move(box.x + 30 * zoom, box.y + 20 * zoom);
+      await page.mouse.down();
+      await page.mouse.move(box.x + 60 * zoom, box.y + 40 * zoom);
+      await page.mouse.up();
+      await expect(node).toHaveCSS('left', '400px');
+      await expect(node).toHaveCSS('top', '100px');
+      const handle = (await node.getByRole('button', { name: `Move ${label}`, exact: true }).boundingBox())!;
+      await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(handle.x + handle.width / 2 + 70 * zoom, handle.y + handle.height / 2 + 40 * zoom, {
+        steps: 8,
+      });
+      await page.mouse.up();
+      await expect(node).toHaveCSS('left', '470px');
+      await expect(node).toHaveCSS('top', '140px');
+    }
   }
   await choose(page, panel, 'Diagram zoom', '100%');
   await choose(page, panel, 'Selected element', 'Tunnel10');

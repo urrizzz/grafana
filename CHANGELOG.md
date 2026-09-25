@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.3 - Unreleased
+
+- Unify router and traffic dragging with the same four-way handle and placement in both display modes.
+- Body clicks select without moving elements; connections continue to follow routers.
+
 ## 0.3.2 - Unreleased
 
 - Add status to compact headings and retain corner status indicators in both modes.

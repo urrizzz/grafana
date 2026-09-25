@@ -8,11 +8,12 @@ for commands/environment. Update this document with every meaningful development
 ## Current position
 
 **M3 compact renderer implemented and verified locally; owner acceptance pending. M1 and M2 remain accepted.**
-Running version: **0.3.2**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
+Running version: **0.3.3**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
 purple OUT, shared automatic axes, matching range-end values and status borders. Historical outages
 appear only over known DOWN intervals; DOWN/UNKNOWN retain available history with current dashes.
 Hover snaps to complete five-minute buckets and reads actual samples in an external tooltip.
 Per-block Show interface details defaults to false. Turning it off collapses the side block and centers the channel name plus colored circle/status above the graph.
+Routers and traffic use the same four-way handle above the top-right edge in edit mode; body clicks select without dragging.
 The corner status circle remains visible in both modes; graph coordinates are preserved. Individual field choices persist.
 
 Open the [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and follow
@@ -384,3 +385,14 @@ The handle sits beside the compact heading, preserving heading space and graph c
 Requirements and both HTML references updated. Typecheck/lint, 35 unit tests and production build passed.
 Both reference smoke checks and all four targeted browser scenarios passed. Browser validation covers compact/full indicators, saved visibility
 and four-way icon movement at multiple zoom levels. Changes local, not pushed; owner review pending.
+
+### Consistent component movement (2026-09-25)
+
+Version 0.3.3 shares one four-way movement handle for routers and traffic in compact/full modes.
+The same 22 px handle sits above/right of each router or graph. Bodies select on click but do not drag;
+handles alone begin movement. Existing zoom compensation, pointer capture/cancel, connection routing
+and view-mode locking remain shared. Connections follow routers and have no independent position.
+Verification: typecheck/lint, 35 unit tests and build passed. All seven layout/traffic browser scenarios
+passed, including body non-movement and identical handle movement for both types at six zoom levels,
+connection routing, resize, save/reload and discard. Diagram-reference smoke check passed.
+Changes committed locally, not pushed; owner validation pending.

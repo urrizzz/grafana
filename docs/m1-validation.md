@@ -1,5 +1,8 @@
 # M1 layout editor validation
 
+Movement update (0.3.3): in panel edit mode, move both routers and traffic using the four-way arrow
+handle above their top-right edge. Body clicks select only. Connections follow routers automatically.
+
 This checks the real plugin's layout editor, not the HTML mockup. Traffic values and result-driven channel
 selection are intentionally absent until M2/M3. Fixture identity fields are editable text for this milestone.
 

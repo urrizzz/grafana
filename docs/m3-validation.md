@@ -1,6 +1,6 @@
 # M3 compact traffic validation
 
-Running version: 0.3.2 on Grafana 13.2.2, port 3001. Owner validation pending.
+Running version: 0.3.3 on Grafana 13.2.2, port 3001. Owner validation pending.
 Open your [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and reload the page.
 Its saved layout, queries and selections are preserved. Keep the fixed fixture time range and the
 Network Map Mock Frames datasource; switching datasources can replace queries (see M2 guide).
@@ -48,3 +48,11 @@ Keep the small status circle inside the top-right corner in BOTH compact and ful
 its existing side heading. In the editor, use a static four-way arrows movement icon, not a text drag label
 or animated image. Preserve an accessible Move <channel> label. This supersedes earlier heading-only and
 compact-only corner-indicator wording. Verify both indicators and movement at different zoom levels.
+
+### Consistent movement (2026-09-25)
+
+In panel edit mode, routers and traffic blocks use the same four-way arrow handle above the top-right
+edge of the router/graph, in both compact and full modes. Click a body to select; drag only its handle.
+Body/label/graph gestures must not move elements. View mode has no handles. Connections automatically
+follow their routers rather than being independently draggable. Validate both element types at all zooms.
+This supersedes earlier whole-router dragging and mode-specific handle placement.

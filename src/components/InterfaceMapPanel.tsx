@@ -123,7 +123,7 @@ const styles = css`
     border-radius: 8px;
     background: var(--map-router);
     padding: 8px;
-    overflow: hidden;
+    overflow: visible;
   }
   .node .muted {
     color: var(--map-muted);
@@ -290,7 +290,7 @@ function DiagramEditor({
   const worldWidth = Math.max(
     1040,
     ...diagram.routers.map((r) => r.x + 180),
-    ...diagram.traffic.map((t) => t.x + t.width + (t.showInterfaceDetails === true ? 200 : 8))
+    ...diagram.traffic.map((t) => t.x + t.width + (t.showInterfaceDetails === true ? 200 : 32))
   );
   const worldHeight = Math.max(
     660,
@@ -341,6 +341,40 @@ function DiagramEditor({
       snapshot: diagram,
     };
   };
+  const moveHandle = (node: RouterNode | TrafficNode, width: number, label: string) => (
+    <button
+      data-map-control
+      className="grip handle"
+      aria-label={`Move ${label}`}
+      title="Move element"
+      style={{
+        top: -24,
+        left: width + 4,
+        width: 22,
+        height: 22,
+        padding: 2,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onPointerDown={(event) => begin(event, node)}
+    >
+      <svg
+        data-testid="move-icon"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 2v20M2 12h20M8 6l4-4 4 4M8 18l4 4 4-4M6 8l-4 4 4 4M18 8l4 4-4 4" />
+      </svg>
+    </button>
+  );
   const move = (event: React.PointerEvent) => {
     const d = drag.current;
     if (!editing || !d) {
@@ -562,10 +596,11 @@ function DiagramEditor({
                 <div
                   key={r.id}
                   data-testid={`router-${r.id}`}
-                  className={`node router ${editing ? 'handle' : ''} ${editing && selected === r.id ? 'selected' : ''}`}
+                  className={`node router ${editing && selected === r.id ? 'selected' : ''}`}
                   style={{ left: r.x, top: r.y }}
-                  onPointerDown={(e) => begin(e, r)}
+                  onClick={() => editing && selectElement(r.id)}
                 >
+                  {editing && moveHandle(r, 150, r.name)}
                   <strong title={r.name}>{r.name}</strong>
                   <span className="muted">{r.instance || 'Instance not set'}</span>
                 </div>
@@ -583,41 +618,9 @@ function DiagramEditor({
                     data-testid={`traffic-${t.id}`}
                     className={`node traffic ${editing && selected === t.id ? 'selected' : ''}`}
                     style={{ left: t.x, top: t.y }}
+                    onClick={() => editing && selectElement(t.id)}
                   >
-                    {editing && (
-                      <button
-                        data-map-control
-                        className="grip handle"
-                        aria-label={`Move ${t.ifName}`}
-                        title="Move traffic block"
-                        style={{
-                          top: -24,
-                          left: showDetails ? 0 : t.width + 4,
-                          width: 22,
-                          height: 22,
-                          padding: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                        onPointerDown={(e) => begin(e, t)}
-                      >
-                        <svg
-                          data-testid="move-icon"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          aria-hidden="true"
-                        >
-                          <path d="M12 2v20M2 12h20M8 6l4-4 4 4M8 18l4 4 4-4M6 8l-4 4 4 4M18 8l4 4-4 4" />
-                        </svg>
-                      </button>
-                    )}
+                    {editing && moveHandle(t, t.width, t.ifName)}
                     {!showDetails && (
                       <div
                         data-testid="compact-channel-name"

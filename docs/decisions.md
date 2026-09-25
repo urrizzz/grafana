@@ -116,3 +116,13 @@ its width when disabled. Move the status indicator to a circle inside the graph 
 red DOWN, gray UNKNOWN), keeping the graph size, current values, history and status border unchanged.
 Persist independently per element, preserve hidden field preferences, and default old layouts to visible.
 See product-spec.md and AC-53 through AC-55. Requirement only; implementation is planned for M3/M4.
+
+## 2026-09-25: Configuration-first query presets
+
+Owner accepted editable standard IF-MIB presets and requested moving as much setup as possible into
+configuration. Panel-level settings cover source metric/label names and shared filters; element settings
+select router/channel and display options. Preset generation must produce normal editable Grafana queries
+and matching adapter mappings, with explicit preview/apply and preservation of manual edits. No automatic
+query replacement, Grafana core modifications or plugin-owned datasource requests. Direct query installation
+requires API feasibility verification; an importable configured starter dashboard is the fallback route.
+See the configuration-first section in product-spec.md. Not implemented in 0.2.0; add to M4 setup work.

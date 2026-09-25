@@ -16,7 +16,8 @@ without issuing requests. Unavailable or ambiguous selections stay in place with
 Open [M2 data preview](http://localhost:3001/d/network-map-data-dev) and follow [M2 validation](m2-validation.md).
 It uses synthetic TestData frames and a fixed historical time range; the original saved dashboard is preserved.
 The next implementation milestone is M3: bars, axes, hover and the per-block Show interface details option.
-Those are not implemented yet. No production VictoriaMetrics compatibility or rate semantics are claimed.
+Configuration-first editable IF-MIB presets are newly planned for M4, also not implemented yet.
+No production VictoriaMetrics compatibility or rate semantics are claimed.
 
 | Milestone | Status | Evidence / remaining work |
 | --- | --- | --- |
@@ -307,3 +308,13 @@ query IDs, Raw Frames scenarios and exact rawFrameContent survive, rather than o
 The strengthened browser save/reload test passed with all eight query definitions preserved exactly.
 Documented datasource-switch behavior and advised reloading the repaired dashboard before further edits.
 Owner should repeat save/reload without switching the demo datasource; M2 overall approval remains pending.
+
+### Configuration-first setup requirement (2026-09-25)
+
+Owner approved reducing manual query setup through IF-MIB presets and configuration. Added panel-level
+metric/label names and shared filters, generated editable Grafana queries/mappings, explicit preview/apply,
+manual-edit preservation, persistence and datasource-compatibility criteria AC-56 through AC-59.
+Direct query installation needs supported-API verification; configured starter-dashboard import is the
+fallback. Implementation is M4 work; current 0.2.0 behavior and M3 next-step order are unchanged.
+Updated product spec, decisions, acceptance criteria, implementation plan and M2 guide. Documentation-only
+change; diff checks only, no runtime tests rerun. Saved locally, not pushed.

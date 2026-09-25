@@ -88,3 +88,10 @@ A-H using Raw Frames. Random Walk has no instance/ifName labels and cannot feed 
 the datasource can reset its queries; preserve/recreate the fixture queries when doing so. Reload the
 page after a server-side repair before editing again, to avoid re-saving stale query definitions.
 Tunnel99 is metadata-only and remains UNKNOWN even with working queries; its metadata should be visible.
+
+## Planned setup improvement
+
+Owner approved configuration-first IF-MIB presets for M4: select a supported datasource, configure shared
+metric/label names and filters, then load generated editable queries with matching mappings. Version 0.2.0
+still has only mock queries preset; a new panel requires manual queries. See product-spec.md for the new
+requirement and the supported-API/starter-dashboard delivery decision to resolve before implementation.

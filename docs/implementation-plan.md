@@ -32,8 +32,8 @@ Build one installable panel for unmodified Grafana 13.2.2. Keep these constraint
 | M1 Diagram model and editor | M0 | Versioned options, routers/traffic placeholders, movement, resize, connections, save/reload | AC-22, 39-45, 52 layout portion |
 | M2 Returned-data adapter | M1 model | Frame mappings, channel index, selections, normalized traffic/state/quality | AC-02-09, 17-20, 23-24, 26, 46-52 |
 | M3 Traffic component | M2 normalized model | Native-size plot, information block, status, axes and hover | AC-10-21, 27-38, 53-54 |
-| M4 Integrated diagram | M1-M3 | Actual mapped traffic in independently configurable saved elements | AC-02-07, 22-23, 26, 31, 39-55 |
-| M5 Backend and quality validation | M4 | Reproducible live demo and complete functional/performance evidence | AC-01-55, especially 24-25 |
+| M4 Integrated diagram | M1-M3 | Actual mapped traffic in independently configurable saved elements | AC-02-07, 22-23, 26, 31, 39-59 |
+| M5 Backend and quality validation | M4 | Reproducible live demo and complete functional/performance evidence | AC-01-59, especially 24-25 |
 | M6 Distribution readiness | M5 and publishing decisions | Versioned validated artifact, then selected signing/publication route | Release checks in publishing guide |
 
 Work in this order by default. Production-shaped sample gathering can proceed at any time; missing samples
@@ -117,6 +117,17 @@ changes, rapid selection changes, datasource/query errors and channel disappeara
 no cross-channel data, no per-element fetching, and hover does not prevent editing or cause accidental dragging.
 Confirm current values are evaluated at the selected range end, not implicitly at wall-clock now.
 
+### M4 configuration-first setup deliverable
+
+Add editable IF-MIB presets and panel-level metric/label/filter configuration (AC-56 through AC-59).
+First verify supported Grafana APIs for installing query targets; if unavailable use an importable
+configured starter dashboard/panel, keeping Grafana unchanged. Generate normal queries and matching
+adapter mappings with standard defaults; provide preview and explicit apply/regenerate. Preserve manual
+query edits and explain unsupported preset datasource formats. The visualization adapter stays generic.
+Test escaping, aliases, variable filters, historical range end, query persistence and duplicated-panel
+independence. Actual VictoriaMetrics rate/quality semantics remain M5 verification. This setup feature
+is not part of the already implemented M2 adapter and does not replace M3 rendering as the next milestone.
+
 ## M5 - Real backend, performance and acceptance audit
 
 Use synthetic IF-MIB data with a local query backend and VictoriaMetrics datasource as the first real example.
@@ -129,7 +140,7 @@ record browser/render latency, refresh behavior and memory on the 16 GB machine,
 practical limits. Keep the established WSL cap and one browser worker; stop disposable services after checks.
 Do not silently coarsen data to make the chart faster. Resolve acceptance failures before calling the MVP done.
 
-Completion evidence: every AC-01 through AC-55 has a result or explicit unresolved entry in current-state.md;
+Completion evidence: every AC-01 through AC-59 has a result or explicit unresolved entry in current-state.md;
 reference screenshots, repeatable live-data setup, relevant tests and known limitations are documented.
 Unresolved required acceptance criteria prevent marking this milestone complete.
 

@@ -42,6 +42,41 @@ The primary traffic area is **120 x 70 CSS pixels**, excluding the information b
 There is no confirmed hard range limit or minimum size below this target. Determine practical limits through testing;
 do not silently replace five-minute bars with coarser intervals.
 
+## Configuration-first IF-MIB setup
+
+The standard setup must not require writing every query from scratch. Provide an editable IF-MIB preset
+built from panel-level setup settings, while retaining an advanced manual-query path for any compatible
+datasource. This is a new requirement, not a feature present in 0.2.0.
+
+- Select the datasource through Grafana. Supply a preset for the first supported VictoriaMetrics query
+  format; validate datasource-specific query models before claiming additional preset compatibility.
+- Default metric names: ifHCInOctets, ifHCOutOctets, ifOperStatus and ifHighSpeed. Allow changing these
+  in setup configuration. Default identity/metadata names: instance, name, ifName, ifAlias, ifDescr.
+- Configure router/interface filters and optional extra label matchers (for example job/site) once per
+  diagram. Allow dashboard variables. Escape/validate names and literal matcher values when generating
+  expressions; distinguish literal filters from explicitly chosen regex/variable filters.
+- Generate the required history/current/status/capacity queries and matching result-role configuration.
+  Metadata may come from existing labels; do not invent a separately queryable string metric. Expose
+  an optional metadata-query override for deployments that need one.
+- Preserve the five-minute rate window and bar interval, 60-second expected collection interval, and
+  historical range-end semantics. Optional source-quality evidence must not be presented as verified
+  unless returned. Configuration-first setup does not change these accepted defaults or data semantics.
+- Generated queries remain visible and editable in Grafana's normal Queries tab. Applying a preset is
+  an explicit setup action with a preview; never overwrite queries automatically on render, refresh,
+  datasource switching, or opening the editor. Preserve custom queries and identify replacements before
+  applying. Manual query edits remain authoritative until explicit regeneration; show when preset inputs
+  have changed instead of silently keeping two conflicting configurations in sync.
+- Persist preset settings, result mappings and per-element selections with the dashboard. Generated
+  executable query definitions belong in Grafana targets, not in a parallel plugin query executor.
+- Each traffic block only selects router/channel and display options such as Show interface details.
+  Source metric names and shared filters belong at panel level, not on every traffic block.
+
+Implementation must use supported Grafana APIs without core modifications. Confirm whether direct query
+installation is supported for this panel context; otherwise deliver an importable starter dashboard or
+generated panel configuration as the supported preset-loading route. Do not promise a direct in-panel
+Load preset button until that API path is verified. The user-facing outcome remains configuration-driven
+standard setup with editable queries, not manual construction of all IF-MIB expressions.
+
 ## Configurable fields
 
 | Field | Meaning | Default visibility |

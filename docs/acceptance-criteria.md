@@ -79,6 +79,15 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-54 | Compact footprint/status | Hidden details leave only the configured graph footprint; graph position/size unchanged; green/red/gray status circle inside top-right, accessible label, no rate overlap; border and hover remain |
 | AC-55 | Toggle persistence/isolation | Re-enable restores metadata preferences; save/reload and duplication retain the setting; other blocks, selection and queries are unaffected |
 
+## Configuration-first setup
+
+| ID | Scenario | Expected behavior |
+| --- | --- | --- |
+| AC-56 | Standard IF-MIB preset | Supported datasource plus configured metric/label names and filters produce editable queries and matching role mappings without writing every expression |
+| AC-57 | Explicit preset application | Preview/apply identifies replaced queries; render, refresh, datasource changes and editor entry never silently regenerate; custom edits preserved until explicit replacement |
+| AC-58 | Setup persistence and independence | Preset settings, Grafana query targets, mappings and selections survive save/reload and panel duplication; elements share results and issue no requests |
+| AC-59 | Query correctness/compatibility | Generated expressions escape literal filters, support explicit variables, retain identity, units, five-minute rates and range-end semantics; unsupported datasource preset formats are explained |
+
 ## Validation layers
 
 First prove the normal panel lifecycle and configurable returned-frame contract on the target installation.

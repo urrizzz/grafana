@@ -30,12 +30,13 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 - UNKNOWN retains history and shows dashes for central values.
 - Keep current information visible; hovering the graph adds a vertical cursor and time-specific IN/OUT rates.
 - Design the traffic area at **120 x 70 pixels**, with readable IN/OUT values; scale it proportionally upward.
-- Keep channel details outside that traffic area; turn off **Show interface details** per block to collapse that space and move the status circle inside the top-right corner.
+- Optional side details use additional space; the corner status circle remains visible in both modes.
+- Use four-way move handles and diagonal resize handles in the panel editor. Router sizes and connection endpoints persist.
 - Configure through normal settings; dashboard authors do not write or paste scripts.
 
 ## Documentation
 
-Start development with the [implementation plan](docs/implementation-plan.md) and
+Start development with the [agent handoff](docs/agent-handoff.md), [implementation plan](docs/implementation-plan.md) and
 [current state](docs/current-state.md). Keep them current with implementation and verification evidence.
 
 | Document | Purpose |

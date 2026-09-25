@@ -3,7 +3,7 @@
 Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
 M2 consumes returned query data for router/channel selection, automatic metadata and current-value previews.
 M3 traffic bars, hover and Show interface details are implemented locally; owner review remains pending.
-See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
+See [current state](current-state.md) for verification and [M3 validation](m3-validation.md) for review.
 
 ## Placement and selection
 
@@ -130,7 +130,7 @@ Diagram selection handles/outlines remain separate editing indicators and must n
 
 - In the right-hand information block, put the channel name first, immediately followed on the same line by the colored circle and status word: `TUNNEL01 [circle] UP`. Apply this order to DOWN and UNKNOWN too; retain the existing status colors.
 - Move all enabled channel/router identity fields and capacity into that right-hand block, outside the graph.
-- Keep only the traffic graph, IN/OUT rates and their axis/direction labels inside the 120 x 70 traffic area.
+- Keep traffic, IN/OUT values, axes/direction labels and the small top-right status circle inside the 120 x 70 traffic area; the channel/status heading stays outside.
 - Incoming traffic is **blue**, occupies the upper half, and grows upward. Bars must be clearly visible, not dim background decoration.
 - Outgoing traffic is **purple**, occupies the lower half, and grows downward.
 - Center the current IN and OUT values within their respective plot halves. Use matching blue IN and purple OUT numbers; preserve readability over bars with a contrasting outline or backing.

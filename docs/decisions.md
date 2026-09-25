@@ -87,7 +87,7 @@ The split layout supersedes metadata/status/capacity inside the graph and whole-
 - Duplicate only the selected router/traffic element, offset it and select the copy; retain its channel
   binding but do not silently copy connections or dependent elements.
 - Suppress connections between overlapping/touching boxes until a clear corridor exists. Route using fixed
-  150x64 router bounds matching the rendered cards; unrelated obstacle avoidance remains out of scope.
+  actual router bounds (legacy default 150x64; optional saved dimensions since 0.3.5); unrelated obstacle avoidance remains out of scope.
 - M1 traffic plot resize range is 120-360 px, preserving 120:70 proportions; this is an editor bound, not a
   final product maximum. Fixture identities are editable text until result-driven selection in M2/M4.
 
@@ -111,7 +111,7 @@ do not leave old errors in the persistent save hint. Avoid a timer that could hi
 
 ## 2026-09-25: Optional interface details on each traffic block
 
-Use **Show interface details**, enabled by default, to hide the entire side-information block and reclaim
+Historical decision (superseded: compact is the default since 0.3.1): use **Show interface details**, enabled by default, to hide the entire side-information block and reclaim
 its width when disabled. Move the status indicator to a circle inside the graph top-right (green UP,
 red DOWN, gray UNKNOWN), keeping the graph size, current values, history and status border unchanged.
 Persist independently per element, preserve hidden field preferences, and default old layouts to visible.

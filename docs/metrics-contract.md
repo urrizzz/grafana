@@ -69,7 +69,7 @@ Proposed bucket algorithm for dashboard range `[T0, T1]` in epoch seconds:
 2. Last complete endpoint: `floor(T1 / 300) * 300`.
 3. Evaluate five-minute rates every 300 seconds; draw each interval `(endpoint - 300, endpoint]`.
 4. Evaluate current IN/OUT separately at `T1`, over the five minutes ending there.
-5. Format visible time labels in the dashboard time zone; keep a visible current-window caption.
+5. Format visible time labels in the dashboard time zone; omit the tiny current-window caption; accessible plot text identifies the range-end evaluation and hover shows bucket times.
 
 If there are no complete bars, show a short visible range hint; a valid current value may still be shown when UP.
 Never relabel coarser returned samples as five-minute buckets. The data-source request must preserve 300-second resolution.

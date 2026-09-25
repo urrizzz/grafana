@@ -1,10 +1,10 @@
 # Acceptance criteria
 
-Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
-Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
-See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
+Project status: 0.3.5 implements the diagram editor, returned-data adapter and compact SVG renderer.
+See [current state](current-state.md) for evidence and remaining work, and [M3 validation](m3-validation.md) for review.
 
-These are future implementation checks, not tests already passed. The custom diagram approach is approved; live plugin validation remains pending.
+These are product acceptance criteria, not a blanket claim that all checks have passed. M1/M2 are owner-accepted;
+M3 final review, real backend/performance validation and distribution remain outstanding.
 
 | ID | Scenario | Expected result |
 | --- | --- | --- |
@@ -12,14 +12,14 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-02 | Multiple displays | Each retains independent instance/ifName settings and data |
 | AC-03 | Fixed selectors or dashboard variables | Both work, including changes during in-flight requests |
 | AC-04 | Empty/ambiguous selection | Clear configuration state; no arbitrary channel selection or aggregation |
-| AC-05 | Default metadata visibility | Compact by default with centered ifName heading; enabling details shows ifName, ifAlias, ifDescr on the right; router instance/name hidden |
+| AC-05 | Default metadata visibility | Compact by default with centered ifName/circle/status heading; enabling details shows ifName, ifAlias, ifDescr on the right; router instance/name hidden |
 | AC-06 | Mapping/visibility changes | Custom source names and individual field visibility work without code edits |
 | AC-07 | Metadata safety and missing fields | Text is safe; missing enabled fields are explicit; no hover required |
 | AC-08 | Capacity value 100 | ifHighSpeed displays 100 Mbit/s in right-hand block; no manual override or ifSpeed fallback assumed |
 | AC-09 | Missing capacity | Explicit unknown capacity; history remains usable |
-| AC-10 | Fresh UP | Green circle and UP in right-hand block; valid current rates visible |
-| AC-11 | Fresh DOWN | Red circle and DOWN in right-hand block, red middle-line segments limited to known DOWN intervals, both current values dashes; history retained |
-| AC-12 | Missing/stale/unknown status | Gray circle and UNKNOWN in right-hand block, current dashes, history retained; unknown intervals not marked red, prior known outages retained |
+| AC-10 | Fresh UP | Green circle and UP in active compact/full heading; valid current rates visible |
+| AC-11 | Fresh DOWN | Red circle and DOWN in active compact/full heading, red middle-line segments limited to known DOWN intervals, both current values dashes; history retained |
+| AC-12 | Missing/stale/unknown status | Gray circle and UNKNOWN in active compact/full heading, current dashes, history retained; unknown intervals not marked red, prior known outages retained |
 | AC-13 | Status changes | DOWN/UNKNOWN do not clear history or replace it with zero |
 | AC-14 | Direction and color | Clearly visible blue IN upward and purple OUT downward; current numbers match those colors and stay readable over bars |
 | AC-15 | Equal rates | Equal magnitude produces equal heights above/below zero |
@@ -36,7 +36,7 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-26 | Query failure | Visible error/staleness; no false DOWN state or cross-interface cached data |
 | AC-27 | Themes and accessibility | Foreground is legible, status has words, and colors preserve IN/OUT distinction |
 | AC-28 | Proportional size reduction/enlargement | Traffic fonts, spacing, bars and axes scale together; external information stays readable |
-| AC-29 | Very small component | At 120 x 70, IN/OUT values are readable at normal zoom; metadata/status/capacity stay outside the graph |
+| AC-29 | Very small component | At 120 x 70, IN/OUT values are readable at normal zoom; metadata/status word/capacity stay outside the graph; a small status circle remains inside top-right |
 | AC-30 | Non-proportional resize and long metadata | No glyph distortion or overlapping content; fitting policy is visually validated |
 | AC-31 | Dashboard-author setup | Required behavior is available through ordinary settings without JavaScript, ECharts/SVG scripts, or per-size font adjustments |
 | AC-32 | Recovered channel | UP badge/current rates with red segments still visible only at earlier known DOWN times |

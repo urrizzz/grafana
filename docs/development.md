@@ -25,7 +25,7 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
 
 ## Development tracking
 
-Use [implementation-plan.md](implementation-plan.md) for milestones, dependencies and completion gates.
+Start a new session with [agent-handoff.md](agent-handoff.md). Use [implementation-plan.md](implementation-plan.md) for milestones, dependencies and completion gates.
 Use [current-state.md](current-state.md) for implemented behavior, verification evidence, open items and
 next work. Read both at task start and update state with each development increment. This guide owns the
 workspace, tool commands and environment constraints; it does not maintain a competing milestone list.
@@ -34,12 +34,12 @@ The requirements and accepted references remain authoritative for product behavi
 ## Documentation checks
 
 Validate local Markdown links, SVG XML, consistency with confirmed decisions, encryption of changed files,
-and `git diff --check`. Mock exporter tests cover counter behavior and history consistency; unit tests cover diagram validation/operations/routing and browser tests cover layout editing, persistence and duplication. Actual traffic visualization tests remain pending.
+and `git diff --check`. Mock exporter tests cover counter behavior and history consistency; unit tests cover diagram validation/operations/routing and browser tests cover layout editing, persistence and duplication. Traffic browser checks cover compact/full modes, status/history, hover and persistence; consult current-state.md for exact run evidence.
 
 ## Revised compact layout
 
 The primary traffic area is 120 x 70 CSS pixels. Design readable IN/OUT values at that native size
-and scale upward proportionally. Put identity fields, status and capacity in a separate block to its right,
+and scale upward proportionally. Compact mode has a channel/status heading above the graph. Optionally put metadata and capacity in a separate block to its right,
 with readable independent typography. The block consumes additional space. This supersedes whole-card
 downscaling and metadata/status/capacity overlays inside the graph. Keep the blocks bound to the same
 interface; validate placement and lifecycle together in the custom diagram panel.
@@ -72,7 +72,7 @@ The container is limited to 1 GiB/one CPU and bound to loopback. It does not mou
 Its anonymous administrator access and unsigned-plugin allowance are development-only configuration.
 The original layout dashboard is preserved. A separate [M2 preview](http://localhost:3001/d/network-map-data-dev)
 uses provisioned Grafana TestData frames; see [M2 validation](m2-validation.md) and [M3 validation](m3-validation.md). Regenerate its fixture JSON
-with `python dev/generate_frame_demo.py`. Actual VictoriaMetrics integration remains for M5.
+with `python dev/generate_frame_demo.py` only after backing up saved dashboards and planning to preserve their options/queries/time ranges. Actual VictoriaMetrics integration remains for M5.
 Default plugin preinstallation/updates are disabled in this isolated instance. GOMEMLIMIT is 300 MiB within
 the 1 GiB container limit after a test instance with default background plugins was OOM-killed.
 
@@ -99,3 +99,7 @@ test verifies the shell only, not every Grafana UI component or the planned data
 
 M2 implementation uses Grafana [data frames](https://grafana.com/developers/plugin-tools/key-concepts/data-frames)
 and the built-in [TestData datasource](https://grafana.com/docs/grafana/latest/datasources/testdata/) for reproducible validation.
+
+Do not use compose down/recreate to reload code in the existing development container: its disposable database
+contains owner-saved dashboards. Build, restart the existing container if metadata changed, and verify health.
+See the handoff for backup/provisioning precautions and exact workspace tool paths.

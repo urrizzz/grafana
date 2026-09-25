@@ -102,7 +102,7 @@ Implemented locally in 0.3.5; owner validation pending. Follow [M3 validation](m
 4. Add time-bucket hover, a vertical cursor and readable external time/IN/OUT tooltip; keep central values unchanged.
 5. Support configured metadata visibility, long labels and light/dark themes without overlapping content.
 6. Add per-block Show interface details (default false); when off collapse side-block space and render
-   a status circle inside the graph top-right. Update both visual reference variants and validate all three
+   a status circle inside the graph top-right in both modes, plus a compact channel/status heading. Update both visual reference variants and validate all three
    statuses at 120 x 70 with no current-value overlap (AC-53/54).
 
 Completion evidence: unit checks for units/scales/status intervals and browser comparisons with both accepted
@@ -111,9 +111,9 @@ Use actual normalized sample values for hover; never infer them from rendered ba
 
 ## M4 - Integrated diagram and dashboard lifecycle
 
-Replace fixture placeholders with mapped traffic components. Connect result-driven router/channel settings,
+Mapped traffic components are implemented through M2/M3. Finish the remaining integration audit and setup presets. Connect result-driven router/channel settings,
 role mappings, field visibility and saved options to the editor. Persist per-element Show interface details,
-default older layouts to true, and verify independent duplication and restoration (AC-55). Persist query definitions through Grafana's
+default unset visibility to false while respecting explicit saved settings, and verify independent duplication and restoration (AC-55). Persist query definitions through Grafana's
 normal query editor, not duplicated plugin options. Preserve component identity during refresh and changes.
 
 Completion evidence: a provisioned multi-router dashboard; save/reload, panel duplication, variable/range
@@ -130,7 +130,7 @@ adapter mappings with standard defaults; provide preview and explicit apply/rege
 query edits and explain unsupported preset datasource formats. The visualization adapter stays generic.
 Test escaping, aliases, variable filters, historical range end, query persistence and duplicated-panel
 independence. Actual VictoriaMetrics rate/quality semantics remain M5 verification. This setup feature
-is not part of the already implemented M2 adapter and does not replace M3 rendering as the next milestone.
+is not part of the implemented M2 adapter. Begin it after final M3 owner acceptance.
 
 ## M5 - Real backend, performance and acceptance audit
 

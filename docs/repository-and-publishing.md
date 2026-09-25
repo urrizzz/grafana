@@ -1,6 +1,6 @@
 # Repository reference and publishing plan
 
-Researched 2026-09-25. The root panel scaffold now exists; the M1 diagram editor is implemented locally; live traffic and publication remain pending.
+Researched 2026-09-25. The root panel scaffold now exists; the M1-M3 editor, adapter and renderer are implemented and locally tested; real backend validation and publication remain pending.
 
 ## Inspected references
 
@@ -37,14 +37,14 @@ find package.json without special subdirectory configuration. Preserve docs/asse
 src/
   plugin.json           Plugin identity, metadata, tested compatibility
   module.ts             PanelPlugin registration
-  types.ts              Initial options schema; saved diagram model to follow
-  components/           Layout editor; live traffic UI to follow
+  types.ts              Schema-1 diagram, dimensions, visibility and data mappings
+  components/           Layout editor and compact SVG traffic renderer
   diagram/              Saved model, operations and facing-side routing
-  data/                 PanelData adapter/channel index boundary; implementation pending
+  data/                 PanelData adapter, normalization and channel index
   img/                  Plugin logo; actual plugin screenshots to follow
   README.md             Packaged plugin usage documentation
-tests/                  Playwright scaffold loading smoke test
-provisioning/           Development dashboard; data-source provisioning pending
+tests/                  Playwright layout, data, renderer and persistence checks
+provisioning/           Development dashboards and built-in TestData datasource
 docs/                   Existing requirements, references and research
 dev/                    Existing synthetic IF-MIB data tools
 package.json            Build/test/sign scripts and dependencies

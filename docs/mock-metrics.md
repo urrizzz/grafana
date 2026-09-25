@@ -1,8 +1,7 @@
 # Synthetic IF-MIB development data
 
-Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
-Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
-See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
+Project status: 0.3.5 implements the diagram editor, returned-data adapter and compact SVG renderer.
+See [current state](current-state.md) for evidence and remaining work, and [M3 validation](m3-validation.md) for review.
 
 `dev/mock_metrics.py` provides a Python standard-library exporter and a 24-hour history generator.
 No new Python packages are required. This is synthetic test data, not a claim about production labels.

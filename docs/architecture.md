@@ -9,7 +9,7 @@ placement. The [source investigation](implementation-investigation.md) remains e
 
 The author adds our panel to a dashboard, adds routers and selects their instances, then adds desired
 ports/tunnels. Each traffic element references a router and its own ifName. The author moves elements,
-resizes traffic graphs, configures connections, and saves the dashboard. Viewing mode hides editing controls.
+resizes routers and traffic graphs, configures connections, and saves the dashboard. Viewing mode hides editing controls.
 The outer panel follows Grafana dashboard layout; element coordinates are internal to our diagram.
 
 Use the [diagram mockup](assets/diagram-panel-mockup.html) for layout/editor behavior and the
@@ -17,8 +17,8 @@ Use the [diagram mockup](assets/diagram-panel-mockup.html) for layout/editor beh
 
 ## Options and persistence
 
-Proposed TypeScript options use a schema version, stable element IDs, router records (instance selector and
-label), traffic records (router ID, ifName selector, mappings, visibility, graph size and position), and
+Implemented TypeScript options use a schema version, stable element IDs, router records (instance selector and
+label and optional width/height), traffic records (router ID, ifName selector, mappings, visibility, graph size and position), and
 connections with explicit endpoint IDs. Derive connector geometry from current router bounds, not saved
 line coordinates. Choose facing left/right or top/bottom edges according to the available separation;
 recompute while dragging, after bounds/endpoint changes, and on reload, using diagram coordinates.
@@ -35,7 +35,7 @@ The plugin is a datasource-independent visualization. The author chooses a datas
 panel query editor and configures one or more queries returning all required routers/channels. Grafana
 executes the queries, resolves query variables, handles authentication and cancellation, and delivers
 PanelData frames on the dashboard time range and refresh lifecycle. The plugin consumes those results;
-it does not generate datasource-specific queries, run per-element requests, or own a polling timer.
+it currently does not generate queries, run per-element requests, or own a polling timer. M4 plans explicit, configuration-driven generation of editable Grafana query targets, not a plugin query executor.
 This supersedes the earlier VictoriaMetrics-specific query coordinator proposal.
 
 VictoriaMetrics is the owner's current backend, with Prometheus collecting IF-MIB every 60 seconds.
@@ -70,7 +70,7 @@ Validate the contract against VictoriaMetrics and datasource-independent frame f
 | Normalization | Rates, metadata, capacity, freshness, errors, historical DOWN intervals |
 | Traffic renderer | SVG bars/axes, current values, status border, right-hand information, hover |
 
-The scaffold uses TypeScript/React with Grafana 13.2.2 packages. SVG remains the planned traffic renderer. The root scaffold uses provisional ID `urrizzz-interfacemap-panel` and the development name Network Traffic Map.
+The scaffold uses TypeScript/React with Grafana 13.2.2 packages. SVG is the implemented traffic renderer. The root scaffold uses provisional ID `urrizzz-interfacemap-panel` and the development name Network Traffic Map.
 No Grafana Cloud account exists yet; local unsigned development proceeds without it. Final identity,
 license, signing, and deployment policy remain to be settled before distribution. No Grafana backend plugin
 is currently required by the design; backend integration still needs proof.

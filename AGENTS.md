@@ -1,6 +1,6 @@
 # Development working references
 
-Before implementing changes, read docs/current-state.md and docs/implementation-plan.md, then consult
+For a new session, start with docs/agent-handoff.md. Before implementing changes, read docs/current-state.md and docs/implementation-plan.md, then consult
 the relevant product requirements and acceptance criteria. Use docs/development.md for environment,
 commands and EFS access rules. User instructions take precedence over these working documents.
 

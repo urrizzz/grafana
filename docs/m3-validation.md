@@ -5,7 +5,7 @@ Open your [existing data dashboard](http://localhost:3001/d/network-map-data-dev
 Its saved layout, queries and selections are preserved. Keep the fixed fixture time range and the
 Network Map Mock Frames datasource; switching datasources can replace queries (see M2 guide).
 For a repeatable UP/DOWN comparison, the browser tests also create
-[M3 graph checks](http://localhost:3001/d/network-map-m3-graphs) independently of your dashboard.
+[M3 graph checks](http://localhost:3001/d/network-map-m3-render-check) independently of your dashboard.
 
 1. At diagram zoom 100%, check the 120 x 70 graph: bright blue incoming above zero, purple outgoing
    below; readable matching current values, positive unit labels and identical IN/OUT scale limits.

@@ -1,8 +1,7 @@
 # Accepted design reference
 
-Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
-Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
-See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
+Project status: 0.3.5 implements the diagram editor, returned-data adapter and compact SVG renderer.
+See [current state](current-state.md) for evidence and remaining work, and [M3 validation](m3-validation.md) for review.
 
 The owner accepted the traffic wireframe and subsequently the custom diagram panel approach.
 The diagram mockup defines the surrounding layout/editor workflow; the traffic wireframe defines each component.

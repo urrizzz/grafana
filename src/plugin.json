@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "panel",
+  "name": "Interface Map",
+  "id": "urrizzz-interfacemap-panel",
+  "info": {
+    "keywords": [
+      "panel",
+      "network",
+      "traffic",
+      "diagram"
+    ],
+    "description": "Development scaffold for compact router interface traffic diagrams",
+    "author": {
+      "name": "urrizzz"
+    },
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Source",
+        "url": "https://github.com/urrizzz/grafana"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=13.2.2 <13.3.0",
+    "plugins": []
+  }
+}

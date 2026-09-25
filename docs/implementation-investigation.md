@@ -167,7 +167,7 @@ without a deliberate decision. No full build or performance claim was made durin
 
 ## Approved next step without modifying Grafana
 
-Scaffold the custom diagram panel and prove its router/traffic/connection editing and dashboard persistence
+The standard custom panel scaffold now exists. Next prove router/traffic/connection editing and dashboard persistence
 using fixtures, then integrate VictoriaMetrics through supported APIs. Use the diagram mockup as the editor
 reference and the traffic wireframe as the component reference. Follow [development milestones](development.md)
 and [acceptance criteria](acceptance-criteria.md). No core build or additional host-placement approval is needed.

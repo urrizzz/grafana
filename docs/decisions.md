@@ -5,6 +5,10 @@
 | Topic | Decision |
 | --- | --- |
 | Grafana deployment | Grafana cannot be modified; no core patches, custom Grafana builds or runtime bundle modifications |
+| Development identity | Interface Map; provisional ID urrizzz-interfacemap-panel, to be confirmed against a future Grafana Cloud organization |
+| Cloud account | Owner has no account yet; local unsigned development proceeds without one; signing/publication deferred |
+| License | No project license selected; package marked UNLICENSED and private to prevent npm publication |
+| Repository structure | Standard root panel scaffold, .config tooling, src, tests, provisioning, dev mocks and preserved docs/assets |
 | Target | Grafana 13.2.2 |
 | Data path | Prometheus collects, forwards to VictoriaMetrics; Grafana uses the VictoriaMetrics data-source plugin |
 | Collection | Every 60 seconds |
@@ -63,7 +67,8 @@ Very small text may become difficult to read, but shrinking must preserve compos
    do not establish whether metadata is stored as labels or separate series, or how joins remain unique.
 3. **Data-source contract:** identify VictoriaMetrics plugin version and prove queries, time steps, rate semantics,
    dashboard events, and per-element isolation.
-4. **Packaging:** determine final identity, license, and signing/delivery for the approved custom diagram panel.
+4. **Publication:** local unsigned packaging is available. Confirm the provisional ID against a future
+   Grafana Cloud organization, choose a license, and decide signing/delivery before public release.
 
 The product interview is sufficient to update the design. Remaining items are concrete technical evidence
 or delivery decisions; they do not reopen the approved custom diagram approach.

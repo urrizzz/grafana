@@ -3,7 +3,7 @@
 An installable **custom Grafana diagram panel** containing router representations, connections, and compact Cisco port/tunnel traffic displays.
 Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
-**Target:** Grafana **13.2.2**. **Status:** requirements, design, and runnable mock metrics; no traffic visualization plugin yet.
+**Target:** Grafana **13.2.2**. **Status:** buildable development panel scaffold, accepted designs, and runnable mock metrics. The diagram editor and live traffic visualization are not implemented yet.
 **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Documentation and accepted mockups are maintained in this repository.
 
 ![Proposed scalable traffic component](docs/assets/compact-component.svg)
@@ -41,6 +41,7 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 | [Metrics contract](docs/metrics-contract.md) | Source mappings, rates, capacity, and proposed quality rules |
 | [Architecture](docs/architecture.md) | Custom diagram editor, persistence, and query boundaries |
 | [Acceptance criteria](docs/acceptance-criteria.md) | Conditions the eventual implementation must satisfy |
+| [Repository and publishing](docs/repository-and-publishing.md) | Inspected plugin examples, proposed source layout, signing and release process |
 | [Development plan](docs/development.md) | Implementation sequence and local environment constraints |
 | [Decisions](docs/decisions.md) | Confirmed answers, proposed defaults, and remaining technical checks |
 
@@ -66,4 +67,26 @@ See [diagram workflow](docs/diagram-panel-concept.md) and [architecture](docs/ar
 The [Canvas investigation](docs/implementation-investigation.md) explains why this route was selected.
 
 Representative exported series/labels and the installed VictoriaMetrics plugin version remain to be inspected.
-No software license has been selected. The visualization is not implemented. Implementation and backend compatibility validation remain pending.
+No software license has been selected (`UNLICENSED` for now). The provisional plugin ID is
+`urrizzz-interfacemap-panel`; a Grafana Cloud account is not required for local development.
+Confirm the organization prefix before signing or publishing. Live traffic implementation remains pending.
+
+## Run the development scaffold
+
+Use Node 24 and Docker Compose. From the repository root:
+
+```sh
+npm ci
+npm run check
+npm run server
+npm run e2e
+```
+
+Open [the development dashboard](http://localhost:3001/d/interface-map-dev). It shows a clearly labeled
+scaffold, not the completed mockup. The separate development container uses port 3001 and a 512 MB limit.
+Stop it with `npm run server:stop` when finished. Your existing port-3000 Grafana remains separate.
+See [development instructions](docs/development.md) for the full workflow and encrypted workspace access.
+
+Source is in `src/`; build configuration in `.config/`; demo provisioning in `provisioning/`; browser tests
+in `tests/`; mock metrics in `dev/`; approved mockups and requirements in `docs/`. `dist/` is generated.
+GitHub CI validates changes; the manual packaging workflow creates unsigned development artifacts only.

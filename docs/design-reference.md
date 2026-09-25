@@ -1,5 +1,9 @@
 # Accepted design reference
 
+Project status: the standard development panel scaffold exists with provisional ID
+`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
+and synthetic metric tools remain separate from the runtime scaffold.
+
 The owner accepted the traffic wireframe and subsequently the custom diagram panel approach.
 The diagram mockup defines the surrounding layout/editor workflow; the traffic wireframe defines each component.
 Use this design as the visual and interaction baseline for implementation, together with the

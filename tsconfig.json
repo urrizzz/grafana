@@ -1,0 +1,12 @@
+{
+  "extends": "./.config/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "."
+  },
+  "include": [
+    "src",
+    "tests",
+    "playwright.config.ts",
+    ".config/types"
+  ]
+}

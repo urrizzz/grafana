@@ -1,0 +1,27 @@
+{
+  "uid": "interface-map-dev",
+  "title": "Interface Map development",
+  "schemaVersion": 39,
+  "version": 1,
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "urrizzz-interfacemap-panel",
+      "title": "Interface Map scaffold",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 10
+      },
+      "options": {
+        "schemaVersion": 1
+      },
+      "targets": []
+    }
+  ]
+}

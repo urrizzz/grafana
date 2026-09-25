@@ -1,5 +1,9 @@
 # Acceptance criteria
 
+Project status: the standard development panel scaffold exists with provisional ID
+`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
+and synthetic metric tools remain separate from the runtime scaffold.
+
 These are future implementation checks, not tests already passed. The custom diagram approach is approved; live plugin validation remains pending.
 
 | ID | Scenario | Expected result |

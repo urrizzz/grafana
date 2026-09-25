@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: Interface Map development
+    folder: Interface Map development
+    type: file
+    options:
+      path: /etc/grafana/provisioning/dashboards

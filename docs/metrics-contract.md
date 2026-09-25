@@ -105,3 +105,8 @@ Include enough visible quality information to distinguish zero, missing, stale, 
 Inspect one sanitized port and tunnel with full label sets, metadata representation, timestamps, and duplicate job/site cases.
 Record the installed VictoriaMetrics data-source plugin ID/version. Neither the confirmed field names nor the data-source name
 alone proves the exported label layout or query API contract. Do not include credentials in examples.
+
+## Implementation location
+
+The future query coordinator and normalization belong in `src/data/`. The current scaffold has no
+VictoriaMetrics connection; mock metrics remain in `dev/` and are not queried by the shell panel.

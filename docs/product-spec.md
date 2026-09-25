@@ -1,5 +1,9 @@
 # Product specification
 
+Project status: the standard development panel scaffold exists with provisional ID
+`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
+and synthetic metric tools remain separate from the runtime scaffold.
+
 ## Placement and selection
 
 Build an installable custom diagram panel targeting Grafana 13.2.2, with router representations,

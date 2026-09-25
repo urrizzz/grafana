@@ -1,5 +1,9 @@
 # Accepted diagram panel workflow
 
+Project status: the standard development panel scaffold exists with provisional ID
+`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
+and synthetic metric tools remain separate from the runtime scaffold.
+
 Open [the interactive mockup](assets/diagram-panel-mockup.html) in a browser.
 The owner approved this custom diagram approach. It supersedes the original built-in Canvas host
 requirement and complements the [accepted traffic component reference](design-reference.md).

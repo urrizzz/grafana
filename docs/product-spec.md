@@ -10,7 +10,10 @@ The author adds the diagram panel to a dashboard, adds routers and selects their
 ports/tunnels, and arranges the diagram inside the panel. Routers and traffic elements can be freely moved;
 traffic plots resize proportionally from 120 x 70 while the right-hand information and hover remain readable.
 Each traffic element references its router and selects its own ifName. Connections have explicit endpoints
-and follow their routers when moved. Edit mode exposes layout/configuration controls; viewing mode hides them.
+and follow their routers continuously while dragged. Automatically choose the facing left/right or top/bottom
+box edges from current router positions and dimensions, with bends outside both endpoint boxes.
+Recalculate after endpoint changes and layout reload; zoom/scroll must not detach endpoints. Moving a
+traffic display alone preserves its configured router-to-router connection. Edit mode exposes layout/configuration controls; viewing mode hides them.
 Save router/channel settings, positions, plot sizes, and connections with the Grafana dashboard.
 The panel occupies a normal dashboard panel region; free placement happens within that region.
 

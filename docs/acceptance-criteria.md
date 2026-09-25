@@ -49,7 +49,7 @@ These are future implementation checks, not tests already passed. The custom dia
 | --- | --- | --- |
 | AC-39 | Create diagram | Add our panel, routers with instance selectors, and chosen interfaces through ordinary settings |
 | AC-40 | Free placement | Move router and traffic elements independently within the diagram; plot and channel information stay bound to the same interface |
-| AC-41 | Connections | Explicit connection endpoints persist and lines follow router movement |
+| AC-41 | Connections | Endpoint IDs persist; during dragging lines stay on box boundaries and automatically switch facing left/right/top/bottom sides; bends avoid both endpoint interiors; verify reversed, vertical and diagonal arrangements, endpoint changes, zoom/scroll and reload |
 | AC-42 | Edit/view mode | Layout controls appear in edit mode; normal viewing supports traffic hover without accidental dragging |
 | AC-43 | Dashboard persistence | Save/reload retains routers, selectors, positions, plot sizes, mappings, visibility, and connections without browser-local storage |
 | AC-44 | Router change/removal | Selection changes refresh dependent traffic without old-router data; removing a router cannot silently rebind dependents |

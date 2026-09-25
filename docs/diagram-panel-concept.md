@@ -14,7 +14,7 @@ inside Grafana's built-in Canvas. No plugin code, live backend, or Grafana insta
 - Select an element to edit its name and settings on the right.
 - Resize a traffic plot with its selected corner handle or width slider (120-240 pixels).
 - Change the mock status to compare UP, DOWN and UNKNOWN. Hover a graph to inspect a five-minute interval.
-- Add router/traffic elements and choose endpoints; diagram connections follow router movement.
+- Add router/traffic elements and choose endpoints; diagram connections update during dragging and automatically attach to facing left/right/top/bottom box edges.
 - Switch editing off to inspect the operator view; zoom and scroll to navigate.
 - Save locally to persist this demo in this browser, or export its layout as JSON. Reset restores the initial demo.
 
@@ -31,3 +31,12 @@ The original component wireframe remains the accepted component reference. Both 
 status-colored graph border: green UP, red DOWN, gray UNKNOWN. The border reflects current status;
 historical red center-line segments retain their original time-localized meaning. This mockup reuses the component's
 visual style in a separate surrounding diagram layout. [Screenshot](assets/diagram-panel-mockup.png).
+
+## Connection routing reference
+
+The mockup uses orthogonal lines attached to the centers of facing box edges. It selects horizontal or
+vertical routing using the larger clear gap between router rectangles, with deterministic horizontal ties.
+It measures actual router-card dimensions and recomputes paths during movement. Moving a traffic card
+alone does not change the router endpoints. Overlapping/touching endpoints or self-connections are not
+drawn; separating the boxes restores the line. Missing endpoints are skipped. Automatic avoidance of
+unrelated routers, traffic cards, and other lines is not demonstrated by this routing rule.

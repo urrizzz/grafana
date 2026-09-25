@@ -19,7 +19,10 @@ Use the [diagram mockup](assets/diagram-panel-mockup.html) for layout/editor beh
 
 Proposed TypeScript options use a schema version, stable element IDs, router records (instance selector and
 label), traffic records (router ID, ifName selector, mappings, visibility, graph size and position), and
-connections with explicit endpoint IDs. Persist diagram configuration through Grafana panel options and
+connections with explicit endpoint IDs. Derive connector geometry from current router bounds, not saved
+line coordinates. Choose facing left/right or top/bottom edges according to the available separation;
+recompute while dragging, after bounds/endpoint changes, and on reload, using diagram coordinates.
+Keep orthogonal bends outside the two endpoint boxes and attachment stable under zoom/scroll. Persist diagram configuration through Grafana panel options and
 normal dashboard saving. Browser localStorage is only the mockup's preview mechanism.
 
 Keep query results and temporary hover/drag/selection state out of saved options. Validate references;

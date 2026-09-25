@@ -12,6 +12,7 @@
 | Capacity | ifHighSpeed, displayed in the right-hand information block |
 | Selection | Fixed instance/ifName values and dashboard variables |
 | Placement | One custom diagram panel with free placement of routers, traffic elements, and connections; Grafana core unmodified |
+| Connection routing | Router connections follow movement continuously and automatically choose the appropriate box sides; bends stay outside endpoint boxes and attachment survives zoom/reload |
 | Multiple channels | Independent router/channel settings for every traffic display in the same custom diagram panel |
 | Size | Primary traffic area 120 x 70 CSS pixels; design readable text at this size, then scale traffic proportionally upward |
 | Compactness | Preserve layout and alignment at very small sizes; avoid fixed-size text crowding the component |

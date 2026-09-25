@@ -126,3 +126,11 @@ and matching adapter mappings, with explicit preview/apply and preservation of m
 query replacement, Grafana core modifications or plugin-owned datasource requests. Direct query installation
 requires API feasibility verification; an importable configured starter dashboard is the fallback route.
 See the configuration-first section in product-spec.md. Not implemented in 0.2.0; add to M4 setup work.
+
+## M3 compact default and outage visibility (2026-09-25)
+
+Owner requested removal of the small 5m/range-end caption. Compact mode is now the default for unset
+blocks, with the channel name centered above the unchanged graph footprint and the status circle inside
+top-right. Preserve explicitly saved detail choices. Red outage segments retain their real timestamps;
+use stronger thickness for visibility and report observed outage start/end times on hover. This supersedes
+earlier default-on detail and visible current-window-caption decisions.

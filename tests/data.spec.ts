@@ -1,5 +1,9 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import demo from '../provisioning/dashboards/data-preview.json';
+import sourceDemo from '../provisioning/dashboards/data-preview.json';
+const demo = structuredClone(sourceDemo);
+for (const traffic of demo.panels[0].options.diagram.traffic) {
+  Object.assign(traffic, { showInterfaceDetails: true });
+}
 
 async function choose(page: Page, panel: Locator, name: string, value: string) {
   const input = panel.getByRole('combobox', { name, exact: true });

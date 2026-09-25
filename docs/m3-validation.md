@@ -1,6 +1,6 @@
 # M3 compact traffic validation
 
-Running version: 0.3.0 on Grafana 13.2.2, port 3001. Owner validation pending.
+Running version: 0.3.1 on Grafana 13.2.2, port 3001. Owner validation pending.
 Open your [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and reload the page.
 Its saved layout, queries and selections are preserved. Keep the fixed fixture time range and the
 Network Map Mock Frames datasource; switching datasources can replace queries (see M2 guide).
@@ -12,8 +12,9 @@ For a repeatable UP/DOWN comparison, the browser tests also create
 2. Hover: vertical line follows five-minute buckets, tooltip shows the interval and IN/OUT rates outside
    the graph. Central values stay fixed. Moving away or dragging clears the tooltip.
 3. DOWN has a red border and current dashes but retains bars; red center segments cover only known
-   historical outages. UNKNOWN has a gray border, dashes and retained available history.
-4. Panel menu > Edit, select traffic by its Move handle. Turn off Show interface details: the side block
+   historical outages (hover an outage to see its start/end times). UNKNOWN has a gray border, dashes and retained available history.
+4. Compact mode is the default: the channel name is centered above the graph, with no tiny 5m caption.
+   Panel menu > Edit, select traffic by its Move handle. Enable then disable Show interface details: the side block
    and its space disappear; a status circle appears inside the graph's top-right. Graph size and location
    stay fixed. Restore details and verify the selected Visible details fields are remembered.
 5. Try 180 and 240 px widths. Hover remains readable and accurate after resizing or zooming. Return to

@@ -2,7 +2,7 @@
 
 Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
 M2 consumes returned query data for router/channel selection, automatic metadata and current-value previews.
-Final traffic bars, hover and Show interface details remain M3/M4 work.
+M3 traffic bars, hover and Show interface details are implemented locally; owner review remains pending.
 See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 ## Placement and selection
@@ -88,7 +88,7 @@ standard setup with editable queries, not manual construction of all IF-MIB expr
 | `ifDescr` | Channel description | Visible |
 
 Allow source metric/label names to be changed and each identity field to be shown or hidden.
-All three channel fields are visible by default. Router fields are optional because a separate router
+When details are enabled, all three channel fields are visible by default. Router fields are optional because a separate router
 representation already provides that context. Missing fields must not silently impersonate another field.
 Proposed missing-value presentation is a visible dash for each enabled unavailable field.
 
@@ -99,7 +99,7 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 
 ## Per-element Show interface details option
 
-Each traffic block has an independent **Show interface details** toggle, enabled by default (including
+Each traffic block has an independent **Show interface details** toggle, disabled by default (including
 existing saved blocks with no explicit value). The name refers to the port/tunnel details, not the separate
 router representation. Save this setting in the traffic element's panel options.
 
@@ -107,7 +107,7 @@ router representation. Save this setting in the traffic element's panel options.
   and the channel-name-followed-by-status-circle-and-word layout.
 - Disabled: remove the entire right-hand information block and its spacing, including any enabled router
   fields, channel name/alias/description, capacity and status word. The traffic element's visible and
-  selectable footprint shrinks to the graph box; keep its graph dimensions and position unchanged.
+  selectable footprint shrinks to the graph width plus a centered channel-name heading above; keep graph dimensions and position unchanged.
 - While details are hidden, show a small status circle inside the graph's top-right corner: green UP,
   red DOWN, gray UNKNOWN. It uses the same range-end status as the border, remains above the bars,
   and must not overlap the current rate values. Give the circle an accessible status label.
@@ -117,7 +117,7 @@ router representation. Save this setting in the traffic element's panel options.
   a block copies the option; changes to the copy do not affect the original. Save/reload retains it.
 
 This changes the default-only side-information layout requirement into two supported display modes.
-Implementation and updated visual reference variants are planned for M3/M4; current M1 has no toggle yet.
+Implemented in M3; version 0.3.1 makes compact mode the default and adds the channel heading.
 
 ## Layout
 
@@ -196,7 +196,7 @@ Current central values are five-minute averages evaluated at the **dashboard ran
 They are not wall-clock values when the operator views an older range.
 
 Proposed historical alignment: completed UTC-aligned five-minute buckets, plus a separate current evaluation
-at the range end. Show a compact visible time/window caption so non-aligned current values are not misleading.
+at the range end. Do not display the tiny current-window caption inside the graph; retain range-end semantics in accessible text and hover.
 The exact alignment remains an engineering default, not an additional user decision.
 
 Autoscale both halves together from observed traffic, with proposed rounded bounds and modest headroom.
@@ -238,3 +238,11 @@ are fixture-only scaffolding to be replaced during M2/M4. The plugin does not qu
 Offer 25%, 50%, 75%, 100%, 125% and 150% zoom. Failed editor actions use a compact themed overlay inside the layout, with an explicit Dismiss action.
 It must not shift or shrink the diagram; its width is at most 340 px and height at most 110 px (scroll longer text). Clear it after successful changes or element selection;
 do not leave old errors in the persistent save hint. Avoid a timer that could hide unread explanations.
+
+### Compact-mode refinement (2026-09-25)
+
+Compact is the default for new/unset blocks; preserve explicit saved visibility choices. In compact mode,
+center the channel name above the graph, outside its 120 x 70 footprint; constrain long names with ellipsis
+and expose the full name on hover. Keep the internal top-right status circle. Remove the tiny 5m/range-end
+caption. Draw outage segments prominently at their actual timestamps, never broaden their duration to fit
+pixels. Hover includes the full known outage interval overlapping the selected five-minute bucket.

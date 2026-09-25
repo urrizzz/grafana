@@ -72,7 +72,6 @@ export function TrafficPlot({ channel, width, from, to, timeZone, showDetails }:
         />
       );
     });
-  const hasHistory = [...incoming.values(), ...outgoing.values()].some((v) => v !== null);
   const tooltip =
     hover && typeof document !== 'undefined'
       ? createPortal(
@@ -83,7 +82,8 @@ export function TrafficPlot({ channel, width, from, to, timeZone, showDetails }:
               zIndex: 10000,
               pointerEvents: 'none',
               left: Math.max(4, Math.min(hover.x + 12, window.innerWidth - 276)),
-              top: Math.max(4, Math.min(hover.y + 12, window.innerHeight - 100)),
+              top: hover.y <= window.innerHeight / 2 ? hover.y + 12 : undefined,
+              bottom: hover.y > window.innerHeight / 2 ? window.innerHeight - hover.y + 12 : undefined,
               width: 268,
               maxWidth: 'calc(100vw - 8px)',
               padding: '8px 10px',
@@ -100,6 +100,13 @@ export function TrafficPlot({ channel, width, from, to, timeZone, showDetails }:
               {timeText(hover.endpoint - BUCKET, timeZone, true)} - {timeText(hover.endpoint, timeZone)} (
               {timeZone || 'browser'})
             </div>
+            {channel?.downIntervals
+              .filter((interval) => interval.from < hover.endpoint && interval.to > hover.endpoint - BUCKET)
+              .map((interval) => (
+                <div key={interval.from} style={{ color: statusColors.DOWN }}>
+                  DOWN {timeText(interval.from, timeZone)} - {timeText(interval.to, timeZone)}
+                </div>
+              ))}
             <div style={{ color: colors.in }}>IN {formatRate(incoming.get(hover.endpoint))}</div>
             <div style={{ color: colors.out }}>OUT {formatRate(outgoing.get(hover.endpoint))}</div>
           </div>,
@@ -159,12 +166,14 @@ export function TrafficPlot({ channel, width, from, to, timeZone, showDetails }:
               <line
                 key={`${a}:${b}`}
                 data-testid="outage-segment"
+                data-from={a}
+                data-to={b}
                 x1={xFor(a, from, to)}
                 x2={xFor(b, from, to)}
                 y1="31"
                 y2="31"
                 stroke="#f2495c"
-                strokeWidth="1.5"
+                strokeWidth="3"
               />
             ) : null;
           })}
@@ -211,9 +220,6 @@ export function TrafficPlot({ channel, width, from, to, timeZone, showDetails }:
             data-testid="current-out"
           >
             {formatRate(channel?.current.out)}
-          </text>
-          <text x="71" y="38" textAnchor="middle" fontSize="6" fill={muted}>
-            {!hasHistory ? (to - from < BUCKET ? 'Range < 5m' : 'No history') : `5m @ ${timeText(to, timeZone)}`}
           </text>
         </g>
         {!showDetails && (

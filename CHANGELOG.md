@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 - Unreleased
+
+- Default unset traffic blocks to compact mode with the channel name centered above the graph.
+- Remove the tiny current-window caption and strengthen exact-time outage segments; show outage times on hover.
+
 ## 0.3.0 - Unreleased
 
 - Render native 120 x 70 mirrored traffic bars, shared automatic axes and range-end values.

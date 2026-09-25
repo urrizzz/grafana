@@ -17,7 +17,7 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 - Choose a datasource and configure one or more queries in Grafana's normal panel query editor. VictoriaMetrics is the current deployment, not a hardcoded dependency.
 - Queries return the required routers/channels; each traffic element selects from those results. No per-element queries are issued.
 - Each diagram traffic display selects `instance` and `ifName`, using fixed values or dashboard variables.
-- Put `ifName`, `ifAlias`, `ifDescr`, status and capacity in an information block to the right of the graph. Router fields stay hidden by default.
+- Compact mode is the default, with the channel name centered above the graph and an internal status circle. Enable **Show interface details** for the right-hand metadata/status/capacity block. Router fields remain optional.
 - Source metric/label mappings and individual identity-field visibility are configurable.
 - Capacity comes from `ifHighSpeed`, expressed in Mbit/s at the source.
 - Clearly visible blue bars rise above the middle; purple bars extend below it. Current values use matching direction colors with readable contrast.

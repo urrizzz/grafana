@@ -8,12 +8,12 @@ for commands/environment. Update this document with every meaningful development
 ## Current position
 
 **M3 compact renderer implemented and verified locally; owner acceptance pending. M1 and M2 remain accepted.**
-Running version: **0.3.0**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
+Running version: **0.3.1**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
 purple OUT, shared automatic axes, matching range-end values and status borders. Historical outages
 appear only over known DOWN intervals; DOWN/UNKNOWN retain available history with current dashes.
 Hover snaps to complete five-minute buckets and reads actual samples in an external tooltip.
-Per-block Show interface details defaults to true. Turning it off collapses the side block, puts the
-status circle inside the top-right corner and preserves graph coordinates. Individual field choices persist.
+Per-block Show interface details defaults to false. Turning it off collapses the side block, puts the
+status circle inside the top-right corner, centers the channel name above the graph and preserves graph coordinates. Individual field choices persist.
 
 Open the [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and follow
 [M3 validation](m3-validation.md). Its saved selections, queries and layout are preserved.
@@ -348,3 +348,15 @@ coordinates. Screenshot review also prompted theme-aware diagram backgrounds and
 
 Owner validation is pending; follow the M3 guide. M3 is committed locally but not pushed. IF-MIB presets
 remain M4, real backend/performance evidence remains M5, and signing/distribution remains M6.
+
+### M3 owner corrections (2026-09-25)
+
+Version 0.3.1 removes the tiny current-window caption, defaults unset blocks to compact mode and places
+the channel name centered above the graph. Explicit saved visibility values are retained. Outage line
+inspection confirmed the fixture contains a 00:50-01:00 outage, just 1.3 px wide across 12 hours at native
+size; the DOWN fixture spans the entire range. Increased line thickness from 1.5 to 3 px without changing
+time endpoints. Hover now lists overlapping observed outage start/end times. Unknown/gaps are not outages.
+Updated both references and requirements. npm run check passed: typecheck, lint, 35 unit tests and build.
+Both reference default-mode browser checks passed. The 11-scenario browser suite passed, including exact
+outage timestamps/hover, centered compact heading, explicit details opt-in and save/reload. Screenshot
+review confirms the thicker line and headings. Changes saved locally; not pushed; owner review pending.

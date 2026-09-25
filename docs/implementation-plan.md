@@ -91,7 +91,7 @@ query examples belong in documentation/provisioning, not the adapter implementat
 
 ## M3 - Compact traffic rendering
 
-Implemented locally in 0.3.0; owner validation pending. Follow [M3 validation](m3-validation.md) and
+Implemented locally in 0.3.1; owner validation pending. Follow [M3 validation](m3-validation.md) and
 [current state](current-state.md) for actual verification evidence. M4 query presets are the next implementation step after acceptance.
 
 1. Implement the plot and right-hand information block using the normalized model, independently of datasource code.
@@ -101,7 +101,7 @@ Implemented locally in 0.3.0; owner validation pending. Follow [M3 validation](m
    current dashes. Draw red center segments only over observed historical DOWN intervals.
 4. Add time-bucket hover, a vertical cursor and readable external time/IN/OUT tooltip; keep central values unchanged.
 5. Support configured metadata visibility, long labels and light/dark themes without overlapping content.
-6. Add per-block Show interface details (default true); when off collapse side-block space and render
+6. Add per-block Show interface details (default false); when off collapse side-block space and render
    a status circle inside the graph top-right. Update both visual reference variants and validate all three
    statuses at 120 x 70 with no current-value overlap (AC-53/54).
 

@@ -25,6 +25,16 @@ test('compact graphs retain history and hover actual samples in light and dark t
     const segments = await up
       .getByTestId('outage-segment')
       .evaluateAll((nodes) => nodes.map((n) => Number(n.getAttribute('x2')) - Number(n.getAttribute('x1'))));
+    await expect(up).not.toContainText('5m @');
+    await expect(page.getByTestId('traffic-t1').getByTestId('interface-details')).toHaveCount(0);
+    await expect(up.getByTestId('outage-segment')).toHaveAttribute('data-from', '1790297400000');
+    await expect(up.getByTestId('outage-segment')).toHaveAttribute('data-to', '1790298000000');
+    await expect(up.getByTestId('outage-segment')).toHaveCSS('stroke-width', '3px');
+    const heading = await page.getByTestId('traffic-t1').getByTestId('compact-channel-name').boundingBox();
+    expect(heading!.x + heading!.width / 2).toBeCloseTo(bounds.x + bounds.width / 2, 0);
+    expect(heading!.y + heading!.height).toBeLessThanOrEqual(bounds.y);
+    await up.hover({ position: { x: 31, y: 32 } });
+    await expect(page.getByRole('tooltip')).toContainText('DOWN 00:50 - 01:00');
     expect(segments.length).toBeGreaterThan(0);
     expect(segments.every((w) => w < 94)).toBeTruthy();
     await up.hover({ position: { x: 60, y: 12 } });
@@ -49,6 +59,9 @@ test('details collapse, status moves inside, size and visibility persist indepen
   const panel = page.getByRole('region', { name: 'Network Traffic Map diagram' });
   const traffic = panel.getByTestId('traffic-t1');
   await traffic.getByRole('button', { name: 'Move Tunnel10', exact: true }).click();
+  await expect(panel.getByRole('checkbox', { name: 'Show interface details', exact: true })).not.toBeChecked();
+  await expect(traffic.getByTestId('compact-channel-name')).toHaveText('Tunnel10');
+  await panel.getByRole('checkbox', { name: 'Show interface details', exact: true }).check();
   const before = (await traffic.boundingBox())!;
   await panel.getByText('Visible details', { exact: true }).click();
   await panel.getByRole('checkbox', { name: 'alias', exact: true }).uncheck();

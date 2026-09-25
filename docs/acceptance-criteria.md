@@ -12,7 +12,7 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-02 | Multiple displays | Each retains independent instance/ifName settings and data |
 | AC-03 | Fixed selectors or dashboard variables | Both work, including changes during in-flight requests |
 | AC-04 | Empty/ambiguous selection | Clear configuration state; no arbitrary channel selection or aggregation |
-| AC-05 | Default metadata visibility | ifName, ifAlias, ifDescr visible in right-hand block; router instance/name hidden |
+| AC-05 | Default metadata visibility | Compact by default with centered ifName heading; enabling details shows ifName, ifAlias, ifDescr on the right; router instance/name hidden |
 | AC-06 | Mapping/visibility changes | Custom source names and individual field visibility work without code edits |
 | AC-07 | Metadata safety and missing fields | Text is safe; missing enabled fields are explicit; no hover required |
 | AC-08 | Capacity value 100 | ifHighSpeed displays 100 Mbit/s in right-hand block; no manual override or ifSpeed fallback assumed |
@@ -75,8 +75,8 @@ These are future implementation checks, not tests already passed. The custom dia
 
 | ID | Scenario | Expected behavior |
 | --- | --- | --- |
-| AC-53 | Per-block Show interface details | Defaults on, including older saved layouts; each block independently hides the complete side block and spacing when off |
-| AC-54 | Compact footprint/status | Hidden details leave only the configured graph footprint; graph position/size unchanged; green/red/gray status circle inside top-right, accessible label, no rate overlap; border and hover remain |
+| AC-53 | Per-block Show interface details | Defaults off when no explicit value is saved; explicitly saved choices are respected; each block independently hides the complete side block and spacing when off |
+| AC-54 | Compact footprint/status | Hidden details leave the configured graph footprint plus a centered channel-name heading above; graph position/size unchanged; green/red/gray status circle inside top-right, accessible label, no rate overlap; border and hover remain |
 | AC-55 | Toggle persistence/isolation | Re-enable restores metadata preferences; save/reload and duplication retain the setting; other blocks, selection and queries are unaffected |
 
 ## Configuration-first setup

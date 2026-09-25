@@ -144,6 +144,17 @@ const styles = css`
     align-items: flex-start;
     gap: 12px;
   }
+  .compact-name {
+    position: absolute;
+    top: -19px;
+    left: 0;
+    text-align: center;
+    font-size: 12px;
+    line-height: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .plot {
     border: 1px solid #a4afbf;
     border-radius: 3px;
@@ -266,7 +277,7 @@ function DiagramEditor({
   const worldWidth = Math.max(
     1040,
     ...diagram.routers.map((r) => r.x + 180),
-    ...diagram.traffic.map((t) => t.x + t.width + (t.showInterfaceDetails === false ? 8 : 200))
+    ...diagram.traffic.map((t) => t.x + t.width + (t.showInterfaceDetails === true ? 200 : 8))
   );
   const worldHeight = Math.max(
     660,
@@ -550,7 +561,7 @@ function DiagramEditor({
                 const current = channelData(t);
                 const status = current?.status ?? 'UNKNOWN';
                 const color = statusColors[status];
-                const showDetails = t.showInterfaceDetails !== false;
+                const showDetails = t.showInterfaceDetails === true;
                 const visible = (field: keyof NonNullable<TrafficNode['visibleFields']>) =>
                   t.visibleFields?.[field] ?? !['instance', 'routerName'].includes(field);
                 return (
@@ -561,9 +572,24 @@ function DiagramEditor({
                     style={{ left: t.x, top: t.y }}
                   >
                     {editing && (
-                      <button data-map-control className="grip handle" onPointerDown={(e) => begin(e, t)}>
+                      <button
+                        data-map-control
+                        className="grip handle"
+                        style={{ top: showDetails ? -24 : -42 }}
+                        onPointerDown={(e) => begin(e, t)}
+                      >
                         Move {t.ifName}
                       </button>
+                    )}
+                    {!showDetails && (
+                      <div
+                        data-testid="compact-channel-name"
+                        className="compact-name"
+                        style={{ width: t.width }}
+                        title={current?.channel || t.ifName || 'Select channel'}
+                      >
+                        {current?.channel || t.ifName || 'Select channel'}
+                      </div>
                     )}
                     <TrafficPlot
                       key={`${t.routerId}:${t.ifName}:${current?.instance}:${timeRange.from.valueOf()}:${timeRange.to.valueOf()}:${t.width}:${zoom}:${showDetails}:${editing}`}
@@ -657,12 +683,12 @@ function DiagramEditor({
                 <label>
                   <input
                     type="checkbox"
-                    checked={traffic.showInterfaceDetails !== false}
+                    checked={traffic.showInterfaceDetails === true}
                     onChange={(event) => updateTraffic({ showInterfaceDetails: event.target.checked })}
                   />{' '}
                   Show interface details
                 </label>
-                {traffic.showInterfaceDetails !== false && (
+                {traffic.showInterfaceDetails === true && (
                   <details>
                     <summary>Visible details</summary>
                     {(['instance', 'routerName', 'channel', 'alias', 'description', 'capacity'] as const).map(

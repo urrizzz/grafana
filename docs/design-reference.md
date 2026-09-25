@@ -78,7 +78,7 @@ Grafana Save/Discard manage persistence. Dashboard viewing and grid editing keep
 
 ## Compact variant: hidden interface details
 
-The accepted default remains the side-information layout. A new per-block Show interface details option
-adds a graph-only variant with a status circle inside the top-right corner and no reserved side-information
-space. Both HTML references now offer Show interface details controls, preserving the default side-information mode.
+The accepted default is compact mode, with the channel name centered above the graph. Show interface details
+optionally restores the side-information variant with a status circle inside the top-right corner and no reserved side-information
+space. Both HTML references now offer Show interface details controls, defaulting to compact mode.
 The M3 plugin implements the same variant; validate native-size readability using [M3 validation](m3-validation.md).

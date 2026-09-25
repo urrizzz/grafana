@@ -28,3 +28,15 @@ Report failures by number. These checks accept M3 visuals only; configuration-fi
 are planned for M4. Production VictoriaMetrics behavior and 10/50-element performance remain M5 work.
 The renderer consumes normalized bit/s rates; it does not query a datasource or calculate counter rates.
 Axis abbreviations b/k/M/G are bit/s, kbit/s, Mbit/s and Gbit/s. Empty/invalid values use --, not zero.
+
+## Corrected TestData history (2026-09-25)
+
+The fixed 00:00-12:00 UTC demo has a recovered outage from 00:50-01:00 on all three traffic channels.
+BRANCH-01 Tunnel10 has another outage from 11:30 through 12:00 and is currently DOWN. All other traffic
+channels recover to UP. Incoming/outgoing rates use separate deterministic irregular minute samples,
+zero during outages, averaged over the preceding five minutes. Instant rates equal the final history
+window. A window ending exactly at outage start still describes the preceding UP traffic; a window
+wholly inside an outage is zero. Status is sampled each minute and no longer stays DOWN for the whole
+range on the branch channel. Tunnel99 remains metadata-only/UNKNOWN.
+
+These are synthetic Grafana frames, not verification of VictoriaMetrics counter-rate behavior.

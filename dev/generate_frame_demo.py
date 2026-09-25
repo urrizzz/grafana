@@ -1,5 +1,6 @@
 """Generate deterministic Grafana TestData frames; no exporter or production connection required."""
 import json
+import random
 from pathlib import Path
 from datetime import datetime, timezone
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,14 +11,30 @@ ROUTERS = [('192.0.2.10', 'CORE-01', 'Tunnel10', 'Primary WAN', 'Cisco tunnel', 
            ('192.0.2.21', 'BRANCH-01', 'Tunnel10', 'Backup WAN', 'Branch tunnel', 2)]
 DS = {'type': 'grafana-testdata-datasource', 'uid': 'network-map-testdata'}
 def iso(value): return datetime.fromtimestamp(value / 1000, timezone.utc).isoformat()
+def status_at(channel_index, time):
+    minute = (time - START) // 60000
+    return 2 if 50 <= minute < 60 or (channel_index == 2 and minute >= 690) else 1
+
+def minute_rate(channel_index, direction, time):
+    if status_at(channel_index, time) == 2:
+        return 0
+    minute = (time - START) // 60000
+    rng = random.Random(1701 + channel_index * 100000 + minute * 37 + (direction == 'out') * 700000)
+    base = (channel_index + 1) * 1000000 * (0.65 if direction == 'out' else 1)
+    return round(base * (0.25 + rng.random() * 2.5) * (2.5 if rng.random() < 0.08 else 1))
+
+def rate_at(channel_index, direction, time):
+    # Rate at t covers [t-5m, t); partial windows average UP minutes and zero DOWN minutes.
+    return sum(minute_rate(channel_index, direction, time - offset * 60000) for offset in range(1, 6)) / 5
+
 def frames(role):
     result = []
     for i, (instance, name, channel, alias, description, state) in enumerate(ROUTERS):
         labels = dict(instance=instance, name=name, ifName=channel, ifAlias=alias, ifDescr=description)
         step = 60000 if role == 'E' else 300000
         times = list(range(START, END + 1, step)) if role in 'ABE' else [END]
-        if role in 'ABCD': values = [(i+1)*1000000 + ((n*37 + i*13) % 19)*110000 for n,_ in enumerate(times)]
-        elif role in 'EF': values = [2 if role == 'E' and 50 <= n < 60 else state for n,_ in enumerate(times)]
+        if role in 'ABCD': values = [rate_at(i, 'in' if role in 'AC' else 'out', time) for time in times]
+        elif role in 'EF': values = [status_at(i, time) for time in times]
         elif role == 'G': values = [100 if i != 1 else 1000] * len(times)
         else: values = [1] * len(times)
         result.append({'schema': {'refId': role, 'fields': [

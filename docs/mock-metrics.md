@@ -102,3 +102,15 @@ The independent M2 data preview uses dev/generate_frame_demo.py and Grafana Test
 exporter/backend pipeline. It supplies rates/status/capacity/metadata as returned data frames at a fixed
 historical range. See [M2 validation](m2-validation.md). It validates the panel adapter and selection;
 it does not validate counter-rate semantics in VictoriaMetrics, which remains M5 work.
+
+## Corrected TestData history (2026-09-25)
+
+The fixed 00:00-12:00 UTC demo has a recovered outage from 00:50-01:00 on all three traffic channels.
+BRANCH-01 Tunnel10 has another outage from 11:30 through 12:00 and is currently DOWN. All other traffic
+channels recover to UP. Incoming/outgoing rates use separate deterministic irregular minute samples,
+zero during outages, averaged over the preceding five minutes. Instant rates equal the final history
+window. A window ending exactly at outage start still describes the preceding UP traffic; a window
+wholly inside an outage is zero. Status is sampled each minute and no longer stays DOWN for the whole
+range on the branch channel. Tunnel99 remains metadata-only/UNKNOWN.
+
+These are synthetic Grafana frames, not verification of VictoriaMetrics counter-rate behavior.

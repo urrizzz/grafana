@@ -17,7 +17,8 @@ status circle inside the top-right corner, centers the channel name above the gr
 
 Open the [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and follow
 [M3 validation](m3-validation.md). Its saved selections, queries and layout are preserved.
-The dev container was restarted, not recreated; the 1 GiB limit remains.
+The dev container was restarted, not recreated; the 1 GiB limit remains. Mock frames now use status-consistent
+traffic: recovered 00:50-01:00 outages and a final 11:30-12:00 outage on BRANCH-01 Tunnel10.
 Configuration-first editable IF-MIB presets are newly planned for M4, also not implemented yet.
 No production VictoriaMetrics compatibility or rate semantics are claimed.
 
@@ -360,3 +361,16 @@ Updated both references and requirements. npm run check passed: typecheck, lint,
 Both reference default-mode browser checks passed. The 11-scenario browser suite passed, including exact
 outage timestamps/hover, centered compact heading, explicit details opt-in and save/reload. Screenshot
 review confirms the thicker line and headings. Changes saved locally; not pushed; owner review pending.
+
+### Mock traffic/status consistency repair (2026-09-25)
+
+Supersedes the original all-range-DOWN fixture mentioned above. The frame generator now uses one
+status timeline for history and current values, with zero minute traffic during outages. Incoming and
+outgoing use independent seeded irregular traffic; five-minute averages and instant/history endpoints
+agree. The branch is UP before its final 11:30 outage. Recovered outage remains 00:50-01:00.
+Regenerated source fixture and repaired local demo queries, preserving saved options/layout/time range;
+an encrypted ignored backup is in data/mock-frame-repair-backup.json. Plugin remains 0.3.1; no renderer
+change. Eight Python tests pass, including three new frame consistency tests. All three renderer browser scenarios passed; the strengthened exact-outage/zero-rate scenario also passed
+in a focused rerun. Typecheck passed. Saved owner and comparison dashboard options/time ranges were verified
+after provisioning and restored after test execution.
+Changes local, not pushed; M3 owner acceptance remains pending.

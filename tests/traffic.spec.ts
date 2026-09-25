@@ -18,6 +18,32 @@ test('compact graphs retain history and hover actual samples in light and dark t
     await expect(up).toHaveCSS('border-top-color', 'rgb(115, 191, 105)');
     await expect(down).toHaveCSS('border-top-color', 'rgb(242, 73, 92)');
     await expect(down.getByTestId('current-in')).toHaveText('--');
+    expect(
+      await down
+        .getByTestId('outage-segment')
+        .evaluateAll((nodes) =>
+          nodes.map((n) => [Number(n.getAttribute('data-from')), Number(n.getAttribute('data-to'))])
+        )
+    ).toEqual([
+      [1790297400000, 1790298000000],
+      [1790335800000, 1790337600000],
+    ]);
+    for (const direction of ['in', 'out']) {
+      await expect(down.locator(`rect[data-direction="${direction}"][data-time="1790337600000"]`)).toHaveAttribute(
+        'height',
+        '0'
+      );
+      await expect(down.locator(`rect[data-direction="${direction}"][data-time="1790297700000"]`)).toHaveAttribute(
+        'height',
+        '0'
+      );
+      expect(
+        Number(
+          await down.locator(`rect[data-direction="${direction}"][data-time="1790335800000"]`).getAttribute('height')
+        )
+      ).toBeGreaterThan(0);
+    }
+
     await expect(up.getByTestId('in-limit')).toHaveText((await up.getByTestId('out-limit').textContent())!);
     const bounds = (await up.boundingBox())!;
     expect(bounds.width).toBeCloseTo(120, 0);

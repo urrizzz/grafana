@@ -184,3 +184,55 @@ test('discarding the panel editor restores the previous diagram', async ({ page,
   await expect(panel.getByTestId('router-r1')).toHaveCount(0);
   await expect(panel.getByRole('button', { name: 'Add router', exact: true })).toHaveCount(0);
 });
+
+test('router resize follows zoom, updates connections and persists dimensions', async ({ page, request }) => {
+  await page.setViewportSize({ width: 1800, height: 1200 });
+  const uid = 'network-map-router-resize';
+  await request.post('/api/dashboards/db', {
+    data: { dashboard: { ...dashboard, uid, id: null, version: 0, title: 'Router resize checks' }, overwrite: true },
+  });
+  await page.goto(`/d/${uid}`);
+  await openEditor(page);
+  const panel = page.getByRole('region', { name: 'Network Traffic Map diagram' });
+  await panel.getByRole('button', { name: 'Load fixture layout', exact: true }).click();
+  await choose(page, panel, 'Selected element', 'CORE-01');
+  const router = panel.getByTestId('router-r1');
+  let width = 150,
+    height = 64;
+  for (const zoom of [0.5, 1, 1.5]) {
+    await choose(page, panel, 'Diagram zoom', `${zoom * 100}%`);
+    const handle = router.getByRole('button', { name: 'Resize router', exact: true });
+    await expect(handle.getByTestId('resize-icon')).toBeVisible();
+    await handle.scrollIntoViewIfNeeded();
+    const box = (await handle.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + 60 * zoom, box.y + box.height / 2 + 36 * zoom, { steps: 8 });
+    await page.mouse.up();
+    width += 60;
+    height += 36;
+    await expect(router).toHaveCSS('width', `${width}px`);
+    await expect(router).toHaveCSS('height', `${height}px`);
+    await expect(router).toHaveCSS('left', '40px');
+    await expect(router).toHaveCSS('top', '220px');
+    await expect(panel.getByTestId('connection-c1')).toHaveAttribute(
+      'd',
+      new RegExp(`^M${40 + width},${220 + height / 2} `)
+    );
+  }
+  await page.getByRole('button', { name: 'Back', exact: true }).click();
+  await expect(panel.getByRole('button', { name: 'Resize router', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.reload();
+  await expect(router).toHaveCSS('width', '330px');
+  await expect(router).toHaveCSS('height', '172px');
+  const saved = await (await request.get(`/api/dashboards/uid/${uid}`)).json();
+  expect(saved.dashboard.panels[0].options.diagram.routers[0]).toMatchObject({
+    width: 330,
+    height: 172,
+    x: 40,
+    y: 220,
+  });
+});

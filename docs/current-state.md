@@ -8,13 +8,14 @@ for commands/environment. Update this document with every meaningful development
 ## Current position
 
 **M3 compact renderer implemented and verified locally; owner acceptance pending. M1 and M2 remain accepted.**
-Running version: **0.3.4**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
+Running version: **0.3.5**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
 purple OUT, shared automatic axes, matching range-end values and status borders. Historical outages
 appear only over known DOWN intervals; DOWN/UNKNOWN retain available history with current dashes.
 The side information block omits the routine Data available success message; warnings and editor diagnostics remain.
 Hover snaps to complete five-minute buckets and reads actual samples in an external tooltip.
 Per-block Show interface details defaults to false. Turning it off collapses the side block and centers the channel name plus colored circle/status above the graph.
 Routers and traffic use the same four-way handle above the top-right edge in edit mode; body clicks select without dragging.
+Routers can be resized using the matching diagonal-arrow control; connection bounds follow their saved dimensions.
 The corner status circle remains visible in both modes; graph coordinates are preserved. Individual field choices persist.
 
 Open the [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and follow
@@ -405,3 +406,19 @@ and quality warnings remain; the editor Data quality section is unchanged. Produ
 A Grafana browser check confirmed the success row and its space are absent, metadata remains, and the
 editor diagnostics section is still available. No dashboard was saved during validation.
 Changes local, not pushed; M3 owner review remains pending.
+
+### Router sizing and resize handles (2026-09-25)
+
+Selected routers and traffic blocks expose a 22 px diagonal-arrow resize button styled like the move
+button, beside the bottom-right corner of the router/graph. Router width and height resize independently
+within 120-600 x 48-320 px. Old layouts default to 150 x 64; optional dimensions persist with Save,
+reload and duplication. Top-left position stays fixed. Connections and diagram bounds use current router
+sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Handles are edit-mode only.
+Validate router resizing at different zooms, live connector attachment and Save/reload.
+
+Verification: typecheck/lint, 36 unit tests and build passed. Four existing layout browser scenarios passed;
+the new router resize scenario passed after scrolling the off-screen handle into view at 150% zoom.
+Verified router size, fixed position, connector attachment at 50/100/150%, save/reload and hidden view-mode
+controls. Diagram reference resize smoke check passed. Corrected two lockfile dependency version fields
+that earlier broad project-version replacements had changed; resolved artifact URLs/integrities are unchanged.
+Changes saved locally, not pushed; owner review pending.

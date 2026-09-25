@@ -265,3 +265,12 @@ This supersedes earlier whole-router dragging and mode-specific handle placement
 
 The side information block must not show a routine Data available success message or reserve space for it.
 Keep actionable missing-data/quality warnings and the editor Data quality diagnostics.
+
+### Router sizing and resize handles (2026-09-25)
+
+Selected routers and traffic blocks expose a 22 px diagonal-arrow resize button styled like the move
+button, beside the bottom-right corner of the router/graph. Router width and height resize independently
+within 120-600 x 48-320 px. Old layouts default to 150 x 64; optional dimensions persist with Save,
+reload and duplication. Top-left position stays fixed. Connections and diagram bounds use current router
+sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Handles are edit-mode only.
+Validate router resizing at different zooms, live connector attachment and Save/reload.

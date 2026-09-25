@@ -211,6 +211,7 @@ type Drag = {
   x: number;
   y: number;
   width: number;
+  height: number;
   resize: boolean;
   snapshot: Diagram;
 };
@@ -289,12 +290,12 @@ function DiagramEditor({
   const connection = diagram.connections.find((c) => c.id === selected);
   const worldWidth = Math.max(
     1040,
-    ...diagram.routers.map((r) => r.x + 180),
+    ...diagram.routers.map((r) => r.x + (r.width ?? 150) + 32),
     ...diagram.traffic.map((t) => t.x + t.width + (t.showInterfaceDetails === true ? 200 : 32))
   );
   const worldHeight = Math.max(
     660,
-    ...diagram.routers.map((r) => r.y + 100),
+    ...diagram.routers.map((r) => r.y + (r.height ?? 64) + 32),
     ...diagram.traffic.map((t) => t.y + (t.width * 70) / 120 + 80)
   );
   const save = (next: Diagram) => {
@@ -336,7 +337,8 @@ function DiagramEditor({
       startY: event.clientY,
       x: node.x,
       y: node.y,
-      width: 'width' in node ? node.width : 150,
+      width: node.width ?? 150,
+      height: 'ifName' in node ? (node.width * 70) / 120 : (node.height ?? 64),
       resize,
       snapshot: diagram,
     };
@@ -375,6 +377,42 @@ function DiagramEditor({
       </svg>
     </button>
   );
+  const resizeHandle = (node: RouterNode | TrafficNode, width: number, height: number, kind: string) => (
+    <button
+      data-map-control
+      className="resize"
+      aria-label={`Resize ${kind}`}
+      title="Resize element"
+      style={{
+        left: width + 4,
+        top: height - 22,
+        right: 'auto',
+        bottom: 'auto',
+        width: 22,
+        height: 22,
+        padding: 2,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onPointerDown={(event) => begin(event, node, true)}
+    >
+      <svg
+        data-testid="resize-icon"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 10V4h6M4 4l16 16M14 20h6v-6" />
+      </svg>
+    </button>
+  );
   const move = (event: React.PointerEvent) => {
     const d = drag.current;
     if (!editing || !d) {
@@ -385,7 +423,19 @@ function DiagramEditor({
     const position = { x: Math.max(8, Math.round(d.x + dx)), y: Math.max(32, Math.round(d.y + dy)) };
     const next = {
       ...diagram,
-      routers: diagram.routers.map((r) => (r.id === d.id ? { ...r, ...position } : r)),
+      routers: diagram.routers.map((r) =>
+        r.id === d.id
+          ? {
+              ...r,
+              ...(d.resize
+                ? {
+                    width: Math.max(120, Math.min(600, Math.round(d.width + dx))),
+                    height: Math.max(48, Math.min(320, Math.round(d.height + dy))),
+                  }
+                : position),
+            }
+          : r
+      ),
       traffic: diagram.traffic.map((t) =>
         t.id === d.id
           ? { ...t, ...(d.resize ? { width: Math.max(120, Math.min(360, Math.round(d.width + dx))) } : position) }
@@ -568,7 +618,10 @@ function DiagramEditor({
                 {diagram.connections.map((c) => {
                   const a = diagram.routers.find((r) => r.id === c.source)!,
                     b = diagram.routers.find((r) => r.id === c.target)!;
-                  const route = routeConnection({ ...a, width: 150, height: 64 }, { ...b, width: 150, height: 64 });
+                  const route = routeConnection(
+                    { ...a, width: a.width ?? 150, height: a.height ?? 64 },
+                    { ...b, width: b.width ?? 150, height: b.height ?? 64 }
+                  );
                   return (
                     route && (
                       <path
@@ -597,12 +650,13 @@ function DiagramEditor({
                   key={r.id}
                   data-testid={`router-${r.id}`}
                   className={`node router ${editing && selected === r.id ? 'selected' : ''}`}
-                  style={{ left: r.x, top: r.y }}
+                  style={{ left: r.x, top: r.y, width: r.width ?? 150, height: r.height ?? 64 }}
                   onClick={() => editing && selectElement(r.id)}
                 >
-                  {editing && moveHandle(r, 150, r.name)}
+                  {editing && moveHandle(r, r.width ?? 150, r.name)}
                   <strong title={r.name}>{r.name}</strong>
                   <span className="muted">{r.instance || 'Instance not set'}</span>
+                  {editing && selected === r.id && resizeHandle(r, r.width ?? 150, r.height ?? 64, 'router')}
                 </div>
               ))}
               {diagram.traffic.map((t) => {
@@ -664,16 +718,7 @@ function DiagramEditor({
                         )}
                       </div>
                     )}
-                    {editing && selected === t.id && (
-                      <button
-                        data-map-control
-                        aria-label="Resize traffic"
-                        className="resize"
-                        onPointerDown={(e) => begin(e, t, true)}
-                      >
-                        +
-                      </button>
-                    )}
+                    {editing && selected === t.id && resizeHandle(t, t.width, (t.width * 70) / 120, 'traffic')}
                   </div>
                 );
               })}

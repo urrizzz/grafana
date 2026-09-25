@@ -26,6 +26,13 @@ export function readDiagram(options: InterfaceMapOptions): Diagram {
     }
   }
   for (const router of diagram.routers) {
+    if (
+      (router.width !== undefined && (!Number.isFinite(router.width) || router.width < 120 || router.width > 600)) ||
+      (router.height !== undefined && (!Number.isFinite(router.height) || router.height < 48 || router.height > 320))
+    ) {
+      throw new Error('Router size must be 120-600 by 48-320 pixels.');
+    }
+
     if (typeof router.name !== 'string' || typeof router.instance !== 'string') {
       throw new Error('Invalid router fields.');
     }

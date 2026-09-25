@@ -7,6 +7,8 @@ export interface RouterNode extends Position {
   id: string;
   name: string;
   instance: string;
+  width?: number;
+  height?: number;
 }
 export interface TrafficNode extends Position {
   id: string;

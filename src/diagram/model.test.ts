@@ -66,3 +66,16 @@ test('details settings are optional, validated and independently duplicated', ()
     })
   ).toThrow();
 });
+
+test('optional router dimensions preserve legacy layouts, validate bounds and survive duplication', () => {
+  const d = fixtureDiagram();
+  expect(readDiagram({ schemaVersion: 1, diagram: d }).routers[0].width).toBeUndefined();
+  d.routers[0].width = 240;
+  d.routers[0].height = 100;
+  expect(duplicateElement(d, 'r1', 'copy').routers.at(-1)).toMatchObject({ width: 240, height: 100 });
+  for (const patch of [{ width: NaN }, { width: 119 }, { width: 601 }, { height: 47 }, { height: 321 }]) {
+    expect(() =>
+      readDiagram({ schemaVersion: 1, diagram: { ...d, routers: [{ ...d.routers[0], ...patch }, d.routers[1]] } })
+    ).toThrow('Router size');
+  }
+});

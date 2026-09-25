@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.5 - Unreleased
+
+- Add saved router dimensions and resize-aware connection geometry.
+- Use diagonal-arrow resize handles styled consistently with movement controls.
+
 ## 0.3.4 - Unreleased
 
 - Remove the routine Data available success row from side information.

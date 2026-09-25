@@ -142,5 +142,7 @@ alone proves the exported label layout or query API contract. Do not include cre
 
 ## Implementation location
 
-The future PanelData adapter, channel index and normalization belong in `src/data/`. No custom query
-coordinator is planned. The current scaffold does not consume traffic data; mock metrics remain in `dev/`.
+The PanelData adapter, channel index and normalization are implemented in `src/data/`. No custom query
+coordinator is used. See [M2 validation](m2-validation.md) for supported frame shapes, default query-role
+mappings, quality evidence units, and the separate synthetic TestData dashboard. Production VictoriaMetrics
+frame shape and backend rate semantics still need validation. Mock exporter tools remain in `dev/`.

@@ -1,5 +1,6 @@
-# Data implementation boundary
+# Returned-data adapter
 
-Implement the datasource-independent PanelData adapter, result mappings, router/channel index and normalization here.
-Grafana owns panel-level datasource queries; elements select from returned data without fetching it.
-Follow ../../docs/metrics-contract.md; no live frame adapter is implemented yet.
+model.ts defines mappings, channel identity and normalized data. adapter.ts consumes PanelData only;
+Grafana owns query execution. It indexes labelled series and table rows, normalizes rates/status/capacity,
+keeps ambiguous selections unavailable, and reports missing evidence rather than inventing quality.
+See ../../docs/metrics-contract.md and ../../docs/m2-validation.md for exact input shapes and limits.

@@ -3,7 +3,7 @@
 An installable **custom Grafana diagram panel** containing router representations, connections, and compact Cisco port/tunnel traffic displays.
 Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
-**Target:** Grafana **13.2.2**. **Status:** M1 layout editor with saved routers, traffic placeholders and connections. Data mapping and live traffic visualization remain pending.
+**Target:** Grafana **13.2.2**. **Status:** M2 query-result adapter and layout editor: result-driven router/channel selection, automatic metadata, current rates/status/capacity and quality diagnostics. Traffic bars/hover remain for M3.
 **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Documentation and accepted mockups are maintained in this repository.
 
 ![Proposed scalable traffic component](docs/assets/compact-component.svg)
@@ -88,8 +88,7 @@ npm run server
 npm run e2e
 ```
 
-Open [the development dashboard](http://localhost:3001/d/interface-map-dev). It provides the M1 layout editor with clearly labeled
-traffic placeholders. Follow the [M1 validation checklist](docs/m1-validation.md). The separate development container uses port 3001 and a 512 MB limit.
+Open [the M2 data preview](http://localhost:3001/d/network-map-data-dev) and follow [M2 validation](docs/m2-validation.md). It uses synthetic frames via Grafana TestData. The original [layout dashboard](http://localhost:3001/d/interface-map-dev) is preserved. The separate development container uses port 3001 and a 1 GiB limit.
 Stop it with `npm run server:stop` when finished. Your existing port-3000 Grafana remains separate.
 See [development instructions](docs/development.md) for the full workflow and encrypted workspace access.
 

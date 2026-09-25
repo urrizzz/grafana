@@ -10,7 +10,7 @@
       "traffic",
       "diagram"
     ],
-    "description": "Layout editor preview for compact router interface traffic diagrams",
+    "description": "Network traffic diagrams with query-driven router and interface selection",
     "author": {
       "name": "urrizzz"
     },

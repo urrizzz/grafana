@@ -95,3 +95,10 @@ belongs to this exporter before stopping it. The exporter does not start automat
 
 Changing the mock generator model changes synthetic counter values. Regenerate fixtures and use a clean
 development database when switching models to avoid mixing counter histories. No history is imported automatically.
+
+## M2 Grafana-frame fixture
+
+The independent M2 data preview uses dev/generate_frame_demo.py and Grafana TestData rather than the
+exporter/backend pipeline. It supplies rates/status/capacity/metadata as returned data frames at a fixed
+historical range. See [M2 validation](m2-validation.md). It validates the panel adapter and selection;
+it does not validate counter-rate semantics in VictoriaMetrics, which remains M5 work.

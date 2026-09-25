@@ -1,47 +1,48 @@
 # Current development state
 
-Last updated: 2026-09-25. Published baseline: `feb4ed4` on `origin/main` includes M1 and the Network Traffic Map rename (`7523401`), plus the Show interface details requirement. Push verified on 2026-09-25. Earlier local/uncommitted notes below are historical.
+Last updated: 2026-09-25. Published baseline: `898723f` on `origin/main` includes M1 and the Network Traffic Map rename (`7523401`), plus the Show interface details requirement. Push verified on 2026-09-25. M2 changes are saved locally and not pushed; earlier local/uncommitted notes below are historical.
 This document records verified implementation state, not intended behavior. Follow the
 [implementation plan](implementation-plan.md) for the work sequence and [development guide](development.md)
 for commands/environment. Update this document with every meaningful development increment.
 
 ## Current position
 
-**M1 is complete and owner-validated, including zoom and notification refinements. M2 is next.**
-New requirement: per-block Show interface details, with an internal status circle when hidden, is planned
-for M3/M4 and is not implemented in version 0.1.5 or the HTML mockups.
-The real Grafana plugin now edits saved routers, traffic placeholders and connections. Metric discovery,
-traffic bars and historical hover are not implemented. Use [M1 validation](m1-validation.md) for review.
-The running local version is **0.1.5**. Dropdowns are confirmed fixed by the owner. Layout editing now
-starts automatically in Grafana's panel editor; dashboard view/grid editing remain read-only. Owner
-confirmed the four editing-mode checks, router-position persistence after Save/reload, and Discard restoring a moved router; remaining original layout checks 2-11 are now owner-confirmed. Owner confirmed the added zoom levels and compact notification work. Next implementation milestone: M2 returned-data adapter.
+**M2 is implemented and locally verified; owner validation is pending. M1 remains accepted.**
+Running version: **0.2.0**, Grafana 13.2.2 on port 3001. The adapter consumes Grafana query results,
+indexes routers/channels, reads interface metadata automatically, and previews current rates/status/capacity.
+Panel options configure identity/quality fields and query-role mappings. Elements select returned data
+without issuing requests. Unavailable or ambiguous selections stay in place with UNKNOWN/dashes.
+
+Open [M2 data preview](http://localhost:3001/d/network-map-data-dev) and follow [M2 validation](m2-validation.md).
+It uses synthetic TestData frames and a fixed historical time range; the original saved dashboard is preserved.
+The next implementation milestone is M3: bars, axes, hover and the per-block Show interface details option.
+Those are not implemented yet. No production VictoriaMetrics compatibility or rate semantics are claimed.
 
 | Milestone | Status | Evidence / remaining work |
 | --- | --- | --- |
-| M0 Foundation | Complete (local baseline) | Build/test tooling, CI definitions and unsigned packaging; remote CI unverified |
-| M1 Diagram model/editor | Complete; owner-validated | 11 unit checks and five browser scenarios passed across the suite and targeted rerun; see validation checklist |
-| M2 Frame adapter | Not started | src/data/ boundary only; fixture fields are manual text for now |
-| M3 Traffic renderer | Not started | Traffic placeholders show UNKNOWN/dashes; no live plots |
-| M4 Integrated diagram | Not started | Depends on M2/M3 |
-| M5 Backend/quality audit | Not started | Synthetic metrics exist separately |
-| M6 Distribution | Deferred | Organization, permanent ID, license and route undecided |
+| M0 Foundation | Complete locally | Build/test tooling and unsigned packaging; remote CI unverified |
+| M1 Diagram model/editor | Complete; owner-validated | Saved layouts, native edit lifecycle, routing, zoom, resizing, duplication, safe removal |
+| M2 Frame adapter | Complete locally; owner review pending | 30 unit tests, eight browser scenarios across suite/targeted rerun; see guide and evidence below |
+| M3 Traffic renderer | Not started | Current-value data preview only; bars/axes/hover and Show interface details pending |
+| M4 Integrated diagram | Partial via M2 data selection | Final traffic renderer and visibility persistence still pending |
+| M5 Backend/quality audit | Not started | Synthetic fixtures only; production frames, rates and capacity/performance audit pending |
+| M6 Distribution | Deferred | Organization, permanent ID, license and publication route undecided |
 
 ## Implemented assets
 
 | Area | Current implementation |
 | --- | --- |
-| Panel registration | [src/module.ts](../src/module.ts), provisional ID urrizzz-interfacemap-panel, display name Network Traffic Map |
-| Runtime UI | [InterfaceMapPanel.tsx](../src/components/InterfaceMapPanel.tsx) follows Grafana panel-editor mode automatically; inspector, zoom, dragging, proportional placeholder resize and connections |
-| Saved options | [src/types.ts](../src/types.ts): schema-1 routers, traffic and connections; legacy empty options supported |
-| Build | TypeScript/React scaffold, Grafana packages 13.2.2, npm lockfile, lint/unit/build commands |
-| Local Grafana | [Compose](../docker-compose.yaml), Enterprise 13.2.2 on loopback port 3001, 512 MB/one CPU limit |
-| Provisioning | Editable development dashboard with empty layout; Load fixture layout seeds two routers/one traffic/one connection; no datasource queries |
-| Unit check | 11 unit tests: metadata/provisioning, saved-option validation, safe removal, independent duplication and routing |
-| Browser check | Expanded browser suite for legacy options, editing, pointer/zoom, save/reload and native panel duplication |
-| CI | GitHub workflow defines build, mock tests and browser smoke test; remote run status unverified |
-| Packaging | Manual unsigned artifact workflow and local ZIP/checksum script; no release/signing automation |
-| Mock metrics | Python exporter/history tools and five tests; separate from the panel runtime |
-| Design references | Accepted traffic wireframe and diagram mockup, including hover and automatic connection-side selection |
+| Panel registration | [src/module.ts](../src/module.ts), provisional ID urrizzz-interfacemap-panel; Network Traffic Map |
+| Runtime UI | [InterfaceMapPanel.tsx](../src/components/InterfaceMapPanel.tsx): native panel editing, layout and result-driven selectors/current preview |
+| Data model/adapter | [adapter.ts](../src/data/adapter.ts), [model.ts](../src/data/model.ts): normalized history/current/status/capacity/metadata/quality |
+| Saved options | Schema 1 layouts preserved; optional nested identity/role mappings use backward-compatible defaults |
+| Local Grafana | Enterprise 13.2.2 at localhost:3001; 1 GiB/one CPU cap, GOMEMLIMIT 300 MiB |
+| Provisioning | Original layout dashboard plus independent TestData datasource and network-map-data-dev dashboard |
+| Fixture generator | [generate_frame_demo.py](../dev/generate_frame_demo.py), deterministic labelled query frames at a fixed historical range |
+| Validation | 30 unit tests; eight browser scenarios covering editor/data lifecycle; typecheck/lint/build pass |
+| CI / packaging | Existing workflows; remote run/signing/publication unverified; local build outputs ignored |
+| Mock metrics | Existing exporter/history tools remain separate; no production endpoint configured |
+| Design references | Approved diagram/traffic mockups; hidden-details variant and actual traffic renderer remain M3 work |
 
 ## Confirmed direction to preserve
 
@@ -54,7 +55,7 @@ first deployment example. Queries return five-minute rates in bit/s; the rendere
 A missing selected channel stays in place with UNKNOWN/no data. The graph is natively 120 x 70 with
 metadata on its right. Status-colored borders, blue/purple directions, historical outage segments and
 hover follow the accepted references. Connections adjust sides while routers move in the implemented editor. The traffic styling and data
-behavior above remain requirements for M2/M3. See [decisions](decisions.md) for the full record.
+rendering details above remain requirements for M3; M2 now supplies normalized data. See [decisions](decisions.md) for the full record.
 
 ## Verification ledger
 
@@ -80,10 +81,9 @@ the unchanged 512 MB/one CPU container. The global WSL limit remains unchanged. 
 not a claim of production capacity. The development instance remains available for owner validation at localhost:3001. After the browser suite,
 Docker reported 426.3 MiB of its 512 MiB limit and OOM=false; this is a point-in-time measurement.
 
-Acceptance status: M1 addresses the layout portions of AC-22, 39-45 and 52. AC-39 uses fixture identity fields,
-not returned-data pickers yet; AC-43/52 do not yet cover data mappings. AC-44's data-isolation portion awaits
-M2/M4. Traffic, hover, real query behavior and performance criteria remain pending. No complete-product
-readiness is claimed from the layout tests.
+Current acceptance: M1 layout is owner-accepted. M2 automated checks exercise configurable roles,
+identity isolation, metadata-only channels, missing/stale data, ambiguity, variables and persistence.
+Production-shaped backend evidence and complete-product rendering/performance remain M3-M5 work.
 
 ## Open questions and limits
 
@@ -98,17 +98,16 @@ readiness is claimed from the layout tests.
 | Grafana Cloud organization and permanent ID | Owner has no Cloud account; provisional ID accepted for local work | Before signing/publication |
 | Project license and distribution route | Package currently private/UNLICENSED; no signing token configured | M6 |
 
-There is no known blocker to starting M2 after the M1 handoff. Unknown backend details do not justify hardcoding the datasource.
+There is no known blocker to M3 after the M2 handoff. Unknown backend details do not justify hardcoding the datasource.
 No production credentials are required for fixture-based implementation.
 
 ## Next concrete work
 
-Owner: follow [M1 validation](m1-validation.md), focusing on movement, connection sides, resize, safe removal,
-and save/reload. UNKNOWN/dashes and manual fixture identities are intentional at this stage.
+Owner: follow [M2 validation](m2-validation.md), checking dependent selection, automatic metadata,
+missing-data behavior, mappings and save/reload in the separate data preview.
 
-Development: M2 starts with normalized channel/result-role types and a PanelData adapter over synthetic
-Grafana frames. Replace fixture text selection with result-driven router/channel choices and configurable
-mappings. Do not introduce per-element fetching. Resolve owner-reported M1 issues as part of the handoff.
+Development: implement M3 using the normalized model, including the optional hidden-details/status-circle
+variant. Keep queries at panel level. Gather sanitized production frame examples for the later M5 audit.
 
 ## Maintenance and handoff
 
@@ -247,3 +246,47 @@ Pushed M1 code, all accumulated documentation, and the new Show interface detail
 urrizzz/grafana main through feb4ed4. Runtime remains 0.1.5; the new visibility option is requirements-only.
 Documentation diff checks passed; no runtime changes or additional runtime tests for this publication.
 Remote CI results have not been checked.
+
+### M2 work in progress (2026-09-25)
+
+Implemented src/data/model.ts and adapter.ts: configurable query reference/field roles, labelled wide
+series and table identity/metadata, independent channel index, aligned history, range-end currents,
+capacity conversion, status/down intervals and explicit quality/ambiguity diagnostics. Panel options
+expose identity and role mappings. Editor uses returned router/channel choices, retains unavailable
+selections, and no longer exposes manual alias/description inputs. Original schema/layouts still load.
+
+A separate TestData datasource/dashboard supplies two routers, shared tunnel names and a metadata-only
+channel. dev/generate_frame_demo.py reproduces its frames. The owner's existing dashboard is preserved.
+Version 0.2.0 is being validated; M3 bars/hover and Show interface details remain unimplemented.
+
+### M2 final verification (2026-09-25)
+
+Version 0.2.0 is implemented and available locally. npm run check passed (typecheck, source lint, 30 unit
+tests and production build). Eight browser scenarios passed across the final suite and targeted mapping
+rerun: M1 editor lifecycle plus returned-data isolation/selection/metadata, save/reload, no per-element
+querying, scalar variable changes/All rejection, and editing panel mappings. The mapping test initially
+used a shorter accessible name than Grafana exposes; it passed after including the help-text prefix.
+
+Actual TestData frames were rendered through Grafana's normal query path. A direct exploratory query API
+request without Grafana's full query envelope returned HTTP 500; the normal browser pipeline and tests
+passed. M2 editor screenshot data/m2-editor.png was inspected for usable layout. Docker memory was
+332.2 MiB of its 512 MiB limit at verification; no production performance claim is made.
+
+Current rates require exact range-end evaluations; status/capacity freshness uses a 180-second policy.
+Optional source timestamps/counts are explicit evidence; absent evidence remains unverified. Query
+errors/loading suppress current values. Duplicate series/dimensions produce visible ambiguity, not sums.
+Only labelled series and identity-bearing tables are supported; ifIndex-only joins await real-frame evidence.
+Legacy saved metadata is ignored in favor of query data. The new compact renderer/visibility toggle remain
+M3 work. Owner M2 review pending. Documentation and implementation are saved together locally; not pushed.
+
+### Development memory allowance (2026-09-25)
+
+Owner authorized increasing the development container limit within Docker's existing 4 GiB budget.
+Raised Grafana's hard memory limit from 512 MiB to 1 GiB in Compose and the running container via docker
+update, preserving its container ID and saved dashboards. Combined RAM+swap ceiling is 2 GiB, matching
+Docker's default for a 1 GiB RAM limit. One CPU and the existing 300 MiB Go soft target remain unchanged;
+the higher hard ceiling provides headroom for process/native/cache memory. Docker's global limit is unchanged.
+
+Memory verification: live inspect reports 1073741824 bytes RAM, the same container ID, and healthy status.
+Usage sampled at 236.7 MiB / 1 GiB; docker compose config --quiet passed. M2 and this configuration update
+are saved in a local development commit; no push was requested for this increment.

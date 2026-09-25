@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 - Unreleased
+
+- Add datasource-independent frame mappings and router/channel selection from query results.
+- Read interface metadata from results; normalize range-end rates, status, capacity and historical outages.
+- Report ambiguous identities, missing data, resolution and source-quality limitations.
+- Support single-valued variables; reject multi/All selections and retain unavailable selections.
+- Add an isolated reproducible TestData dashboard and M2 adapter/browser validation.
+- Final traffic bars, axes, hover and hidden interface details remain planned for M3/M4.
+
 ## 0.1.5 - Unreleased
 
 - Rename the visualization to Network Traffic Map; retain the existing plugin ID for dashboard compatibility.

@@ -1,7 +1,8 @@
 # Accepted diagram panel workflow
 
 Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
-Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
+M2 consumes returned query data for router/channel selection, automatic metadata and current-value previews.
+Final traffic bars, hover and Show interface details remain M3/M4 work.
 See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 Open [the interactive mockup](assets/diagram-panel-mockup.html) in a browser.

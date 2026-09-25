@@ -1,3 +1,4 @@
+import { DataMapping } from './data/model';
 export interface Position {
   x: number;
   y: number;
@@ -28,4 +29,5 @@ export interface Diagram {
 export interface InterfaceMapOptions {
   schemaVersion: number;
   diagram?: Diagram;
+  mapping?: Partial<DataMapping>;
 }

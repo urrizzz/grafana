@@ -1,11 +1,14 @@
-# Network Traffic Map - layout editor preview
+# Network Traffic Map - data integration preview
 
 Provisional plugin ID: urrizzz-interfacemap-panel. Target: Grafana 13.2.2.
 
-Use Edit layout to add routers, traffic placeholders and connections. Configure names, fixture identities
-and endpoints in Element settings. Drag elements, resize traffic plots, and save the Grafana dashboard.
-Load fixture layout is available only on an empty diagram. Normal dashboard saving persists layout options.
+Open Grafana panel menu > Edit to arrange routers, traffic blocks and connections. Use the normal query
+editor for datasource/metric queries, then panel options to map query results. Each block selects a
+returned router/channel; alias and description come from data. Back > Save persists the configuration.
 
-This M1 build has no live metrics, traffic bars or query-result selection yet. UNKNOWN/dashes are expected.
-No Grafana Cloud account is needed for development. Signing and publication are not configured.
-Source, requirements and validation checklist: https://github.com/urrizzz/grafana
+M2 includes current rates, status, capacity and quality diagnostics. M3 bars, axes, hover and optional
+hidden interface details remain pending. The local M2 dashboard uses synthetic TestData frames, not
+production traffic. No custom per-element requests or Grafana backend plugin are used.
+
+Source, requirements and validation guides: https://github.com/urrizzz/grafana
+Signing/publication remain unconfigured.

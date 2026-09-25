@@ -48,7 +48,7 @@ a committed CI workflow is not evidence that a remote CI run passed.
 
 ## M1 - Diagram model and editor
 
-Implementation and owner validation are complete, including zoom and warning refinements. Next: M2. See [current state](current-state.md) for verification and
+Implementation and owner validation are complete, including zoom and warning refinements. Next: M3 after M2 owner review. See [current state](current-state.md) for verification and
 [M1 validation](m1-validation.md) for the owner checklist; do not infer full traffic support from this milestone.
 
 1. Extend src/types.ts with versioned router, traffic and connection records, stable IDs, geometry and mappings.
@@ -67,6 +67,9 @@ Check vertical, reversed and diagonal connections, overlap handling, zoom, and e
 Do not mark production traffic support complete because placeholders work.
 
 ## M2 - Returned-data adapter and selection
+
+Implemented locally in 0.2.0; owner validation uses [M2 validation](m2-validation.md).
+Production VictoriaMetrics frame/quality evidence remains an M5 check, not a claim made by synthetic tests.
 
 1. Define normalized channel identity, history/current rates, metadata, capacity, status and quality types.
    Specify supported frame shapes and document unsupported/ambiguous inputs explicitly.
@@ -126,7 +129,7 @@ record browser/render latency, refresh behavior and memory on the 16 GB machine,
 practical limits. Keep the established WSL cap and one browser worker; stop disposable services after checks.
 Do not silently coarsen data to make the chart faster. Resolve acceptance failures before calling the MVP done.
 
-Completion evidence: every AC-01 through AC-52 has a result or explicit unresolved entry in current-state.md;
+Completion evidence: every AC-01 through AC-55 has a result or explicit unresolved entry in current-state.md;
 reference screenshots, repeatable live-data setup, relevant tests and known limitations are documented.
 Unresolved required acceptance criteria prevent marking this milestone complete.
 

@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { PanelProps } from '@grafana/data';
-import { locationService } from '@grafana/runtime';
+import { getTemplateSrv, locationService } from '@grafana/runtime';
 import { Combobox, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { Connection, Diagram, InterfaceMapOptions, RouterNode, TrafficNode } from '../types';
 import { duplicateElement, fixtureDiagram, newId, readDiagram, removeElement } from '../diagram/model';
+import { adaptFrames, resolveIdentity } from '../data/adapter';
+import { channelKey } from '../data/model';
 import { routeConnection } from '../diagram/routing';
 
 const styles = css`
@@ -195,8 +197,55 @@ export function InterfaceMapPanel(props: PanelProps<InterfaceMapOptions>) {
   return diagram ? <DiagramEditor {...props} diagram={diagram} /> : <div role="alert">{message}</div>;
 }
 
-function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<InterfaceMapOptions> & { diagram: Diagram }) {
+function DiagramEditor({
+  id,
+  options,
+  onOptionsChange,
+  diagram,
+  data,
+  timeRange,
+  replaceVariables,
+}: PanelProps<InterfaceMapOptions> & { diagram: Diagram }) {
   const theme = useTheme2();
+  const index = useMemo(
+    () => adaptFrames(data, options.mapping, timeRange.from.valueOf(), timeRange.to.valueOf()),
+    [data, options.mapping, timeRange]
+  );
+  const channels = [...index.channels.values()];
+  const routerIdentities = [...new Set(channels.map((channel) => channel.instance))].sort();
+  const resolve = (value: string) => resolveIdentity(value, replaceVariables, getTemplateSrv().getVariables());
+  const channelData = (node: TrafficNode) => {
+    const instance = resolve(diagram.routers.find((router) => router.id === node.routerId)?.instance ?? '');
+    const channel = resolve(node.ifName);
+    return instance && channel ? index.channels.get(channelKey(instance, channel)) : undefined;
+  };
+  const rate = (value: number | null | undefined) =>
+    value == null
+      ? '--'
+      : value >= 1e9
+        ? `${(value / 1e9).toFixed(1)} Gbit/s`
+        : value >= 1e6
+          ? `${(value / 1e6).toFixed(1)} Mbit/s`
+          : value >= 1e3
+            ? `${(value / 1e3).toFixed(1)} kbit/s`
+            : `${value.toFixed(0)} bit/s`;
+  const identityPicker = (label: string, value: string, values: string[], change: (value: string) => void) => (
+    <div data-map-field>
+      <span>{label}</span>
+      <Combobox
+        aria-label={label}
+        value={value || null}
+        createCustomValue
+        placeholder="Select returned identity or enter a variable"
+        options={[...new Set([...values, ...(value ? [value] : [])])].map((item) => ({
+          value: item,
+          label: item,
+          description: values.includes(item) ? undefined : 'Saved/custom selection; may be unavailable',
+        }))}
+        onChange={(option) => change(option.value)}
+      />
+    </div>
+  );
   const editing = useSyncExternalStore(
     (notify) => locationService.getHistory().listen(notify),
     () => locationService.getSearch().get('editPanel') === String(id)
@@ -344,7 +393,7 @@ function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<Int
                     {
                       id,
                       routerId: router?.id ?? diagram.routers[0].id,
-                      ifName: 'Tunnel01',
+                      ifName: '',
                       alias: '',
                       description: '',
                       width: 120,
@@ -403,17 +452,28 @@ function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<Int
             />
           </div>
         </div>
-        <span className="muted">Layout preview - fixture identities, no live traffic</span>
+        <span className="muted">Data preview - traffic graph arrives in M3</span>
+      </div>
+      <div className="muted" aria-label="Data diagnostics" style={{ maxHeight: 54, overflow: 'auto', flexShrink: 0 }}>
+        {`${routerIdentities.length} routers / ${channels.length} channels returned. `}
+        {index.issues.join('; ') ||
+          (channels.length ? 'Rates are query results in bit/s.' : 'Configure panel queries and result mappings.')}
       </div>
       <div className="layout">
         {editing && message && (
           <div
             role="alert"
             className="notice"
-            style={{ background: theme.colors.background.secondary, color: theme.colors.text.primary, borderColor: theme.colors.warning.main }}
+            style={{
+              background: theme.colors.background.secondary,
+              color: theme.colors.text.primary,
+              borderColor: theme.colors.warning.main,
+            }}
           >
             <span>{message}</span>
-            <button data-map-control onClick={() => setMessage('')}>Dismiss</button>
+            <button data-map-control onClick={() => setMessage('')}>
+              Dismiss
+            </button>
           </div>
         )}
         <div className="viewport">
@@ -459,7 +519,11 @@ function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<Int
                 })}
               </svg>
               {!diagram.routers.length && (
-                <p style={{ padding: 24, color: '#a4afbf' }}>{editing ? 'Empty diagram. Add routers or load the fixture layout.' : 'Empty diagram. Open the panel editor to add routers.'}</p>
+                <p style={{ padding: 24, color: '#a4afbf' }}>
+                  {editing
+                    ? 'Empty diagram. Add routers or load the fixture layout.'
+                    : 'Empty diagram. Open the panel editor to add routers.'}
+                </p>
               )}
               {diagram.routers.map((r) => (
                 <div
@@ -473,45 +537,62 @@ function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<Int
                   <span className="muted">{r.instance || 'Instance not set'}</span>
                 </div>
               ))}
-              {diagram.traffic.map((t) => (
-                <div
-                  key={t.id}
-                  data-testid={`traffic-${t.id}`}
-                  className={`node traffic ${editing && selected === t.id ? 'selected' : ''}`}
-                  style={{ left: t.x, top: t.y }}
-                >
-                  {editing && (
-                    <button data-map-control className="grip handle" onPointerDown={(e) => begin(e, t)}>
-                      Move {t.ifName}
-                    </button>
-                  )}
+              {diagram.traffic.map((t) => {
+                const current = channelData(t);
+                const status = current?.status ?? 'UNKNOWN';
+                const color = status === 'UP' ? '#73bf69' : status === 'DOWN' ? '#f2495c' : '#a4afbf';
+                return (
                   <div
-                    className="plot"
-                    style={{ width: t.width, height: (t.width * 70) / 120, fontSize: (11.5 * t.width) / 120 }}
+                    key={t.id}
+                    data-testid={`traffic-${t.id}`}
+                    className={`node traffic ${editing && selected === t.id ? 'selected' : ''}`}
+                    style={{ left: t.x, top: t.y }}
                   >
-                    <span>IN --</span>
-                    <span>OUT --</span>
-                  </div>
-                  <div className="info">
-                    <strong>
-                      {t.ifName} <span style={{ color: '#a4afbf' }}>UNKNOWN</span>
-                    </strong>
-                    <div>{t.alias || '--'}</div>
-                    <div>{t.description || '--'}</div>
-                    <div>No data - placeholder</div>
-                  </div>
-                  {editing && selected === t.id && (
-                    <button
-                      data-map-control
-                      aria-label="Resize traffic"
-                      className="resize"
-                      onPointerDown={(e) => begin(e, t, true)}
+                    {editing && (
+                      <button data-map-control className="grip handle" onPointerDown={(e) => begin(e, t)}>
+                        Move {t.ifName}
+                      </button>
+                    )}
+                    <div
+                      className="plot"
+                      style={{
+                        width: t.width,
+                        height: (t.width * 70) / 120,
+                        fontSize: (11.5 * t.width) / 120,
+                        borderColor: color,
+                      }}
                     >
-                      +
-                    </button>
-                  )}
-                </div>
-              ))}
+                      <span>IN {rate(current?.current.in)}</span>
+                      <span>OUT {rate(current?.current.out)}</span>
+                    </div>
+                    <div className="info">
+                      <strong>
+                        {current?.channel || t.ifName || 'Select channel'} <span style={{ color }}>{status}</span>
+                      </strong>
+                      <div>{current?.alias || '--'}</div>
+                      <div>{current?.description || '--'}</div>
+                      <div>Capacity {rate(current?.capacity)}</div>
+                      <div aria-label="Channel diagnostics">
+                        {current
+                          ? current.issues.length
+                            ? `${current.issues[0]}${current.issues.length > 1 ? ` (+${current.issues.length - 1} checks)` : ''}`
+                            : 'Data available'
+                          : 'Selected channel unavailable or invalid variable; no data'}
+                      </div>
+                    </div>
+                    {editing && selected === t.id && (
+                      <button
+                        data-map-control
+                        aria-label="Resize traffic"
+                        className="resize"
+                        onPointerDown={(e) => begin(e, t, true)}
+                      >
+                        +
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -525,7 +606,7 @@ function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<Int
                 placeholder="Select an element"
                 options={[
                   ...diagram.routers.map((r) => ({ value: r.id, label: r.name })),
-                  ...diagram.traffic.map((t) => ({ value: t.id, label: t.ifName })),
+                  ...diagram.traffic.map((t) => ({ value: t.id, label: t.ifName || 'Unconfigured traffic' })),
                   ...diagram.connections.map((c, i) => ({ value: c.id, label: `Connection ${i + 1}` })),
                 ]}
                 onChange={(option) => selectElement(option.value)}
@@ -534,15 +615,35 @@ function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<Int
             {router && (
               <>
                 {text('Router name', router.name, (name) => updateRouter({ name }))}
-                {text('Instance (fixture)', router.instance, (instance) => updateRouter({ instance }))}
+                {identityPicker('Router instance', router.instance, routerIdentities, (instance) =>
+                  updateRouter({ instance })
+                )}
               </>
             )}
             {traffic && (
               <>
                 {routers('Router', traffic.routerId, (routerId) => updateTraffic({ routerId }))}
-                {text('Channel (fixture)', traffic.ifName, (ifName) => updateTraffic({ ifName }))}
-                {text('Alias', traffic.alias, (alias) => updateTraffic({ alias }))}
-                {text('Description', traffic.description, (description) => updateTraffic({ description }))}
+                {identityPicker(
+                  'Channel',
+                  traffic.ifName,
+                  channels
+                    .filter(
+                      (channel) =>
+                        channel.instance ===
+                        resolve(diagram.routers.find((node) => node.id === traffic.routerId)?.instance ?? '')
+                    )
+                    .map((channel) => channel.channel),
+                  (ifName) => updateTraffic({ ifName })
+                )}
+                <p className="muted">
+                  Alias and description come from query results. Configure their mappings in panel options.
+                </p>
+                <details>
+                  <summary>Data quality</summary>
+                  {channelData(traffic)?.issues.map((issue) => <p key={issue}>{issue}</p>) ?? (
+                    <p>Selected channel unavailable or invalid variable</p>
+                  )}
+                </details>
                 <label data-map-field>
                   Graph width
                   <input
@@ -622,7 +723,8 @@ function DiagramEditor({ id, options, onOptionsChange, diagram }: PanelProps<Int
               </button>
             )}
             <p className="muted">
-              Positions and fixture identities are saved with the dashboard. Query-based selection arrives in M2.
+              Selections and positions are saved with the dashboard. Metric expressions belong in queries; result
+              mappings are in panel options.
             </p>
           </aside>
         )}

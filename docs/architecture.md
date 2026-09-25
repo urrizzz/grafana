@@ -92,3 +92,11 @@ Benchmark multiple independent elements across 12-24 hours, including 288 bucket
 Retain all samples despite subpixel bars at native size. Validate long metadata, light/dark themes, reload,
 variable changes and cleanup. A full Canvas clone, automatic topology discovery, and bulk interface import
 are not committed scope. Mockup success does not establish live plugin compatibility.
+
+## M2 implementation
+
+src/data/model.ts and adapter.ts provide query-role mappings, composite router/channel indexing,
+normalization and diagnostics. InterfaceMapPanel consumes this index for dependent pickers and a
+current-value preview. Grafana panel option editors configure mappings; legacy layouts remain schema 1.
+See m2-validation.md for supported labelled-series/table shapes, exact timestamp requirements, variable
+constraints and ambiguity handling. The SVG traffic renderer and hidden-details variant remain M3 work.

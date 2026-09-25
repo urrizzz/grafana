@@ -1,7 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import dashboard from '../provisioning/dashboards/development.json';
 
-
 async function openEditor(page: Page, index = 0) {
   const menus = page.getByRole('button', { name: 'Menu for panel Interface Map layout editor', exact: true });
   await page.getByText('Interface Map layout editor', { exact: true }).nth(index).hover();
@@ -37,7 +36,7 @@ test('Grafana loads an empty diagram from legacy scaffold options', async ({ pag
   await expect(panel.locator('[data-testid^="connection-"]')).toHaveCount(1);
   await panel.getByRole('button', { name: 'Remove element', exact: true }).click();
   await expect(panel.locator('[data-testid^="connection-"]')).toHaveCount(0);
-  await choose(page, panel, 'Selected element', 'Tunnel01');
+  await choose(page, panel, 'Selected element', 'Unconfigured traffic');
   await panel.getByRole('button', { name: 'Remove element', exact: true }).click();
   await expect(panel.locator('[data-testid^="traffic-"]')).toHaveCount(0);
   await choose(page, panel, 'Selected element', 'Router B');

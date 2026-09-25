@@ -1,6 +1,6 @@
 # Current development state
 
-Last updated: 2026-09-25. Source baseline: `7523401` on `main` contains M1 and the display-name update; not pushed. The Show interface details requirement is a subsequent local documentation change.
+Last updated: 2026-09-25. Published baseline: `feb4ed4` on `origin/main` includes M1 and the Network Traffic Map rename (`7523401`), plus the Show interface details requirement. Push verified on 2026-09-25. Earlier local/uncommitted notes below are historical.
 This document records verified implementation state, not intended behavior. Follow the
 [implementation plan](implementation-plan.md) for the work sequence and [development guide](development.md)
 for commands/environment. Update this document with every meaningful development increment.
@@ -240,3 +240,10 @@ status circle inside the graph top-right when hidden; green/red/gray for UP/DOWN
 values, hover, selections and metadata preferences. Acceptance criteria AC-53/54/55 cover rendering and
 saved option isolation. Product spec, decisions, implementation plan and reference notes updated.
 Requirement-only change, not implemented or visually validated; no runtime tests rerun. M1 remains accepted.
+
+### Repository publication (2026-09-25)
+
+Pushed M1 code, all accumulated documentation, and the new Show interface details requirement to
+urrizzz/grafana main through feb4ed4. Runtime remains 0.1.5; the new visibility option is requirements-only.
+Documentation diff checks passed; no runtime changes or additional runtime tests for this publication.
+Remote CI results have not been checked.

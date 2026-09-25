@@ -23,6 +23,7 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 - Bars represent five-minute average bit rates, using one symmetric scale based on visible traffic.
 - Text overlays the graph. Central IN/OUT values are five-minute averages at the dashboard range end.
 - Follow dashboard time range and refresh; typical history is 12-24 hours.
+- Traffic graph border matches the range-end status: green UP, red DOWN, gray UNKNOWN.
 - Right-hand status circle and label: green UP, red DOWN, gray UNKNOWN (including stale status).
 - Red middle-line segments mark historical DOWN intervals only, including past outages after recovery. Current DOWN retains history and shows central dashes.
 - UNKNOWN retains history and shows dashes for central values.

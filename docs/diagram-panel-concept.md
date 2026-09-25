@@ -28,5 +28,7 @@ The future plugin would save options and positions with the Grafana dashboard ra
 Connections here are simple router-to-router lines with configured endpoints, not a full network editor.
 The current scope is a visual/interaction mockup, not a promise of all Canvas features.
 
-The existing scalable-wireframe.html and its assets remain unchanged. This new mockup reuses the component's
+The original component wireframe remains the accepted component reference. Both mockups now share the
+status-colored graph border: green UP, red DOWN, gray UNKNOWN. The border reflects current status;
+historical red center-line segments retain their original time-localized meaning. This mockup reuses the component's
 visual style in a separate surrounding diagram layout. [Screenshot](assets/diagram-panel-mockup.png).

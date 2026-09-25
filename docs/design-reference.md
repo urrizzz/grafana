@@ -25,6 +25,7 @@ should update the reference and screenshots together.
 - Current rates in matching direction colors, with contrast protection over the bars.
 - Five-minute averages; positive displayed magnitudes for both directions.
 - Channel metadata, status, and capacity outside the graph in a block on its right.
+- Traffic graph border matches the current status marker: green UP, red DOWN, gray UNKNOWN. Historical outage markers remain time-localized independently.
 - Heading order: channel name, colored circle, UP/DOWN/UNKNOWN on the same line.
 - Historical traffic remains visible in every operational state. Current DOWN/UNKNOWN values use dashes.
 - Red middle-line segments only over observed DOWN intervals, including outages before recovery.

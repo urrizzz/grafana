@@ -42,6 +42,13 @@ No manual capacity override or `ifSpeed` fallback is part of the confirmed requi
 
 ## Layout
 
+The traffic graph border must match the current (dashboard range-end) status color: **green for UP,
+red for DOWN, gray for UNKNOWN**, using the same colors as the status marker. Apply this to the graph
+rectangle in both the component wireframe and diagram mockup, including after status changes and resizing.
+The border reflects range-end status; red middle-line segments continue to represent historical DOWN
+intervals only. A currently UP graph therefore has a green border even if earlier outage segments are red.
+Diagram selection handles/outlines remain separate editing indicators and must not replace the status border.
+
 - In the right-hand information block, put the channel name first, immediately followed on the same line by the colored circle and status word: `TUNNEL01 [circle] UP`. Apply this order to DOWN and UNKNOWN too; retain the existing status colors.
 - Move all enabled channel/router identity fields and capacity into that right-hand block, outside the graph.
 - Keep only the traffic graph, IN/OUT rates and their axis/direction labels inside the 120 x 70 traffic area.

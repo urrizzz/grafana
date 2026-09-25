@@ -24,6 +24,7 @@
 | Plot | Clearly visible IN blue and OUT purple bars; current numbers match direction colors with readable contrast |
 | Axis | Shared symmetric autoscale from visible traffic, separate from capacity |
 | Current values | Center of each half; five-minute averages ending at dashboard range end |
+| Traffic border | Graph rectangle matches range-end status marker: green UP, red DOWN, gray UNKNOWN; independent of historical red outage segments |
 | UP | Green circle and UP in the right-hand information block |
 | DOWN | Red circle and DOWN in the right-hand information block, historical DOWN segments only, retained history, central dashes |
 | UNKNOWN | Gray circle and UNKNOWN in right-hand block for missing/stale status, retained history, central dashes |

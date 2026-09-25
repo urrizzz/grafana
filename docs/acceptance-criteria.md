@@ -41,6 +41,7 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-35 | Channel heading | Name is immediately followed on the same line by the colored circle and UP/DOWN/UNKNOWN word; existing colors retained |
 | AC-36 | Hover at native size and after resize | Cursor stays aligned to the selected bucket; tooltip remains readable outside the plot and leaves with the pointer |
 | AC-37 | Historical hover while DOWN/UNKNOWN or missing traffic | Available historical rates remain inspectable; missing values are dashes, not zero; timestamps use dashboard zone |
+| AC-38 | Status-colored traffic border | Graph outline matches the status marker (green UP, red DOWN, gray UNKNOWN) in both previews and after resizing/state changes; historical outage segments remain independent |
 
 ## Validation layers
 

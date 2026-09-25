@@ -1,6 +1,7 @@
 # Accepted design reference
 
-The owner accepted the latest interactive wireframe after the hover interaction was added.
+The owner accepted the traffic wireframe and subsequently the custom diagram panel approach.
+The diagram mockup defines the surrounding layout/editor workflow; the traffic wireframe defines each component.
 Use this design as the visual and interaction baseline for implementation, together with the
 [product specification](product-spec.md), [metrics contract](metrics-contract.md), and
 [acceptance criteria](acceptance-criteria.md).
@@ -14,7 +15,8 @@ Use this design as the visual and interaction baseline for implementation, toget
 | [Hover screenshot](assets/scalable-wireframe-hover.png) | Static review image showing the cursor and tooltip |
 | [Traffic SVG](assets/compact-component.svg) | Traffic-area-only illustration; does not include the right-hand block or hover code |
 
-All four files are tracked in Git. The HTML is self-contained and can be opened directly in a browser.
+The diagram [HTML mockup](assets/diagram-panel-mockup.html) and [screenshot](assets/diagram-panel-mockup.png)
+are also accepted references. All six files are tracked in Git. The HTML is self-contained and can be opened directly in a browser.
 The accepted interactive baseline first appeared in local commit `18a3c20`; subsequent approved revisions
 should update the reference and screenshots together.
 
@@ -46,8 +48,9 @@ scale, dashboard time zone/range/refresh, and real historical status intervals.
 
 The 120 x 70 size excludes the right-hand block. Its exact width and long-text fitting remain implementation
 details to validate. The displayed sample labels, rates, dates, and outage times are not production defaults.
-Built-in Grafana Canvas integration on 13.2.2 remains an unresolved technical prerequisite; approving the
-wireframe does not approve substituting standalone panels or modifying Grafana core.
+The approved host is our own installable diagram panel on unmodified Grafana 13.2.2.
+The diagram mockup uses browser storage and static fixtures; production saves options with the dashboard
+and queries VictoriaMetrics. No live plugin compatibility is implied by either reference.
 
 ## Superseded explorations
 
@@ -61,4 +64,4 @@ use the interactive wireframe and current requirements above.
 Validate the implementation at native size, in all three states, after enlargement, and during hover.
 Compare screenshots to this reference while testing source data, missing values, and long metadata separately.
 Keep approved changes to requirements, interactive reference, and screenshots in the same Git revision.
-Source control here means local Git; GitHub push remains deferred at the owner's request.
+The owner authorized committing and pushing the accepted references and updated requirements to GitHub.

@@ -1,10 +1,10 @@
 # Acceptance criteria
 
-These are future implementation checks, not tests already passed. Canvas feasibility must be resolved first.
+These are future implementation checks, not tests already passed. The custom diagram approach is approved; live plugin validation remains pending.
 
 | ID | Scenario | Expected result |
 | --- | --- | --- |
-| AC-01 | Host integration | Traffic display operates inside the built-in Canvas on Grafana 13.2.2 |
+| AC-01 | Host integration | Installable custom diagram panel operates on unmodified Grafana 13.2.2 |
 | AC-02 | Multiple displays | Each retains independent instance/ifName settings and data |
 | AC-03 | Fixed selectors or dashboard variables | Both work, including changes during in-flight requests |
 | AC-04 | Empty/ambiguous selection | Clear configuration state; no arbitrary channel selection or aggregation |
@@ -25,7 +25,7 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-19 | History resolution | Five-minute intervals preserved; no silent coarsening |
 | AC-20 | Missing traffic/reset | Gaps/dashes, no fabricated zeros or reset spikes; zero remains valid traffic |
 | AC-21 | Hover inspection | Vertical cursor and readable tooltip show hovered five-minute interval and positive IN/OUT average rates; current values remain visible and unchanged |
-| AC-22 | Placement and resize | Element moves/resizes inside Canvas; traffic scales proportionally from native 120 x 70 layout; settings persist on reload |
+| AC-22 | Placement and resize | Element moves/resizes inside our diagram panel; traffic scales proportionally from native 120 x 70 layout; settings persist on reload |
 | AC-23 | Dashboard refresh | Data follows dashboard refresh with no independent timer or accumulating subscriptions |
 | AC-24 | Real backend | Works through the VictoriaMetrics data-source plugin with 60-second collected data |
 | AC-25 | Normal history load | Multiple elements remain readable and responsive over 12-24 hours |
@@ -43,10 +43,22 @@ These are future implementation checks, not tests already passed. Canvas feasibi
 | AC-37 | Historical hover while DOWN/UNKNOWN or missing traffic | Available historical rates remain inspectable; missing values are dashes, not zero; timestamps use dashboard zone |
 | AC-38 | Status-colored traffic border | Graph outline matches the status marker (green UP, red DOWN, gray UNKNOWN) in both previews and after resizing/state changes; historical outage segments remain independent |
 
+## Diagram-specific acceptance criteria
+
+| ID | Scenario | Expected result |
+| --- | --- | --- |
+| AC-39 | Create diagram | Add our panel, routers with instance selectors, and chosen interfaces through ordinary settings |
+| AC-40 | Free placement | Move router and traffic elements independently within the diagram; plot and channel information stay bound to the same interface |
+| AC-41 | Connections | Explicit connection endpoints persist and lines follow router movement |
+| AC-42 | Edit/view mode | Layout controls appear in edit mode; normal viewing supports traffic hover without accidental dragging |
+| AC-43 | Dashboard persistence | Save/reload retains routers, selectors, positions, plot sizes, mappings, visibility, and connections without browser-local storage |
+| AC-44 | Router change/removal | Selection changes refresh dependent traffic without old-router data; removing a router cannot silently rebind dependents |
+| AC-45 | Duplicate panel | Layout/settings survive duplication and runtime selection/query state stays isolated |
+
 ## Validation layers
 
-First prove the Canvas host and VictoriaMetrics query contracts on the target installation.
-Then test pure rate/axis/unit/state logic, query cancellation and data isolation, and browser-level Canvas interactions.
+First prove the normal panel lifecycle and VictoriaMetrics query contracts on the target installation.
+Then test pure rate/axis/unit/state logic, query cancellation and data isolation, and browser-level diagram interactions.
 Use synthetic counter fixtures for normal rates, resets, missing samples, and state transitions; supplement them
 with sanitized production-shaped port/tunnel samples. Validate 12-24 hours and multiple independent elements.
 Validate native 120 x 70 traffic at normal browser zoom, plus 150% and 200% enlargement and independent
@@ -57,5 +69,5 @@ Documentation checks do not constitute plugin compatibility or implementation te
 ## Accepted reference
 
 Use the [accepted design reference](design-reference.md) for visual and interaction checks at native
-120 x 70, larger sizes, all operational states, and hover. Keep the HTML and both screenshots tracked
+120 x 70, larger sizes, all operational states, and hover. Keep both mockup HTML files and their screenshots tracked
 and synchronized with approved changes. Older illustrations and community previews are not the baseline.

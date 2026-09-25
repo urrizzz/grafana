@@ -2,13 +2,20 @@
 
 ## Placement and selection
 
-Build a compact traffic display **inside the built-in Grafana Canvas panel**, targeting Grafana 13.2.2.
-Support multiple independently configured displays in the same Canvas, placed beside router representations.
-Each display can be freely moved and resized; its traffic area scales proportionally from 120 x 70,
-while the separate information block and hover tooltip retain readable typography.
-Grafana itself must remain unmodified. The investigation found no supported external Canvas-element
-registration route in the installed 13.2.2. This conflicts with the built-in Canvas placement requirement;
-a standalone panel is an alternative awaiting a placement decision, not an approved substitution.
+Build an installable custom diagram panel targeting Grafana 13.2.2, with router representations,
+connections, and multiple independent traffic displays. Grafana itself must remain unmodified.
+The owner approved this approach; it supersedes placement inside the built-in Canvas panel.
+
+The author adds the diagram panel to a dashboard, adds routers and selects their instances, adds chosen
+ports/tunnels, and arranges the diagram inside the panel. Routers and traffic elements can be freely moved;
+traffic plots resize proportionally from 120 x 70 while the right-hand information and hover remain readable.
+Each traffic element references its router and selects its own ifName. Connections have explicit endpoints
+and follow their routers when moved. Edit mode exposes layout/configuration controls; viewing mode hides them.
+Save router/channel settings, positions, plot sizes, and connections with the Grafana dashboard.
+The panel occupies a normal dashboard panel region; free placement happens within that region.
+
+Use the [accepted diagram mockup](assets/diagram-panel-mockup.html) for the editor/layout workflow and
+[traffic wireframe](assets/scalable-wireframe.html) for individual component rendering.
 
 Each display selects exactly one router (`instance`) and channel (`ifName`). Both fixed strings and
 single-valued dashboard variables are supported. Resolve variables before selection. Proposed handling for
@@ -145,5 +152,5 @@ Status-history gaps must remain unknown rather than being bridged into a continu
 ## Scope
 
 Visualize existing collected data. SNMP polling, router configuration, alerting, aggregation across channels,
-and replacing the built-in Canvas with another visualization are outside the agreed scope.
-See [architecture](architecture.md) for the unresolved Canvas integration route.
+and reproducing all built-in Canvas features are outside the agreed scope.
+See [architecture](architecture.md) for the custom diagram panel implementation boundaries.

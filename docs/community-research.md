@@ -1,6 +1,9 @@
 # Community alternatives research
 
-Reviewed on 2026-09-24 for Grafana 13.2.2 and the agreed built-in Canvas placement requirement.
+Reviewed on 2026-09-24 for Grafana 13.2.2 and the then-required built-in Canvas placement.
+
+**Subsequent decision:** the owner approved a custom diagram panel with its own router/traffic layout editor.
+The comparisons below retain their original research context; see [current architecture](architecture.md).
 
 ## Result
 
@@ -19,7 +22,7 @@ parts of the result. This is a search finding, not proof that no such project ex
 | Built-in Canvas | Free positioning of elements, text/metrics and router-style representations | A supported external time-series element registration route remains unverified | No new custom element was added in this research |
 
 The best visual reuse candidate is **Business Charts**, if a standalone panel or a custom chart-based layout
-is acceptable. That would change the agreed host requirement and is not assumed approved.
+is acceptable. That was a change to the host requirement at the time of this research.
 If built-in Canvas is mandatory, continue investigating its exact 13.2.2 extension path before implementing.
 ACE.SVG is an alternative for a code-driven whole-diagram layout, not an automatic way to embed a panel into Canvas.
 
@@ -29,7 +32,7 @@ The user emphasized that the component must work in a very small space by scalin
 visual elements proportionally. General-purpose panels that retain fixed text sizes become crowded when
 shrunk. The dashboard author must not need scripts or manual font retuning to obtain the component.
 The comparison remains useful as a rendering experiment, but its scripted configuration and current layout
-do not meet these requirements. No change to the built-in Canvas requirement has been approved.
+do not meet these requirements. The later approved custom diagram approach addresses placement and ordinary configuration.
 See the [product specification](product-spec.md) for the updated acceptance scope.
 
 ## Local preview

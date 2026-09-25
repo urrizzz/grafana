@@ -4,8 +4,9 @@
 
 **Grafana itself cannot be modified.** Source patches, custom Grafana builds and runtime bundle modifications
 are excluded. The source-integrated route below is retained only to explain the technical limitation.
-A standalone custom panel is the recommended feasible alternative, but changing the built-in Canvas
-placement requirement has not yet been approved.
+The owner subsequently approved a custom diagram panel containing routers, connections and traffic elements.
+This supersedes the original built-in Canvas requirement. See [current architecture](architecture.md).
+The Canvas route below is retained as historical investigation, not an implementation plan.
 
 ## Conclusion
 
@@ -16,7 +17,7 @@ custom element to a maintained Grafana source build, or a future upstream extens
 This is a source-inspection finding, not a completed custom-element runtime proof.
 
 The earlier uncertainty about where Canvas gets its elements is resolved: it uses internal source lists.
-A production delivery decision is still needed. No Grafana core files or running dashboards were changed
+The delivery decision is now the custom diagram panel. No Grafana core files or running dashboards were changed
 by this investigation, and no custom Grafana image was built.
 
 ## Evidence from the installed version
@@ -48,20 +49,17 @@ private runtime injection hack is impossible. Such a hack is not a supported del
 
 | Route | Preserves built-in Canvas? | Result and cost |
 | --- | --- | --- |
-| Source-integrated Canvas element in a custom Grafana build | Yes | Best match for unchanged requirements; maintain a small patch plus renderer/query integration and validate every upgrade |
+| Source-integrated Canvas element in a custom Grafana build | Yes | Ruled out: modifying Grafana is prohibited |
 | Standalone custom traffic panel | No | Ordinary plugin packaging and settings, easier maintenance; dashboard-grid placement rather than inside Canvas |
-| Separate custom topology/Canvas-like panel | No | Free placement inside our own panel; substantially more editor, connection, persistence and accessibility work |
+| Separate custom topology/Canvas-like panel | No | Approved: free placement inside our own panel; requires editor, connections, and dashboard persistence |
 | Request/contribute an upstream extension point | Eventually, if accepted | Could enable a normal external package later; availability and timing cannot be assumed |
 
-**Recommendation under the no-modification constraint:** implement a standalone custom traffic panel if the
-owner accepts dashboard placement. Package the accepted renderer, normal settings and query adapter as a
-standard panel plugin. The internal Canvas route is ruled out; it must not be implemented as the next step.
-Keep the renderer independent so a supported Canvas API could be adopted later if one becomes available.
+**Current decision:** implement the custom diagram panel using standard plugin packaging. Keep the traffic
+renderer independent, but build the scoped router/traffic/connection editor and persist its options in the
+dashboard. Do not patch Grafana, inject runtime code, or use private Canvas imports.
 
-The local server uses the Enterprise image. Obtaining a complete reproducible source/build matching that
-artifact is still a prerequisite; shipped frontend source alone is not a full build checkout. Validate the
-chosen OSS/Enterprise distribution and production packaging before committing to a build strategy. Do not
-edit hashed/minified bundles in a running container or assume changing shipped TSX files changes the UI.
+The following source-integrated design was investigated before that decision and is ruled out.
+Its reusable rendering/data observations inform the [current architecture](architecture.md).
 
 ## Investigated Canvas route (ruled out by deployment constraint)
 
@@ -167,22 +165,9 @@ Keep current WSL limits (4 GB, 4 CPUs) for the existing workload. A full Grafana
 that budget; measure an isolated build or use a CI build machine rather than increasing PC memory limits
 without a deliberate decision. No full build or performance claim was made during this investigation.
 
-## Feasible next step without modifying Grafana
+## Approved next step without modifying Grafana
 
-Build a normal TypeScript/React panel plugin with the accepted SVG traffic renderer, right-hand information,
-ordinary option editors and a VictoriaMetrics query adapter. Use the Grafana 13.2.2 SDK and its normal plugin
-loading/signing process. The graph inside the panel can use the native 120 x 70 design; the overall dashboard
-panel also needs room for the information block and Grafana layout constraints.
-
-The limitation is placement: it is a dashboard panel, not an item inside built-in Canvas. Transparent styling
-and hiding a title do not turn it into a Canvas element. Ordinary dashboard panels cannot be promised arbitrary
-embedding into the user's existing Canvas. The dashboard's own minimum sizes, grid spacing and layout behavior
-must be validated in a small proof before promising the final compact arrangement.
-
-If placement inside a freely arranged diagram is indispensable, a separate custom topology panel could own
-both router representations and traffic widgets. This also changes the host and brings substantial additional
-editor/connection/persistence scope; it has not been approved.
-
-**Decision needed:** accept standalone dashboard-panel placement, or retain the built-in Canvas requirement
-and acknowledge that no supported route satisfying both that requirement and unmodified Grafana was found.
-Do not begin a core patch or silently substitute a standalone layout.
+Scaffold the custom diagram panel and prove its router/traffic/connection editing and dashboard persistence
+using fixtures, then integrate VictoriaMetrics through supported APIs. Use the diagram mockup as the editor
+reference and the traffic wireframe as the component reference. Follow [development milestones](development.md)
+and [acceptance criteria](acceptance-criteria.md). No core build or additional host-placement approval is needed.

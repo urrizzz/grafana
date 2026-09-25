@@ -1,10 +1,10 @@
 # Compact Interface Traffic
 
-A compact Cisco port/tunnel traffic display intended to live **inside Grafana's built-in Canvas panel**.
+An installable **custom Grafana diagram panel** containing router representations, connections, and compact Cisco port/tunnel traffic displays.
 Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
 **Target:** Grafana **13.2.2**. **Status:** requirements, design, and runnable mock metrics; no traffic visualization plugin yet.
-**Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Changes remain local at the owner's request.
+**Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Documentation and accepted mockups are maintained in this repository.
 
 ![Proposed scalable traffic component](docs/assets/compact-component.svg)
 
@@ -15,7 +15,7 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 
 - Prometheus collects every **60 seconds** and forwards metrics to VictoriaMetrics.
 - Grafana uses the **VictoriaMetrics data source plugin**.
-- Each Canvas traffic display selects `instance` and `ifName`, using fixed values or dashboard variables.
+- Each diagram traffic display selects `instance` and `ifName`, using fixed values or dashboard variables.
 - Put `ifName`, `ifAlias`, `ifDescr`, status and capacity in an information block to the right of the graph. Router fields stay hidden by default.
 - Source metric/label mappings and individual identity-field visibility are configurable.
 - Capacity comes from `ifHighSpeed`, expressed in Mbit/s at the source.
@@ -39,7 +39,7 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 | [Accepted design reference](docs/design-reference.md) | Approved visual baseline, tracked assets, and superseded explorations |
 | [Product specification](docs/product-spec.md) | Confirmed configuration, layout, and state behavior |
 | [Metrics contract](docs/metrics-contract.md) | Source mappings, rates, capacity, and proposed quality rules |
-| [Architecture](docs/architecture.md) | Canvas integration feasibility and query boundaries |
+| [Architecture](docs/architecture.md) | Custom diagram editor, persistence, and query boundaries |
 | [Acceptance criteria](docs/acceptance-criteria.md) | Conditions the eventual implementation must satisfy |
 | [Development plan](docs/development.md) | Implementation sequence and local environment constraints |
 | [Decisions](docs/decisions.md) | Confirmed answers, proposed defaults, and remaining technical checks |
@@ -53,15 +53,17 @@ See the [research and local preview](docs/community-research.md) for similar plu
 A [local IF-MIB exporter and history generator](docs/mock-metrics.md) provides ten synthetic channels,
 including normal traffic, DOWN, UNKNOWN, missing samples, and counter resets.
 
-## Implementation prerequisite
+## Agreed implementation approach
 
-Embedding this visualization inside the built-in Canvas panel is a firm requirement.
-Inspection of the installed Grafana 13.2.2 source found **no supported external Canvas-element registration route**.
-**Grafana must remain unmodified**, so a custom build is ruled out. A standalone panel is the recommended
-alternative, subject to agreement on dashboard placement instead of built-in Canvas.
-See the [implementation investigation](docs/implementation-investigation.md) for concrete options.
-Do not assume a standalone panel plugin can be installed as a Canvas element.
-The architecture document defines the feasibility check before scaffolding or choosing a delivery model.
+Add one custom diagram panel to the dashboard, add routers and select their instances, then add the
+interfaces to display. Freely position routers and traffic elements, resize plots, and configure connections
+inside the panel. Save the diagram with the Grafana dashboard; turn editing off for normal viewing.
+Grafana 13.2.2 remains unmodified. This supersedes the original built-in Canvas placement requirement.
+
+The [diagram mockup](docs/assets/diagram-panel-mockup.html) is the accepted layout/editor reference;
+the existing [traffic wireframe](docs/assets/scalable-wireframe.html) remains the component reference.
+See [diagram workflow](docs/diagram-panel-concept.md) and [architecture](docs/architecture.md).
+The [Canvas investigation](docs/implementation-investigation.md) explains why this route was selected.
 
 Representative exported series/labels and the installed VictoriaMetrics plugin version remain to be inspected.
-No software license has been selected. The visualization is not implemented. Changes remain local; no GitHub push.
+No software license has been selected. The visualization is not implemented. Implementation and backend compatibility validation remain pending.

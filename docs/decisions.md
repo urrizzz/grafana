@@ -11,8 +11,8 @@
 | Rates | Five-minute average bit/s for bars and central numbers, with automatic decimal units |
 | Capacity | ifHighSpeed, displayed in the right-hand information block |
 | Selection | Fixed instance/ifName values and dashboard variables |
-| Placement | Inside Grafana's built-in Canvas panel |
-| Multiple channels | Independent router/channel settings for every traffic display in the same Canvas |
+| Placement | One custom diagram panel with free placement of routers, traffic elements, and connections; Grafana core unmodified |
+| Multiple channels | Independent router/channel settings for every traffic display in the same custom diagram panel |
 | Size | Primary traffic area 120 x 70 CSS pixels; design readable text at this size, then scale traffic proportionally upward |
 | Compactness | Preserve layout and alignment at very small sizes; avoid fixed-size text crowding the component |
 | Author experience | Ordinary settings only; no dashboard-author scripts or manual font retuning per size |
@@ -31,10 +31,10 @@
 | Outage history | Red center-line segments only where observed status was DOWN, even if the channel has since recovered; gaps/unknown never imply DOWN |
 | Header order | In the right-hand block: channel name, colored circle, status word, on one line (for example TUNNEL01 [circle] UP); existing colors retained |
 | Interaction | Hover adds a vertical time cursor plus timestamp/interval and IN/OUT average rates; current information remains directly visible |
-| Design reference | Latest interactive wireframe accepted; source and screenshots tracked in Git; see [design-reference.md](design-reference.md) |
-| Repository | Keep documentation local for now |
+| Design reference | Diagram mockup accepted for layout/editor workflow; original interactive wireframe accepted for component visuals; source and screenshots tracked in Git; see [design-reference.md](design-reference.md) |
+| Repository | GitHub repository urrizzz/grafana; owner authorized committing and pushing these updates |
 
-These decisions supersede the initial assumptions of a standalone panel, Prometheus Grafana data source,
+These decisions supersede the earlier built-in Canvas placement requirement, Prometheus Grafana data source,
 hidden history while DOWN/UNKNOWN, ifDescr-only heading, capacity overrides/fallbacks. The later hover requirement supersedes the earlier no-tooltip decision.
 
 ## Proposed engineering defaults, not confirmed requirements
@@ -54,17 +54,17 @@ Very small text may become difficult to read, but shrinking must preserve compos
 
 ## Technical checks before implementation
 
-1. **Canvas delivery decision:** source inspection of installed 13.2.2 found no supported external registration
-   route. The owner ruled out modifying Grafana. A standalone panel is recommended but requires approval
-   of the changed placement requirement.
-   See [implementation investigation](implementation-investigation.md).
+1. **Delivery decision resolved:** the owner approved our own installable diagram panel containing routers,
+   traffic elements and connections. No Grafana core modifications. Verify normal panel lifecycle and saved
+   options on 13.2.2. See [architecture](architecture.md).
+
 2. **Exported data shape:** inspect full labels and channel metadata for one port and one tunnel; names alone
    do not establish whether metadata is stored as labels or separate series, or how joins remain unique.
 3. **Data-source contract:** identify VictoriaMetrics plugin version and prove queries, time steps, rate semantics,
    dashboard events, and per-element isolation.
-4. **Packaging:** determine final identity, license, and signing/delivery after the Canvas route is known.
+4. **Packaging:** determine final identity, license, and signing/delivery for the approved custom diagram panel.
 
 The product interview is sufficient to update the design. Remaining items are concrete technical evidence
-or delivery decisions; they are not reasons to silently weaken the built-in Canvas requirement.
+or delivery decisions; they do not reopen the approved custom diagram approach.
 
 The split layout supersedes metadata/status/capacity inside the graph and whole-card downscaling from a large base.

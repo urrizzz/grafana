@@ -1,11 +1,10 @@
-# Separate diagram-panel concept
+# Accepted diagram panel workflow
 
 Open [the interactive mockup](assets/diagram-panel-mockup.html) in a browser.
-This is a new exploration requested by the owner. It does not replace the
-[accepted traffic component reference](design-reference.md), and does not constitute approval to
-change the production host from built-in Canvas to this custom panel.
+The owner approved this custom diagram approach. It supersedes the original built-in Canvas host
+requirement and complements the [accepted traffic component reference](design-reference.md).
 
-The idea is one installable Grafana panel providing its own free-placement diagram. It would contain router
+The agreed approach is one installable Grafana panel providing its own free-placement diagram. It would contain router
 representations and multiple compact traffic displays without modifying Grafana core. It is not an extension
 inside Grafana's built-in Canvas. No plugin code, live backend, or Grafana installation change is included here.
 
@@ -24,7 +23,7 @@ Each state uses the existing wireframe's fictional data, so independent settings
 queried live traffic yet. Metadata capacity in this preview is illustrative (100 Mbit/s). Hover derives values
 from static SVG geometry only in this mockup; the implementation must use normalized source data.
 
-The future plugin would save options and positions with the Grafana dashboard rather than browser storage.
+The implemented plugin must save options and positions with the Grafana dashboard rather than browser storage.
 Connections here are simple router-to-router lines with configured endpoints, not a full network editor.
 The current scope is a visual/interaction mockup, not a promise of all Canvas features.
 

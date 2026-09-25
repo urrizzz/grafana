@@ -4,7 +4,7 @@
 
 - Remote: `https://github.com/urrizzz/grafana.git`; local branch `main`.
 - Checkout: `C:\Codex\projects\grafana`.
-- Documentation remains local; do not push until requested.
+- The owner authorized pushing the current documentation and accepted mockups.
 - The visualization plugin is not implemented. A runnable [mock metrics exporter](mock-metrics.md) and tests are available.
 
 Existing workspace tooling includes Node/npm, Git, Python, Docker/WSL, and browser-testing tools.
@@ -23,9 +23,10 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
 
 ## Implementation milestones
 
-1. **Resolve host placement.** Exact-version source inspection found no supported external Canvas-element
-   registration route, and the owner ruled out Grafana modifications. Agree on a standalone-panel alternative
-   before scaffolding; do not start a core patch. See [investigation](implementation-investigation.md).
+1. **Scaffold the approved diagram panel.** Use standard panel-plugin packaging on unmodified Grafana 13.2.2.
+   Prove router/traffic creation, free placement, proportional graph resize, connections, edit/view mode,
+   and dashboard persistence with fixtures. Follow both [accepted references](design-reference.md).
+
 2. **Inspect source data.** Capture sanitized labels/metadata for a port and tunnel and record the installed
    VictoriaMetrics data-source plugin ID/version. Collection interval and rate meaning are already confirmed.
 3. **Prove queries.** Independently select multiple channels, interpolate variables, customize mappings, and follow
@@ -39,8 +40,8 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
    proportional reductions and independent width/height changes, including long metadata and every state.
    Check dependencies, and add build/CI appropriate to the verified delivery model.
 
-Choose a license and final identity before distribution. Do not assume the standalone panel generator supplies
-Canvas integration, and do not deploy a core modification without an explicit delivery decision.
+Choose a license and final identity before distribution and verify signing/deployment requirements.
+Do not modify Grafana core or import its internal Canvas modules.
 
 The bars must remain clearly visible at native size. Use matching blue/purple current numbers with contrast
 protection. Validate recovered outages and missing status against historical status queries, not just the
@@ -49,7 +50,7 @@ range-end badge.
 ## Documentation checks
 
 Validate local Markdown links, SVG XML, consistency with confirmed decisions, encryption of changed files,
-and `git diff --check`. Mock exporter tests cover counter behavior and history consistency; visualization and Canvas integration tests remain pending.
+and `git diff --check`. Mock exporter tests cover counter behavior and history consistency; visualization and custom diagram integration tests remain pending.
 
 ## Revised compact layout
 
@@ -57,10 +58,10 @@ The primary traffic area is 120 x 70 CSS pixels. Design readable IN/OUT values a
 and scale upward proportionally. Put identity fields, status and capacity in a separate block to its right,
 with readable independent typography. The block consumes additional space. This supersedes whole-card
 downscaling and metadata/status/capacity overlays inside the graph. Keep the blocks bound to the same
-interface; validate placement and lifecycle together in the eventual Canvas integration.
+interface; validate placement and lifecycle together in the custom diagram panel.
 
 ## Accepted reference
 
 Use the [accepted design reference](design-reference.md) for visual and interaction checks at native
-120 x 70, larger sizes, all operational states, and hover. Keep the HTML and both screenshots tracked
+120 x 70, larger sizes, all operational states, and hover. Keep both mockup HTML files and their screenshots tracked
 and synchronized with approved changes. Older illustrations and community previews are not the baseline.

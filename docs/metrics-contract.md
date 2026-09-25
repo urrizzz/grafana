@@ -3,7 +3,7 @@
 ## Confirmed pipeline
 
 Cisco IF-MIB -> existing collection pipeline -> Prometheus -> VictoriaMetrics ->
-**VictoriaMetrics Grafana data source plugin** -> Canvas traffic display.
+**VictoriaMetrics Grafana data source plugin** -> custom diagram traffic display.
 Prometheus collects every **60 seconds**. The exact collector/exporter is not confirmed; do not assume snmp_exporter.
 VictoriaMetrics is the query engine; a Prometheus-compatible query is not evidence of identical evaluation semantics.
 

@@ -27,10 +27,10 @@ test('returned router/channel selection, automatic metadata, missing data and pe
   await expect(panel.getByLabel('Data diagnostics')).toContainText('2 routers / 4 channels');
   await expect(panel.getByTestId('traffic-t1')).toContainText('Primary WAN');
   await expect(panel.getByTestId('traffic-t1')).toContainText('UP');
-  await expect(panel.getByTestId('traffic-t1')).toContainText('Capacity 100.0 Mbit/s');
+  await expect(panel.getByTestId('traffic-t1')).toContainText('Capacity 100 Mbit/s');
   await expect(panel.getByTestId('traffic-t2')).toContainText('Backup WAN');
   await expect(panel.getByTestId('traffic-t2')).toContainText('DOWN');
-  await expect(panel.getByTestId('traffic-t2')).toContainText('IN --');
+  await expect(panel.getByTestId('traffic-t2').getByTestId('current-in')).toHaveText('--');
   await editor(page);
   await choose(page, panel, 'Selected element', 'CORE-01');
   await panel.getByRole('combobox', { name: 'Router instance', exact: true }).click();
@@ -52,7 +52,7 @@ test('returned router/channel selection, automatic metadata, missing data and pe
   });
   await choose(page, panel, 'Channel', 'GigabitEthernet0/1');
   await expect(panel.getByTestId('traffic-t1')).toContainText('Physical uplink');
-  await expect(panel.getByTestId('traffic-t1')).toContainText('Capacity 1.0 Gbit/s');
+  await expect(panel.getByTestId('traffic-t1')).toContainText('Capacity 1 Gbit/s');
   await choose(page, panel, 'Router', 'BRANCH-01');
   await expect(panel.getByTestId('traffic-t1')).toContainText('UNKNOWN');
   await expect(panel.getByTestId('traffic-t1')).toContainText('Selected channel unavailable');
@@ -70,12 +70,22 @@ test('returned router/channel selection, automatic metadata, missing data and pe
   const saved = await (await request.get(`/api/dashboards/uid/${uid}`)).json();
   expect(saved.dashboard.panels[0].options.diagram.traffic[0].routerId).toBe('r2');
   expect(saved.dashboard.panels[0].options.mapping.sourceTime).toBe('sourceTimestamp');
-  expect(saved.dashboard.panels[0].targets.map((target: { refId: string }) => target.refId)).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']);
+  expect(saved.dashboard.panels[0].targets.map((target: { refId: string }) => target.refId)).toEqual([
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+  ]);
   for (const target of saved.dashboard.panels[0].targets) {
     expect(target.scenarioId).toBe('raw_frame');
-    expect(target.rawFrameContent).toBe(demo.panels[0].targets.find(original => original.refId === target.refId)!.rawFrameContent);
+    expect(target.rawFrameContent).toBe(
+      demo.panels[0].targets.find((original) => original.refId === target.refId)!.rawFrameContent
+    );
   }
-
 });
 
 test('single-valued dashboard variables select data and All is rejected', async ({ page, request }) => {
@@ -138,5 +148,5 @@ test('panel option mappings change the interpretation of returned data', async (
   await expect(panel.getByTestId('traffic-t1')).toContainText('Capacity --');
   await field.fill('Value');
   await field.press('Tab');
-  await expect(panel.getByTestId('traffic-t1')).toContainText('Capacity 100.0 Mbit/s');
+  await expect(panel.getByTestId('traffic-t1')).toContainText('Capacity 100 Mbit/s');
 });

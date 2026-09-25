@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 - Unreleased
+
+- Render native 120 x 70 mirrored traffic bars, shared automatic axes and range-end values.
+- Preserve historical traffic and draw red segments only during observed outages.
+- Add time-bucket hover with source values in an external, unscaled tooltip.
+- Add per-block Show interface details, field visibility and internal status circles when hidden.
+- Extend both reference mockups and renderer/save-reload regression coverage.
+- IF-MIB query presets and real backend/performance validation remain later milestones.
+
 ## 0.2.0 - Unreleased
 
 - Add datasource-independent frame mappings and router/channel selection from query results.

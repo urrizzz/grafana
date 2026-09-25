@@ -49,3 +49,20 @@ test('overlapping boxes suppress their connection until separated', () => {
   expect(routeConnection(box, box)).toBeNull();
   expect(routeConnection(box, { ...box, x: 400 })).not.toBeNull();
 });
+
+test('details settings are optional, validated and independently duplicated', () => {
+  const d = fixtureDiagram();
+  expect(readDiagram({ schemaVersion: 1, diagram: d }).traffic[0].showInterfaceDetails).toBeUndefined();
+  d.traffic[0].showInterfaceDetails = false;
+  d.traffic[0].visibleFields = { alias: false };
+  const copy = duplicateElement(d, 't1', 'copy');
+  copy.traffic[1].visibleFields!.alias = true;
+  expect(d.traffic[0].visibleFields.alias).toBe(false);
+  expect(copy.traffic[1].showInterfaceDetails).toBe(false);
+  expect(() =>
+    readDiagram({
+      schemaVersion: 1,
+      diagram: { ...d, traffic: [{ ...d.traffic[0], showInterfaceDetails: 'no' as unknown as boolean }] },
+    })
+  ).toThrow();
+});

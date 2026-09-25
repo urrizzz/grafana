@@ -3,7 +3,7 @@
 An installable **custom Grafana diagram panel** containing router representations, connections, and compact Cisco port/tunnel traffic displays.
 Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
-**Target:** Grafana **13.2.2**. **Status:** M2 query-result adapter and layout editor: result-driven router/channel selection, automatic metadata, current rates/status/capacity and quality diagnostics. Traffic bars/hover remain for M3.
+**Target:** Grafana **13.2.2**. **Status:** M3 compact renderer implemented locally: mirrored traffic bars, shared axes, hover, status borders and optional hidden details. Owner validation pending; IF-MIB query presets remain M4 work.
 **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Documentation and accepted mockups are maintained in this repository.
 
 ![Proposed scalable traffic component](docs/assets/compact-component.svg)
@@ -30,7 +30,7 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 - UNKNOWN retains history and shows dashes for central values.
 - Keep current information visible; hovering the graph adds a vertical cursor and time-specific IN/OUT rates.
 - Design the traffic area at **120 x 70 pixels**, with readable IN/OUT values; scale it proportionally upward.
-- Keep channel details outside that traffic area; the right-hand block takes additional space.
+- Keep channel details outside that traffic area; turn off **Show interface details** per block to collapse that space and move the status circle inside the top-right corner.
 - Configure through normal settings; dashboard authors do not write or paste scripts.
 
 ## Documentation
@@ -47,6 +47,7 @@ Start development with the [implementation plan](docs/implementation-plan.md) an
 | [Acceptance criteria](docs/acceptance-criteria.md) | Conditions the eventual implementation must satisfy |
 | [Repository and publishing](docs/repository-and-publishing.md) | Inspected plugin examples, proposed source layout, signing and release process |
 | [Implementation plan](docs/implementation-plan.md) | Milestones, dependencies, completion gates and working procedure |
+| [M3 validation](docs/m3-validation.md) | Compact graphs, hover, themes and saved detail visibility |
 | [Current state](docs/current-state.md) | Implemented features, verification evidence, open items and next work |
 | [Development guide](docs/development.md) | Tool commands and local environment constraints |
 | [Decisions](docs/decisions.md) | Confirmed answers, proposed defaults, and remaining technical checks |

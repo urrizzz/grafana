@@ -48,7 +48,7 @@ a committed CI workflow is not evidence that a remote CI run passed.
 
 ## M1 - Diagram model and editor
 
-Implementation and owner validation are complete, including zoom and warning refinements. Next: M3 after M2 owner review. See [current state](current-state.md) for verification and
+Implementation and owner validation are complete, including zoom and warning refinements. M2 is owner-accepted; M3 implementation is awaiting owner validation. See [current state](current-state.md) for verification and
 [M1 validation](m1-validation.md) for the owner checklist; do not infer full traffic support from this milestone.
 
 1. Extend src/types.ts with versioned router, traffic and connection records, stable IDs, geometry and mappings.
@@ -69,7 +69,7 @@ Do not mark production traffic support complete because placeholders work.
 ## M2 - Returned-data adapter and selection
 
 Implemented locally in 0.2.0 and owner-accepted on 2026-09-25. [M2 validation](m2-validation.md) remains
-the regression guide. M3 is next.
+the regression guide. M3 implementation follows below.
 Production VictoriaMetrics frame/quality evidence remains an M5 check, not a claim made by synthetic tests.
 
 1. Define normalized channel identity, history/current rates, metadata, capacity, status and quality types.
@@ -90,6 +90,9 @@ Verify selection only filters received frames and does not create network querie
 query examples belong in documentation/provisioning, not the adapter implementation.
 
 ## M3 - Compact traffic rendering
+
+Implemented locally in 0.3.0; owner validation pending. Follow [M3 validation](m3-validation.md) and
+[current state](current-state.md) for actual verification evidence. M4 query presets are the next implementation step after acceptance.
 
 1. Implement the plot and right-hand information block using the normalized model, independently of datasource code.
 2. Render blue IN above and purple OUT below zero, a shared symmetric scale, decimal units and readable

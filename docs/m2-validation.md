@@ -30,7 +30,7 @@ fixture timestamps will deliberately produce missing-current/stale diagnostics. 
 | Role | Default query refId | Expected result |
 | --- | --- | --- |
 | Incoming history | A | 5-minute average bit/s at aligned 300-second endpoints |
-| Outgoing history | B | Same, positive values (drawing inversion comes in M3) |
+| Outgoing history | B | Same, positive values (M3 draws them below zero) |
 | Incoming current | C | 5-minute bit/s at the exact dashboard range end |
 | Outgoing current | D | Same |
 | Status history | E | IF-MIB operational code at 60-second resolution |
@@ -70,8 +70,7 @@ exact time is also acceptable; simply using the last bar before the end is not.
 - During loading or query errors, current values are unavailable and status UNKNOWN. Returned historical
   data is retained, but the plugin does not cache results across missing selections.
 - Legacy alias/description fields remain in saved JSON for schema compatibility but are ignored for display.
-- M3 traffic bars, axes, hover and Show interface details are not implemented yet. Current values and
-  metadata are a data-integration preview, not the final compact renderer.
+- M3 now renders bars, axes, hover and optional hidden details. Continue with [M3 validation](m3-validation.md).
 
 Automated coverage is recorded in current-state.md. Owner accepted M2 on 2026-09-25 after the query
 recovery and configuration discussion; this checklist remains the regression reference.

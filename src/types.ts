@@ -15,6 +15,10 @@ export interface TrafficNode extends Position {
   alias: string;
   description: string;
   width: number;
+  showInterfaceDetails?: boolean;
+  visibleFields?: Partial<
+    Record<'instance' | 'routerName' | 'channel' | 'alias' | 'description' | 'capacity', boolean>
+  >;
 }
 export interface Connection {
   id: string;

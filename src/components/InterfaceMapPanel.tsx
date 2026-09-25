@@ -5,6 +5,8 @@ import { Combobox, useTheme2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import { Connection, Diagram, InterfaceMapOptions, RouterNode, TrafficNode } from '../types';
 import { duplicateElement, fixtureDiagram, newId, readDiagram, removeElement } from '../diagram/model';
+import { TrafficPlot, statusColors } from './TrafficPlot';
+import { formatRate } from './trafficGeometry';
 import { adaptFrames, resolveIdentity } from '../data/adapter';
 import { channelKey } from '../data/model';
 import { routeConnection } from '../diagram/routing';
@@ -91,12 +93,12 @@ const styles = css`
     flex: 1;
     overflow: auto;
     min-width: 160px;
-    background: #0c141f;
+    background: var(--map-background);
   }
   .world {
     position: relative;
     transform-origin: 0 0;
-    background-image: radial-gradient(#31455d 0.8px, transparent 0.8px);
+    background-image: radial-gradient(var(--map-grid) 0.8px, transparent 0.8px);
     background-size: 16px 16px;
   }
   aside {
@@ -107,7 +109,7 @@ const styles = css`
   }
   .node {
     position: absolute;
-    color: #e5edf8;
+    color: var(--map-text);
     user-select: none;
   }
   .selected {
@@ -119,9 +121,13 @@ const styles = css`
     height: 64px;
     border: 1px solid #557599;
     border-radius: 8px;
-    background: #17283c;
+    background: var(--map-router);
     padding: 8px;
     overflow: hidden;
+  }
+  .node .muted {
+    color: var(--map-muted);
+    opacity: 1;
   }
   .router strong {
     display: block;
@@ -135,7 +141,7 @@ const styles = css`
   }
   .traffic {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
   }
   .plot {
@@ -205,6 +211,7 @@ function DiagramEditor({
   data,
   timeRange,
   replaceVariables,
+  timeZone,
 }: PanelProps<InterfaceMapOptions> & { diagram: Diagram }) {
   const theme = useTheme2();
   const index = useMemo(
@@ -219,16 +226,6 @@ function DiagramEditor({
     const channel = resolve(node.ifName);
     return instance && channel ? index.channels.get(channelKey(instance, channel)) : undefined;
   };
-  const rate = (value: number | null | undefined) =>
-    value == null
-      ? '--'
-      : value >= 1e9
-        ? `${(value / 1e9).toFixed(1)} Gbit/s`
-        : value >= 1e6
-          ? `${(value / 1e6).toFixed(1)} Mbit/s`
-          : value >= 1e3
-            ? `${(value / 1e3).toFixed(1)} kbit/s`
-            : `${value.toFixed(0)} bit/s`;
   const identityPicker = (label: string, value: string, values: string[], change: (value: string) => void) => (
     <div data-map-field>
       <span>{label}</span>
@@ -269,7 +266,7 @@ function DiagramEditor({
   const worldWidth = Math.max(
     1040,
     ...diagram.routers.map((r) => r.x + 180),
-    ...diagram.traffic.map((t) => t.x + t.width + 200)
+    ...diagram.traffic.map((t) => t.x + t.width + (t.showInterfaceDetails === false ? 8 : 200))
   );
   const worldHeight = Math.max(
     660,
@@ -361,7 +358,19 @@ function DiagramEditor({
   );
 
   return (
-    <section className={styles} aria-label="Network Traffic Map diagram">
+    <section
+      className={styles}
+      aria-label="Network Traffic Map diagram"
+      style={
+        {
+          '--map-background': theme.isDark ? '#0c141f' : '#edf2f7',
+          '--map-grid': theme.isDark ? '#31455d' : '#c3d0df',
+          '--map-text': theme.isDark ? '#e5edf8' : '#18304c',
+          '--map-muted': theme.isDark ? '#a4b5cb' : '#425873',
+          '--map-router': theme.isDark ? '#17283c' : '#ffffff',
+        } as React.CSSProperties
+      }
+    >
       <div className="toolbar">
         {editing && (
           <>
@@ -452,7 +461,7 @@ function DiagramEditor({
             />
           </div>
         </div>
-        <span className="muted">Data preview - traffic graph arrives in M3</span>
+        <span className="muted">Traffic history and current 5-minute rates</span>
       </div>
       <div className="muted" aria-label="Data diagnostics" style={{ maxHeight: 54, overflow: 'auto', flexShrink: 0 }}>
         {`${routerIdentities.length} routers / ${channels.length} channels returned. `}
@@ -540,7 +549,10 @@ function DiagramEditor({
               {diagram.traffic.map((t) => {
                 const current = channelData(t);
                 const status = current?.status ?? 'UNKNOWN';
-                const color = status === 'UP' ? '#73bf69' : status === 'DOWN' ? '#f2495c' : '#a4afbf';
+                const color = statusColors[status];
+                const showDetails = t.showInterfaceDetails !== false;
+                const visible = (field: keyof NonNullable<TrafficNode['visibleFields']>) =>
+                  t.visibleFields?.[field] ?? !['instance', 'routerName'].includes(field);
                 return (
                   <div
                     key={t.id}
@@ -553,33 +565,37 @@ function DiagramEditor({
                         Move {t.ifName}
                       </button>
                     )}
-                    <div
-                      className="plot"
-                      style={{
-                        width: t.width,
-                        height: (t.width * 70) / 120,
-                        fontSize: (11.5 * t.width) / 120,
-                        borderColor: color,
-                      }}
-                    >
-                      <span>IN {rate(current?.current.in)}</span>
-                      <span>OUT {rate(current?.current.out)}</span>
-                    </div>
-                    <div className="info">
-                      <strong>
-                        {current?.channel || t.ifName || 'Select channel'} <span style={{ color }}>{status}</span>
-                      </strong>
-                      <div>{current?.alias || '--'}</div>
-                      <div>{current?.description || '--'}</div>
-                      <div>Capacity {rate(current?.capacity)}</div>
-                      <div aria-label="Channel diagnostics">
-                        {current
-                          ? current.issues.length
-                            ? `${current.issues[0]}${current.issues.length > 1 ? ` (+${current.issues.length - 1} checks)` : ''}`
-                            : 'Data available'
-                          : 'Selected channel unavailable or invalid variable; no data'}
+                    <TrafficPlot
+                      key={`${t.routerId}:${t.ifName}:${current?.instance}:${timeRange.from.valueOf()}:${timeRange.to.valueOf()}:${t.width}:${zoom}:${showDetails}:${editing}`}
+                      channel={current}
+                      width={t.width}
+                      from={timeRange.from.valueOf()}
+                      to={timeRange.to.valueOf()}
+                      timeZone={timeZone}
+                      showDetails={showDetails}
+                    />
+                    {showDetails && (
+                      <div className="info" data-testid="interface-details">
+                        <strong>
+                          {visible('channel') && (current?.channel || t.ifName || 'Select channel')}{' '}
+                          <span style={{ color }}>
+                            <span aria-hidden="true">&#9679;</span> {status}
+                          </span>
+                        </strong>
+                        {visible('instance') && <div>{current?.instance || '--'}</div>}
+                        {visible('routerName') && <div>{current?.routerName || '--'}</div>}
+                        {visible('alias') && <div>{current?.alias || '--'}</div>}
+                        {visible('description') && <div>{current?.description || '--'}</div>}
+                        {visible('capacity') && <div>Capacity {formatRate(current?.capacity)}</div>}
+                        <div aria-label="Channel diagnostics">
+                          {current
+                            ? current.issues.length
+                              ? `${current.issues[0]}${current.issues.length > 1 ? ` (+${current.issues.length - 1} checks)` : ''}`
+                              : 'Data available'
+                            : 'Selected channel unavailable or invalid variable; no data'}
+                        </div>
                       </div>
-                    </div>
+                    )}
                     {editing && selected === t.id && (
                       <button
                         data-map-control
@@ -638,6 +654,35 @@ function DiagramEditor({
                 <p className="muted">
                   Alias and description come from query results. Configure their mappings in panel options.
                 </p>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={traffic.showInterfaceDetails !== false}
+                    onChange={(event) => updateTraffic({ showInterfaceDetails: event.target.checked })}
+                  />{' '}
+                  Show interface details
+                </label>
+                {traffic.showInterfaceDetails !== false && (
+                  <details>
+                    <summary>Visible details</summary>
+                    {(['instance', 'routerName', 'channel', 'alias', 'description', 'capacity'] as const).map(
+                      (field) => (
+                        <label key={field} style={{ display: 'block' }}>
+                          <input
+                            type="checkbox"
+                            checked={traffic.visibleFields?.[field] ?? !['instance', 'routerName'].includes(field)}
+                            onChange={(event) =>
+                              updateTraffic({
+                                visibleFields: { ...traffic.visibleFields, [field]: event.target.checked },
+                              })
+                            }
+                          />{' '}
+                          {field}
+                        </label>
+                      )
+                    )}
+                  </details>
+                )}
                 <details>
                   <summary>Data quality</summary>
                   {channelData(traffic)?.issues.map((issue) => <p key={issue}>{issue}</p>) ?? (

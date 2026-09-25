@@ -37,6 +37,18 @@ export function readDiagram(options: InterfaceMapOptions): Diagram {
     if (!Number.isFinite(traffic.width) || traffic.width < 120 || traffic.width > 360) {
       throw new Error('Traffic width must be 120-360 pixels.');
     }
+    if (traffic.showInterfaceDetails !== undefined && typeof traffic.showInterfaceDetails !== 'boolean') {
+      throw new Error('Invalid interface details visibility.');
+    }
+    if (
+      traffic.visibleFields !== undefined &&
+      (!traffic.visibleFields ||
+        typeof traffic.visibleFields !== 'object' ||
+        Array.isArray(traffic.visibleFields) ||
+        Object.values(traffic.visibleFields).some((value) => typeof value !== 'boolean'))
+    ) {
+      throw new Error('Invalid metadata visibility.');
+    }
     if ([traffic.ifName, traffic.alias, traffic.description].some((v) => typeof v !== 'string')) {
       throw new Error('Invalid channel fields.');
     }
@@ -82,7 +94,16 @@ export function duplicateElement(diagram: Diagram, id: string, copyId: string): 
   if (traffic) {
     return {
       ...diagram,
-      traffic: [...diagram.traffic, { ...traffic, id: copyId, x: traffic.x + 24, y: traffic.y + 24 }],
+      traffic: [
+        ...diagram.traffic,
+        {
+          ...traffic,
+          visibleFields: traffic.visibleFields ? { ...traffic.visibleFields } : undefined,
+          id: copyId,
+          x: traffic.x + 24,
+          y: traffic.y + 24,
+        },
+      ],
     };
   }
   throw new Error('Select a router or traffic element to duplicate.');

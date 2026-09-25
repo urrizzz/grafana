@@ -1,0 +1,29 @@
+# M3 compact traffic validation
+
+Running version: 0.3.0 on Grafana 13.2.2, port 3001. Owner validation pending.
+Open your [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and reload the page.
+Its saved layout, queries and selections are preserved. Keep the fixed fixture time range and the
+Network Map Mock Frames datasource; switching datasources can replace queries (see M2 guide).
+For a repeatable UP/DOWN comparison, the browser tests also create
+[M3 graph checks](http://localhost:3001/d/network-map-m3-graphs) independently of your dashboard.
+
+1. At diagram zoom 100%, check the 120 x 70 graph: bright blue incoming above zero, purple outgoing
+   below; readable matching current values, positive unit labels and identical IN/OUT scale limits.
+2. Hover: vertical line follows five-minute buckets, tooltip shows the interval and IN/OUT rates outside
+   the graph. Central values stay fixed. Moving away or dragging clears the tooltip.
+3. DOWN has a red border and current dashes but retains bars; red center segments cover only known
+   historical outages. UNKNOWN has a gray border, dashes and retained available history.
+4. Panel menu > Edit, select traffic by its Move handle. Turn off Show interface details: the side block
+   and its space disappear; a status circle appears inside the graph's top-right. Graph size and location
+   stay fixed. Restore details and verify the selected Visible details fields are remembered.
+5. Try 180 and 240 px widths. Hover remains readable and accurate after resizing or zooming. Return to
+   120 px to judge the main use case at normal browser zoom.
+6. Back > Save > reload. Width, details visibility and field choices should remain. A duplicated element
+   can have different visibility without changing the original. Dashboard view remains read-only.
+7. Check light/dark themes and your longest channel descriptions. Side text should wrap without entering
+   the graph; the status circle must not overlap central values in compact mode.
+
+Report failures by number. These checks accept M3 visuals only; configuration-first IF-MIB query presets
+are planned for M4. Production VictoriaMetrics behavior and 10/50-element performance remain M5 work.
+The renderer consumes normalized bit/s rates; it does not query a datasource or calculate counter rates.
+Axis abbreviations b/k/M/G are bit/s, kbit/s, Mbit/s and Gbit/s. Empty/invalid values use --, not zero.

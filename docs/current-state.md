@@ -1,21 +1,23 @@
 # Current development state
 
-Last updated: 2026-09-25. Published baseline: `898723f` on `origin/main` includes M1 and the Network Traffic Map rename (`7523401`), plus the Show interface details requirement. Push verified on 2026-09-25. M2 changes are saved locally and not pushed; earlier local/uncommitted notes below are historical.
+Last updated: 2026-09-25. Published baseline: `31a216f` on `origin/main`, including accepted M2 and configuration-first setup requirements. Push and matching remote HEAD verified before starting M3. M3 is saved in the local implementation commit following that baseline; it has not been pushed.
 This document records verified implementation state, not intended behavior. Follow the
 [implementation plan](implementation-plan.md) for the work sequence and [development guide](development.md)
 for commands/environment. Update this document with every meaningful development increment.
 
 ## Current position
 
-**M2 is complete and owner-accepted following mock-query recovery and setup clarification. M1 remains accepted; M3 is next.**
-Running version: **0.2.0**, Grafana 13.2.2 on port 3001. The adapter consumes Grafana query results,
-indexes routers/channels, reads interface metadata automatically, and previews current rates/status/capacity.
-Panel options configure identity/quality fields and query-role mappings. Elements select returned data
-without issuing requests. Unavailable or ambiguous selections stay in place with UNKNOWN/dashes.
+**M3 compact renderer implemented and verified locally; owner acceptance pending. M1 and M2 remain accepted.**
+Running version: **0.3.0**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
+purple OUT, shared automatic axes, matching range-end values and status borders. Historical outages
+appear only over known DOWN intervals; DOWN/UNKNOWN retain available history with current dashes.
+Hover snaps to complete five-minute buckets and reads actual samples in an external tooltip.
+Per-block Show interface details defaults to true. Turning it off collapses the side block, puts the
+status circle inside the top-right corner and preserves graph coordinates. Individual field choices persist.
 
-Open [M2 data preview](http://localhost:3001/d/network-map-data-dev) and follow [M2 validation](m2-validation.md).
-It uses synthetic TestData frames and a fixed historical time range; the original saved dashboard is preserved.
-The next implementation milestone is M3: bars, axes, hover and the per-block Show interface details option.
+Open the [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and follow
+[M3 validation](m3-validation.md). Its saved selections, queries and layout are preserved.
+The dev container was restarted, not recreated; the 1 GiB limit remains.
 Configuration-first editable IF-MIB presets are newly planned for M4, also not implemented yet.
 No production VictoriaMetrics compatibility or rate semantics are claimed.
 
@@ -24,8 +26,8 @@ No production VictoriaMetrics compatibility or rate semantics are claimed.
 | M0 Foundation | Complete locally | Build/test tooling and unsigned packaging; remote CI unverified |
 | M1 Diagram model/editor | Complete; owner-validated | Saved layouts, native edit lifecycle, routing, zoom, resizing, duplication, safe removal |
 | M2 Frame adapter | Complete locally; owner-accepted | 30 unit tests, eight browser scenarios across suite/targeted rerun; see guide and evidence below |
-| M3 Traffic renderer | Not started | Current-value data preview only; bars/axes/hover and Show interface details pending |
-| M4 Integrated diagram | Partial via M2 data selection | Final traffic renderer and visibility persistence still pending |
+| M3 Traffic renderer | Implemented and tested locally; owner review pending | Bars/axes/hover, state borders, hidden details and visibility persistence |
+| M4 Integrated diagram | Partially implemented via M2/M3 | Query presets, broader lifecycle audit and acceptance remain |
 | M5 Backend/quality audit | Not started | Synthetic fixtures only; production frames, rates and capacity/performance audit pending |
 | M6 Distribution | Deferred | Organization, permanent ID, license and publication route undecided |
 
@@ -34,16 +36,16 @@ No production VictoriaMetrics compatibility or rate semantics are claimed.
 | Area | Current implementation |
 | --- | --- |
 | Panel registration | [src/module.ts](../src/module.ts), provisional ID urrizzz-interfacemap-panel; Network Traffic Map |
-| Runtime UI | [InterfaceMapPanel.tsx](../src/components/InterfaceMapPanel.tsx): native panel editing, layout and result-driven selectors/current preview |
+| Runtime UI | [InterfaceMapPanel.tsx](../src/components/InterfaceMapPanel.tsx): native panel editing, layout and result-driven selectors and compact SVG renderer |
 | Data model/adapter | [adapter.ts](../src/data/adapter.ts), [model.ts](../src/data/model.ts): normalized history/current/status/capacity/metadata/quality |
-| Saved options | Schema 1 layouts preserved; optional nested identity/role mappings use backward-compatible defaults |
+| Saved options | Schema 1 layouts preserved; optional identity/role mappings and visibility settings use backward-compatible defaults |
 | Local Grafana | Enterprise 13.2.2 at localhost:3001; 1 GiB/one CPU cap, GOMEMLIMIT 300 MiB |
 | Provisioning | Original layout dashboard plus independent TestData datasource and network-map-data-dev dashboard |
 | Fixture generator | [generate_frame_demo.py](../dev/generate_frame_demo.py), deterministic labelled query frames at a fixed historical range |
-| Validation | 30 unit tests; eight browser scenarios covering editor/data lifecycle; typecheck/lint/build pass |
+| Validation | 35 unit tests; eight existing browser scenarios plus three renderer scenarios passed across suite/targeted runs; typecheck/lint/build pass |
 | CI / packaging | Existing workflows; remote run/signing/publication unverified; local build outputs ignored |
 | Mock metrics | Existing exporter/history tools remain separate; no production endpoint configured |
-| Design references | Approved diagram/traffic mockups; hidden-details variant and actual traffic renderer remain M3 work |
+| Design references | Approved diagram/traffic mockups now include Show interface details controls |
 
 ## Confirmed direction to preserve
 
@@ -55,8 +57,7 @@ first deployment example. Queries return five-minute rates in bit/s; the rendere
 
 A missing selected channel stays in place with UNKNOWN/no data. The graph is natively 120 x 70 with
 metadata on its right. Status-colored borders, blue/purple directions, historical outage segments and
-hover follow the accepted references. Connections adjust sides while routers move in the implemented editor. The traffic styling and data
-rendering details above remain requirements for M3; M2 now supplies normalized data. See [decisions](decisions.md) for the full record.
+hover follow the accepted references. Connections adjust sides while routers move in the implemented editor. M3 renders the normalized data supplied by M2; visual owner acceptance is pending. See [decisions](decisions.md) for the full record.
 
 ## Verification ledger
 
@@ -82,9 +83,9 @@ the unchanged 512 MB/one CPU container. The global WSL limit remains unchanged. 
 not a claim of production capacity. The development instance remains available for owner validation at localhost:3001. After the browser suite,
 Docker reported 426.3 MiB of its 512 MiB limit and OOM=false; this is a point-in-time measurement.
 
-Current acceptance: M1 layout is owner-accepted. M2 automated checks exercise configurable roles,
+Current acceptance: M1 and M2 are owner-accepted; M3 awaits owner review. M2 automated checks exercise configurable roles,
 identity isolation, metadata-only channels, missing/stale data, ambiguity, variables and persistence.
-Production-shaped backend evidence and complete-product rendering/performance remain M3-M5 work.
+Production-shaped backend evidence and full performance/acceptance auditing remain M4-M5 work.
 
 ## Open questions and limits
 
@@ -93,13 +94,13 @@ Production-shaped backend evidence and complete-product rendering/performance re
 | Exact returned frame layouts and metadata joins | Needed for robust role/identity mapping; use generic fixtures now | M2, confirm with real backend in M5 |
 | Status freshness and sample-coverage evidence | Cannot infer source quality from evaluated values alone | M2 contract/fixtures and M5 query examples |
 | Sanitized port/tunnel samples and VictoriaMetrics plugin version | Needed to verify production-shaped integration | M5; not a blocker to M1 |
-| Long metadata fitting | Router labels truncate with a title; full traffic information fitting remains for rendering work | M3 |
+| Long metadata fitting | Router labels truncate with a title; side metadata wraps in a separate fixed-width block; owner readability review pending | M3 owner review |
 | Practical component-count/performance limits | Not measured in the real plugin | M5 |
 | Dependency peer/deprecation warnings | Known from install; shell works, broader UI usage unverified | Reassess when introducing relevant UI components |
 | Grafana Cloud organization and permanent ID | Owner has no Cloud account; provisional ID accepted for local work | Before signing/publication |
 | Project license and distribution route | Package currently private/UNLICENSED; no signing token configured | M6 |
 
-There is no known blocker to M3 after the M2 handoff. Unknown backend details do not justify hardcoding the datasource.
+There is no known implementation blocker; M3 owner visual review is the next gate. Unknown backend details do not justify hardcoding the datasource.
 No production credentials are required for fixture-based implementation.
 
 ## Next concrete work
@@ -107,8 +108,9 @@ No production credentials are required for fixture-based implementation.
 Owner accepted the M2 preview after validation and query-setup clarification. Keep [M2 validation](m2-validation.md)
 as the regression checklist; no further M2 owner gate remains.
 
-Development: implement M3 using the normalized model, including the optional hidden-details/status-circle
-variant. Keep queries at panel level. Gather sanitized production frame examples for the later M5 audit.
+Owner: follow [M3 validation](m3-validation.md), especially native-size readability, hover, hidden details and save/reload.
+Development after acceptance: M4 configuration-first IF-MIB presets and the remaining integrated lifecycle audit.
+Keep queries at panel level. Gather sanitized production frame examples for the later M5 audit.
 
 ## Maintenance and handoff
 
@@ -326,3 +328,23 @@ Record M2 owner acceptance; do not infer additional individually performed check
 Existing automated evidence remains 30 unit tests and eight browser scenarios. No runtime changes or new
 tests for this status update. M3 renderer is the next milestone; presets remain M4 and real backend
 validation remains M5. Documentation saved locally; no push requested.
+
+### M3 compact rendering (2026-09-25)
+
+Pushed accepted M2 to origin/main first (`31a216f`), then implemented the renderer independently of
+datasource code. Version 0.3.0 avoids the earlier browser plugin cache problem. Both HTML reference
+variants now support Show interface details. Saved schema-1 layouts default to showing details;
+duplication copies field settings independently. Query definitions and the owner dashboard were preserved.
+
+Verification: npm run check passed (typecheck, lint, 35 unit tests, production build). Eight existing
+browser scenarios passed in the suite; three renderer scenarios passed in the focused rerun after the
+SVG coordinate correction. Coverage includes native size, 180/240 px widths, light/dark themes, retained
+DOWN/UNKNOWN history, missing versus zero values, outage segments, hover and independent saved visibility.
+An additional isolated browser check confirmed long unbroken metadata wraps without graph overlap and
+hiding tall metadata preserves graph x/y/width. Both HTML reference toggles passed Chromium smoke checks without script errors. Dark/light screenshots
+were inspected locally. Initial browser failures exposed test-selector collisions, SVG line zero-width
+visibility assertions, and a real border-related hover offset; the renderer now uses inverse SVG screen
+coordinates. Screenshot review also prompted theme-aware diagram backgrounds and router text.
+
+Owner validation is pending; follow the M3 guide. M3 is committed locally but not pushed. IF-MIB presets
+remain M4, real backend/performance evidence remains M5, and signing/distribution remains M6.

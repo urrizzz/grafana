@@ -75,3 +75,10 @@ The owner authorized committing and pushing the accepted references and updated 
 The standalone HTML mockup remains a visual reference. Its separate layout-edit toggle is superseded in
 the plugin: opening Grafana panel menu > Edit enables layout controls automatically. Back exits editing;
 Grafana Save/Discard manage persistence. Dashboard viewing and grid editing keep the diagram read-only.
+
+## Pending compact variant: hidden interface details
+
+The accepted default remains the side-information layout. A new per-block Show interface details option
+adds a graph-only variant with a status circle inside the top-right corner and no reserved side-information
+space. Both existing HTML references still demonstrate the default mode; the compact variant is not yet
+implemented in them. Update both references during M3 before visual acceptance against AC-53/54.

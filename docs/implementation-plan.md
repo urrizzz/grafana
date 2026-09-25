@@ -31,9 +31,9 @@ Build one installable panel for unmodified Grafana 13.2.2. Keep these constraint
 | M0 Foundation | None | Standard plugin shell, build/test tools, provisioned smoke dashboard | AC-01 partially; foundation only |
 | M1 Diagram model and editor | M0 | Versioned options, routers/traffic placeholders, movement, resize, connections, save/reload | AC-22, 39-45, 52 layout portion |
 | M2 Returned-data adapter | M1 model | Frame mappings, channel index, selections, normalized traffic/state/quality | AC-02-09, 17-20, 23-24, 26, 46-52 |
-| M3 Traffic component | M2 normalized model | Native-size plot, information block, status, axes and hover | AC-10-21, 27-38 |
-| M4 Integrated diagram | M1-M3 | Actual mapped traffic in independently configurable saved elements | AC-02-07, 22-23, 26, 31, 39-52 |
-| M5 Backend and quality validation | M4 | Reproducible live demo and complete functional/performance evidence | AC-01-52, especially 24-25 |
+| M3 Traffic component | M2 normalized model | Native-size plot, information block, status, axes and hover | AC-10-21, 27-38, 53-54 |
+| M4 Integrated diagram | M1-M3 | Actual mapped traffic in independently configurable saved elements | AC-02-07, 22-23, 26, 31, 39-55 |
+| M5 Backend and quality validation | M4 | Reproducible live demo and complete functional/performance evidence | AC-01-55, especially 24-25 |
 | M6 Distribution readiness | M5 and publishing decisions | Versioned validated artifact, then selected signing/publication route | Release checks in publishing guide |
 
 Work in this order by default. Production-shaped sample gathering can proceed at any time; missing samples
@@ -94,6 +94,9 @@ query examples belong in documentation/provisioning, not the adapter implementat
    current dashes. Draw red center segments only over observed historical DOWN intervals.
 4. Add time-bucket hover, a vertical cursor and readable external time/IN/OUT tooltip; keep central values unchanged.
 5. Support configured metadata visibility, long labels and light/dark themes without overlapping content.
+6. Add per-block Show interface details (default true); when off collapse side-block space and render
+   a status circle inside the graph top-right. Update both visual reference variants and validate all three
+   statuses at 120 x 70 with no current-value overlap (AC-53/54).
 
 Completion evidence: unit checks for units/scales/status intervals and browser comparisons with both accepted
 references at native size, 150% and 200%, all states, gaps, zero traffic, long labels and hover after resize.
@@ -102,7 +105,8 @@ Use actual normalized sample values for hover; never infer them from rendered ba
 ## M4 - Integrated diagram and dashboard lifecycle
 
 Replace fixture placeholders with mapped traffic components. Connect result-driven router/channel settings,
-role mappings, field visibility and saved options to the editor. Persist query definitions through Grafana's
+role mappings, field visibility and saved options to the editor. Persist per-element Show interface details,
+default older layouts to true, and verify independent duplication and restoration (AC-55). Persist query definitions through Grafana's
 normal query editor, not duplicated plugin options. Preserve component identity during refresh and changes.
 
 Completion evidence: a provisioned multi-router dashboard; save/reload, panel duplication, variable/range

@@ -61,6 +61,28 @@ Traffic/status/capacity sources are configurable, defaulting to `ifHCInOctets`, 
 must be inspected before implementing the mapping editor. See [metrics contract](metrics-contract.md).
 No manual capacity override or `ifSpeed` fallback is part of the confirmed requirements.
 
+## Per-element Show interface details option
+
+Each traffic block has an independent **Show interface details** toggle, enabled by default (including
+existing saved blocks with no explicit value). The name refers to the port/tunnel details, not the separate
+router representation. Save this setting in the traffic element's panel options.
+
+- Enabled: keep the right-hand information block, its configured identity/metadata and capacity fields,
+  and the channel-name-followed-by-status-circle-and-word layout.
+- Disabled: remove the entire right-hand information block and its spacing, including any enabled router
+  fields, channel name/alias/description, capacity and status word. The traffic element's visible and
+  selectable footprint shrinks to the graph box; keep its graph dimensions and position unchanged.
+- While details are hidden, show a small status circle inside the graph's top-right corner: green UP,
+  red DOWN, gray UNKNOWN. It uses the same range-end status as the border, remains above the bars,
+  and must not overlap the current rate values. Give the circle an accessible status label.
+- Keep the status-colored border, traffic history, current IN/OUT values and graph hover behavior.
+  Hiding details never changes the selected router/channel, data queries, routing or data availability.
+- Re-enabling restores the configured details without losing metadata visibility preferences. Duplicating
+  a block copies the option; changes to the copy do not affect the original. Save/reload retains it.
+
+This changes the default-only side-information layout requirement into two supported display modes.
+Implementation and updated visual reference variants are planned for M3/M4; current M1 has no toggle yet.
+
 ## Layout
 
 The traffic graph border must match the current (dashboard range-end) status color: **green for UP,

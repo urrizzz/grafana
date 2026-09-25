@@ -71,6 +71,14 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-51 | Incomplete/coarse results | Missing roles, insufficient resolution and unavailable quality evidence are explicit; no fabricated rates, timestamps or outages |
 | AC-52 | Query persistence | Grafana saves datasource/query definitions; plugin options save result mappings, selections and layout |
 
+## Optional interface details
+
+| ID | Scenario | Expected behavior |
+| --- | --- | --- |
+| AC-53 | Per-block Show interface details | Defaults on, including older saved layouts; each block independently hides the complete side block and spacing when off |
+| AC-54 | Compact footprint/status | Hidden details leave only the configured graph footprint; graph position/size unchanged; green/red/gray status circle inside top-right, accessible label, no rate overlap; border and hover remain |
+| AC-55 | Toggle persistence/isolation | Re-enable restores metadata preferences; save/reload and duplication retain the setting; other blocks, selection and queries are unaffected |
+
 ## Validation layers
 
 First prove the normal panel lifecycle and configurable returned-frame contract on the target installation.

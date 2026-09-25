@@ -108,3 +108,11 @@ are fixture-only scaffolding to be replaced during M2/M4. The plugin does not qu
 Offer 25%, 50%, 75%, 100%, 125% and 150% zoom. Failed editor actions use a compact themed overlay inside the layout, with an explicit Dismiss action.
 It must not shift or shrink the diagram; its width is at most 340 px and height at most 110 px (scroll longer text). Clear it after successful changes or element selection;
 do not leave old errors in the persistent save hint. Avoid a timer that could hide unread explanations.
+
+## 2026-09-25: Optional interface details on each traffic block
+
+Use **Show interface details**, enabled by default, to hide the entire side-information block and reclaim
+its width when disabled. Move the status indicator to a circle inside the graph top-right (green UP,
+red DOWN, gray UNKNOWN), keeping the graph size, current values, history and status border unchanged.
+Persist independently per element, preserve hidden field preferences, and default old layouts to visible.
+See product-spec.md and AC-53 through AC-55. Requirement only; implementation is planned for M3/M4.

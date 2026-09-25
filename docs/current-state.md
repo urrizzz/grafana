@@ -1,6 +1,6 @@
 # Current development state
 
-Last updated: 2026-09-25. Source baseline: `4816d55` on `main`; M1 work and the display-name update are included in this local development commit; not pushed.
+Last updated: 2026-09-25. Source baseline: `7523401` on `main` contains M1 and the display-name update; not pushed. The Show interface details requirement is a subsequent local documentation change.
 This document records verified implementation state, not intended behavior. Follow the
 [implementation plan](implementation-plan.md) for the work sequence and [development guide](development.md)
 for commands/environment. Update this document with every meaningful development increment.
@@ -8,6 +8,8 @@ for commands/environment. Update this document with every meaningful development
 ## Current position
 
 **M1 is complete and owner-validated, including zoom and notification refinements. M2 is next.**
+New requirement: per-block Show interface details, with an internal status circle when hidden, is planned
+for M3/M4 and is not implemented in version 0.1.5 or the HTML mockups.
 The real Grafana plugin now edits saved routers, traffic placeholders and connections. Metric discovery,
 traffic bars and historical hover are not implemented. Use [M1 validation](m1-validation.md) for review.
 The running local version is **0.1.5**. Dropdowns are confirmed fixed by the owner. Layout editing now
@@ -229,3 +231,12 @@ commit; no push requested. M2 returned-data mapping is the next implementation s
 Rename validation: npm run check passed (typecheck, lint, 11 unit tests, build); all five browser tests
 passed together on 0.1.5. Grafana plugin settings reports Network Traffic Map version 0.1.5. Staged diff
 checks and source encryption checks passed. This commit includes all accumulated source/docs changes.
+
+### New requirement: Show interface details (2026-09-25)
+
+Documented the owner's per-traffic-block visibility option: default on; off removes all side information
+and spacing, shrinking the block footprint while leaving graph size/position unchanged. Show a range-end
+status circle inside the graph top-right when hidden; green/red/gray for UP/DOWN/UNKNOWN. Preserve border,
+values, hover, selections and metadata preferences. Acceptance criteria AC-53/54/55 cover rendering and
+saved option isolation. Product spec, decisions, implementation plan and reference notes updated.
+Requirement-only change, not implemented or visually validated; no runtime tests rerun. M1 remains accepted.

@@ -1,8 +1,8 @@
 # Accepted design reference
 
-Project status: the standard development panel scaffold exists with provisional ID
-`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
-and synthetic metric tools remain separate from the runtime scaffold.
+Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
+Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
+See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 The owner accepted the traffic wireframe and subsequently the custom diagram panel approach.
 The diagram mockup defines the surrounding layout/editor workflow; the traffic wireframe defines each component.
@@ -69,3 +69,9 @@ Validate the implementation at native size, in all three states, after enlargeme
 Compare screenshots to this reference while testing source data, missing values, and long metadata separately.
 Keep approved changes to requirements, interactive reference, and screenshots in the same Git revision.
 The owner authorized committing and pushing the accepted references and updated requirements to GitHub.
+
+## Panel editor integration (2026-09-25)
+
+The standalone HTML mockup remains a visual reference. Its separate layout-edit toggle is superseded in
+the plugin: opening Grafana panel menu > Edit enables layout controls automatically. Back exits editing;
+Grafana Save/Discard manage persistence. Dashboard viewing and grid editing keep the diagram read-only.

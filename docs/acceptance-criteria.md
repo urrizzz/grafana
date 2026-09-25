@@ -1,8 +1,8 @@
 # Acceptance criteria
 
-Project status: the standard development panel scaffold exists with provisional ID
-`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
-and synthetic metric tools remain separate from the runtime scaffold.
+Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
+Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
+See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 These are future implementation checks, not tests already passed. The custom diagram approach is approved; live plugin validation remains pending.
 
@@ -54,7 +54,7 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-39 | Create diagram | Add our panel, routers with instance selectors, and chosen interfaces through ordinary settings |
 | AC-40 | Free placement | Move router and traffic elements independently within the diagram; plot and channel information stay bound to the same interface |
 | AC-41 | Connections | Endpoint IDs persist; during dragging lines stay on box boundaries and automatically switch facing left/right/top/bottom sides; bends avoid both endpoint interiors; verify reversed, vertical and diagonal arrangements, endpoint changes, zoom/scroll and reload |
-| AC-42 | Edit/view mode | Layout controls appear in edit mode; normal viewing supports traffic hover without accidental dragging |
+| AC-42 | Edit/view mode | Layout controls activate automatically only in this panel's Grafana editor; no separate layout toggle. Dashboard view/grid editing prevent mutation. Back exits layout editing, Save persists changes, Discard restores the previous layout |
 | AC-43 | Dashboard persistence | Save/reload retains routers, selectors, positions, plot sizes, mappings, visibility, and connections without browser-local storage |
 | AC-44 | Router change/removal | Selection changes refresh dependent traffic without old-router data; removing a router cannot silently rebind dependents |
 | AC-45 | Duplicate panel | Layout/settings survive duplication and runtime selection/query state stays isolated |

@@ -1,9 +1,9 @@
-# Compact Interface Traffic
+# Network Traffic Map
 
 An installable **custom Grafana diagram panel** containing router representations, connections, and compact Cisco port/tunnel traffic displays.
 Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
-**Target:** Grafana **13.2.2**. **Status:** buildable development panel scaffold, accepted designs, and runnable mock metrics. The diagram editor and live traffic visualization are not implemented yet.
+**Target:** Grafana **13.2.2**. **Status:** M1 layout editor with saved routers, traffic placeholders and connections. Data mapping and live traffic visualization remain pending.
 **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Documentation and accepted mockups are maintained in this repository.
 
 ![Proposed scalable traffic component](docs/assets/compact-component.svg)
@@ -35,6 +35,9 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 
 ## Documentation
 
+Start development with the [implementation plan](docs/implementation-plan.md) and
+[current state](docs/current-state.md). Keep them current with implementation and verification evidence.
+
 | Document | Purpose |
 | --- | --- |
 | [Accepted design reference](docs/design-reference.md) | Approved visual baseline, tracked assets, and superseded explorations |
@@ -43,7 +46,9 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 | [Architecture](docs/architecture.md) | Custom diagram editor, persistence, and query boundaries |
 | [Acceptance criteria](docs/acceptance-criteria.md) | Conditions the eventual implementation must satisfy |
 | [Repository and publishing](docs/repository-and-publishing.md) | Inspected plugin examples, proposed source layout, signing and release process |
-| [Development plan](docs/development.md) | Implementation sequence and local environment constraints |
+| [Implementation plan](docs/implementation-plan.md) | Milestones, dependencies, completion gates and working procedure |
+| [Current state](docs/current-state.md) | Implemented features, verification evidence, open items and next work |
+| [Development guide](docs/development.md) | Tool commands and local environment constraints |
 | [Decisions](docs/decisions.md) | Confirmed answers, proposed defaults, and remaining technical checks |
 
 ## Community alternatives
@@ -72,7 +77,7 @@ No software license has been selected (`UNLICENSED` for now). The provisional pl
 `urrizzz-interfacemap-panel`; a Grafana Cloud account is not required for local development.
 Confirm the organization prefix before signing or publishing. Live traffic implementation remains pending.
 
-## Run the development scaffold
+## Run the development panel
 
 Use Node 24 and Docker Compose. From the repository root:
 
@@ -83,8 +88,8 @@ npm run server
 npm run e2e
 ```
 
-Open [the development dashboard](http://localhost:3001/d/interface-map-dev). It shows a clearly labeled
-scaffold, not the completed mockup. The separate development container uses port 3001 and a 512 MB limit.
+Open [the development dashboard](http://localhost:3001/d/interface-map-dev). It provides the M1 layout editor with clearly labeled
+traffic placeholders. Follow the [M1 validation checklist](docs/m1-validation.md). The separate development container uses port 3001 and a 512 MB limit.
 Stop it with `npm run server:stop` when finished. Your existing port-3000 Grafana remains separate.
 See [development instructions](docs/development.md) for the full workflow and encrypted workspace access.
 

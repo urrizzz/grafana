@@ -11,12 +11,12 @@
     {
       "id": 1,
       "type": "urrizzz-interfacemap-panel",
-      "title": "Interface Map scaffold",
+      "title": "Interface Map layout editor",
       "gridPos": {
         "x": 0,
         "y": 0,
         "w": 24,
-        "h": 10
+        "h": 20
       },
       "options": {
         "schemaVersion": 1

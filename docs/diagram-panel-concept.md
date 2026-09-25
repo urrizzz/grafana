@@ -1,8 +1,8 @@
 # Accepted diagram panel workflow
 
-Project status: the standard development panel scaffold exists with provisional ID
-`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
-and synthetic metric tools remain separate from the runtime scaffold.
+Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
+Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
+See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 Open [the interactive mockup](assets/diagram-panel-mockup.html) in a browser.
 The owner approved this custom diagram approach. It supersedes the original built-in Canvas host

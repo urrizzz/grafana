@@ -70,7 +70,7 @@ Validate the contract against VictoriaMetrics and datasource-independent frame f
 | Normalization | Rates, metadata, capacity, freshness, errors, historical DOWN intervals |
 | Traffic renderer | SVG bars/axes, current values, status border, right-hand information, hover |
 
-The scaffold uses TypeScript/React with Grafana 13.2.2 packages. SVG remains the planned traffic renderer. The root scaffold uses provisional ID `urrizzz-interfacemap-panel` and the development name Interface Map.
+The scaffold uses TypeScript/React with Grafana 13.2.2 packages. SVG remains the planned traffic renderer. The root scaffold uses provisional ID `urrizzz-interfacemap-panel` and the development name Network Traffic Map.
 No Grafana Cloud account exists yet; local unsigned development proceeds without it. Final identity,
 license, signing, and deployment policy remain to be settled before distribution. No Grafana backend plugin
 is currently required by the design; backend integration still needs proof.

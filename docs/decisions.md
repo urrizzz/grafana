@@ -5,7 +5,7 @@
 | Topic | Decision |
 | --- | --- |
 | Grafana deployment | Grafana cannot be modified; no core patches, custom Grafana builds or runtime bundle modifications |
-| Development identity | Interface Map; provisional ID urrizzz-interfacemap-panel, to be confirmed against a future Grafana Cloud organization |
+| Development identity | Network Traffic Map; provisional ID urrizzz-interfacemap-panel, to be confirmed against a future Grafana Cloud organization |
 | Cloud account | Owner has no account yet; local unsigned development proceeds without one; signing/publication deferred |
 | License | No project license selected; package marked UNLICENSED and private to prevent npm publication |
 | Repository structure | Standard root panel scaffold, .config tooling, src, tests, provisioning, dev mocks and preserved docs/assets |
@@ -78,3 +78,33 @@ The product interview is sufficient to update the design. Remaining items are co
 or delivery decisions; they do not reopen the approved custom diagram approach.
 
 The split layout supersedes metadata/status/capacity inside the graph and whole-card downscaling from a large base.
+
+## M1 engineering choices (2026-09-25)
+
+- Keep schema version 1 compatible with the original schemaVersion-only empty options. Reject unsupported
+  versions and malformed layouts without overwriting them. Saved records have stable, unique IDs.
+- Block router removal until dependent traffic and connections are removed or reassigned.
+- Duplicate only the selected router/traffic element, offset it and select the copy; retain its channel
+  binding but do not silently copy connections or dependent elements.
+- Suppress connections between overlapping/touching boxes until a clear corridor exists. Route using fixed
+  150x64 router bounds matching the rendered cards; unrelated obstacle avoidance remains out of scope.
+- M1 traffic plot resize range is 120-360 px, preserving 120:70 proportions; this is an editor bound, not a
+  final product maximum. Fixture identities are editable text until result-driven selection in M2/M4.
+
+## 2026-09-25: Follow Grafana panel editing
+
+Remove the independent layout toggle. Only the active Grafana panel editor exposes layout mutations.
+Dashboard view and dashboard grid editing remain read-only. Back retains pending edits, Save persists
+through Grafana, and Discard restores the prior panel. Zoom remains available while viewing.
+The HTML mockup's standalone edit toggle is superseded for plugin integration.
+
+## M1 owner feedback (2026-09-25)
+
+Channel name, alias and description come from the router's returned metric data (defaults ifName,
+ifAlias, ifDescr), not manual user entry in the finished plugin. Configure metric/query roles and
+field/label mappings at panel level; elements select a returned router/channel. Manual fields in M1
+are fixture-only scaffolding to be replaced during M2/M4. The plugin does not query routers directly.
+
+Offer 25%, 50%, 75%, 100%, 125% and 150% zoom. Failed editor actions use a compact themed overlay inside the layout, with an explicit Dismiss action.
+It must not shift or shrink the diagram; its width is at most 340 px and height at most 110 px (scroll longer text). Clear it after successful changes or element selection;
+do not leave old errors in the persistent save hint. Avoid a timer that could hide unread explanations.

@@ -1,8 +1,8 @@
 # Product specification
 
-Project status: the standard development panel scaffold exists with provisional ID
-`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
-and synthetic metric tools remain separate from the runtime scaffold.
+Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
+Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
+See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 ## Placement and selection
 
@@ -17,7 +17,7 @@ Each traffic element references its router and selects its own ifName. Connectio
 and follow their routers continuously while dragged. Automatically choose the facing left/right or top/bottom
 box edges from current router positions and dimensions, with bends outside both endpoint boxes.
 Recalculate after endpoint changes and layout reload; zoom/scroll must not detach endpoints. Moving a
-traffic display alone preserves its configured router-to-router connection. Edit mode exposes layout/configuration controls; viewing mode hides them.
+traffic display alone preserves its configured router-to-router connection. Layout editing activates automatically only inside Grafana's panel editor (panel menu > Edit). Dashboard viewing and dashboard grid editing keep the diagram read-only. There is no separate Edit layout/Finish layout toggle. Back leaves the panel editor and retains pending changes; Grafana Save persists them and Discard cancels them.
 Save router/channel settings, positions, plot sizes, and connections with the Grafana dashboard.
 The panel occupies a normal dashboard panel region; free placement happens within that region.
 
@@ -169,3 +169,14 @@ Status-history gaps must remain unknown rather than being bridged into a continu
 Visualize existing collected data. SNMP polling, router configuration, alerting, aggregation across channels,
 and reproducing all built-in Canvas features are outside the agreed scope.
 See [architecture](architecture.md) for the custom diagram panel implementation boundaries.
+
+## M1 owner feedback (2026-09-25)
+
+Channel name, alias and description come from the router's returned metric data (defaults ifName,
+ifAlias, ifDescr), not manual user entry in the finished plugin. Configure metric/query roles and
+field/label mappings at panel level; elements select a returned router/channel. Manual fields in M1
+are fixture-only scaffolding to be replaced during M2/M4. The plugin does not query routers directly.
+
+Offer 25%, 50%, 75%, 100%, 125% and 150% zoom. Failed editor actions use a compact themed overlay inside the layout, with an explicit Dismiss action.
+It must not shift or shrink the diagram; its width is at most 340 px and height at most 110 px (scroll longer text). Clear it after successful changes or element selection;
+do not leave old errors in the persistent save hint. Avoid a timer that could hide unread explanations.

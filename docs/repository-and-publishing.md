@@ -1,6 +1,6 @@
 # Repository reference and publishing plan
 
-Researched 2026-09-25. The root panel scaffold now exists; the functional diagram/traffic plugin is not implemented or published.
+Researched 2026-09-25. The root panel scaffold now exists; the M1 diagram editor is implemented locally; live traffic and publication remain pending.
 
 ## Inspected references
 
@@ -38,8 +38,8 @@ src/
   plugin.json           Plugin identity, metadata, tested compatibility
   module.ts             PanelPlugin registration
   types.ts              Initial options schema; saved diagram model to follow
-  components/           Development shell; editor/traffic UI to follow
-  diagram/              Boundary documented; routing implementation pending
+  components/           Layout editor; live traffic UI to follow
+  diagram/              Saved model, operations and facing-side routing
   data/                 PanelData adapter/channel index boundary; implementation pending
   img/                  Plugin logo; actual plugin screenshots to follow
   README.md             Packaged plugin usage documentation
@@ -104,7 +104,7 @@ The signature root URLs must match the installation configuration. See the same 
 
 - Grafana Cloud organization slug: the plugin ID prefix must match it, which is not automatically your GitHub username.
 - Use provisional ID `urrizzz-interfacemap-panel` now. The owner has no Grafana Cloud organization yet. Local development does not require one. Confirm or replace the prefix before signing/publishing.
-- Development display name: Interface Map.
+- Development display name: Network Traffic Map.
 - Choose a project license before distribution; the package is currently private and UNLICENSED.
 - Decide whether first deployment is private/internal or a public Community catalog submission.
 

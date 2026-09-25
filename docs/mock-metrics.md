@@ -1,8 +1,8 @@
 # Synthetic IF-MIB development data
 
-Project status: the standard development panel scaffold exists with provisional ID
-`urrizzz-interfacemap-panel`. Diagram editing and live traffic remain unimplemented; the HTML references
-and synthetic metric tools remain separate from the runtime scaffold.
+Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
+Traffic elements are placeholders; returned-data mapping and live traffic rendering remain pending.
+See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 `dev/mock_metrics.py` provides a Python standard-library exporter and a 24-hour history generator.
 No new Python packages are required. This is synthetic test data, not a claim about production labels.

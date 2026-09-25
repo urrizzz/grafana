@@ -3,7 +3,7 @@ import demo from '../provisioning/dashboards/data-preview.json';
 
 test('compact graphs retain history and hover actual samples in light and dark themes', async ({ page, request }) => {
   await page.setViewportSize({ width: 1600, height: 1100 });
-  const uid = 'network-map-m3-graphs';
+  const uid = 'network-map-m3-render-check';
   const config = structuredClone(demo);
   config.panels[0].options.diagram.traffic[0].width = 120;
   await request.post('/api/dashboards/db', {
@@ -86,8 +86,12 @@ test('details collapse, status moves inside, size and visibility persist indepen
   const traffic = panel.getByTestId('traffic-t1');
   await traffic.getByRole('button', { name: 'Move Tunnel10', exact: true }).click();
   await expect(panel.getByRole('checkbox', { name: 'Show interface details', exact: true })).not.toBeChecked();
-  await expect(traffic.getByTestId('compact-channel-name')).toHaveText('Tunnel10');
+  await expect(traffic.getByTestId('compact-channel-name')).toHaveText(/Tunnel10.*UP/);
   await panel.getByRole('checkbox', { name: 'Show interface details', exact: true }).check();
+  await expect(traffic.getByTestId('internal-status')).toHaveAttribute('aria-label', 'UP');
+  await expect(traffic.getByTestId('compact-channel-name')).toHaveCount(0);
+  await expect(traffic.getByRole('button', { name: 'Move Tunnel10', exact: true })).toHaveText('');
+  await expect(traffic.getByTestId('move-icon')).toBeVisible();
   const before = (await traffic.boundingBox())!;
   await panel.getByText('Visible details', { exact: true }).click();
   await panel.getByRole('checkbox', { name: 'alias', exact: true }).uncheck();

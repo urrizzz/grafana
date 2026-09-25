@@ -108,7 +108,7 @@ router representation. Save this setting in the traffic element's panel options.
 - Disabled: remove the entire right-hand information block and its spacing, including any enabled router
   fields, channel name/alias/description, capacity and status word. The traffic element's visible and
   selectable footprint shrinks to the graph width plus a centered channel-name heading above; keep graph dimensions and position unchanged.
-- While details are hidden, show a small status circle inside the graph's top-right corner: green UP,
+- In both modes, show a small status circle inside the graph's top-right corner: green UP,
   red DOWN, gray UNKNOWN. It uses the same range-end status as the border, remains above the bars,
   and must not overlap the current rate values. Give the circle an accessible status label.
 - Keep the status-colored border, traffic history, current IN/OUT values and graph hover behavior.
@@ -242,7 +242,15 @@ do not leave old errors in the persistent save hint. Avoid a timer that could hi
 ### Compact-mode refinement (2026-09-25)
 
 Compact is the default for new/unset blocks; preserve explicit saved visibility choices. In compact mode,
-center the channel name above the graph, outside its 120 x 70 footprint; constrain long names with ellipsis
+center the channel name plus colored circle and status above the graph, outside its 120 x 70 footprint; constrain long names with ellipsis
 and expose the full name on hover. Keep the internal top-right status circle. Remove the tiny 5m/range-end
 caption. Draw outage segments prominently at their actual timestamps, never broaden their duration to fit
 pixels. Hover includes the full known outage interval overlapping the selected five-minute bucket.
+
+### Status and movement refinement (2026-09-25)
+
+Compact heading: channel name followed by colored circle and UP/DOWN/UNKNOWN, centered above the graph.
+Keep the small status circle inside the top-right corner in BOTH compact and full modes. Full mode keeps
+its existing side heading. In the editor, use a static four-way arrows movement icon, not a text drag label
+or animated image. Preserve an accessible Move <channel> label. This supersedes earlier heading-only and
+compact-only corner-indicator wording. Verify both indicators and movement at different zoom levels.

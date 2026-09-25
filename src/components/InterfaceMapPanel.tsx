@@ -144,7 +144,20 @@ const styles = css`
     align-items: flex-start;
     gap: 12px;
   }
+  .compact-name .channel-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .compact-name .channel-status {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
   .compact-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
     position: absolute;
     top: -19px;
     left: 0;
@@ -575,10 +588,34 @@ function DiagramEditor({
                       <button
                         data-map-control
                         className="grip handle"
-                        style={{ top: showDetails ? -24 : -42 }}
+                        aria-label={`Move ${t.ifName}`}
+                        title="Move traffic block"
+                        style={{
+                          top: -24,
+                          left: showDetails ? 0 : t.width + 4,
+                          width: 22,
+                          height: 22,
+                          padding: 2,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
                         onPointerDown={(e) => begin(e, t)}
                       >
-                        Move {t.ifName}
+                        <svg
+                          data-testid="move-icon"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 2v20M2 12h20M8 6l4-4 4 4M8 18l4 4 4-4M6 8l-4 4 4 4M18 8l4 4-4 4" />
+                        </svg>
                       </button>
                     )}
                     {!showDetails && (
@@ -588,7 +625,10 @@ function DiagramEditor({
                         style={{ width: t.width }}
                         title={current?.channel || t.ifName || 'Select channel'}
                       >
-                        {current?.channel || t.ifName || 'Select channel'}
+                        <span className="channel-label">{current?.channel || t.ifName || 'Select channel'}</span>
+                        <span className="channel-status" style={{ color, fontSize: 10 }}>
+                          <span aria-hidden="true">&#9679;</span> {status}
+                        </span>
                       </div>
                     )}
                     <TrafficPlot
@@ -598,7 +638,6 @@ function DiagramEditor({
                       from={timeRange.from.valueOf()}
                       to={timeRange.to.valueOf()}
                       timeZone={timeZone}
-                      showDetails={showDetails}
                     />
                     {showDetails && (
                       <div className="info" data-testid="interface-details">

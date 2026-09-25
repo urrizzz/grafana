@@ -8,12 +8,12 @@ for commands/environment. Update this document with every meaningful development
 ## Current position
 
 **M3 compact renderer implemented and verified locally; owner acceptance pending. M1 and M2 remain accepted.**
-Running version: **0.3.1**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
+Running version: **0.3.2**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
 purple OUT, shared automatic axes, matching range-end values and status borders. Historical outages
 appear only over known DOWN intervals; DOWN/UNKNOWN retain available history with current dashes.
 Hover snaps to complete five-minute buckets and reads actual samples in an external tooltip.
-Per-block Show interface details defaults to false. Turning it off collapses the side block, puts the
-status circle inside the top-right corner, centers the channel name above the graph and preserves graph coordinates. Individual field choices persist.
+Per-block Show interface details defaults to false. Turning it off collapses the side block and centers the channel name plus colored circle/status above the graph.
+The corner status circle remains visible in both modes; graph coordinates are preserved. Individual field choices persist.
 
 Open the [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and follow
 [M3 validation](m3-validation.md). Its saved selections, queries and layout are preserved.
@@ -374,3 +374,13 @@ change. Eight Python tests pass, including three new frame consistency tests. Al
 in a focused rerun. Typecheck passed. Saved owner and comparison dashboard options/time ranges were verified
 after provisioning and restored after test execution.
 Changes local, not pushed; M3 owner acceptance remains pending.
+
+### Status headings and four-way movement icon (2026-09-25)
+
+Version 0.3.2 shows channel name + colored circle + UP/DOWN/UNKNOWN centered above compact graphs.
+The small top-right circle remains in BOTH compact and full modes. Traffic movement uses a static
+four-way arrows icon in edit mode with an accessible Move <channel> label; no repeated drag text.
+The handle sits beside the compact heading, preserving heading space and graph coordinates.
+Requirements and both HTML references updated. Typecheck/lint, 35 unit tests and production build passed.
+Both reference smoke checks and all four targeted browser scenarios passed. Browser validation covers compact/full indicators, saved visibility
+and four-way icon movement at multiple zoom levels. Changes local, not pushed; owner review pending.

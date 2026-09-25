@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2 - Unreleased
+
+- Add status to compact headings and retain corner status indicators in both modes.
+- Replace traffic drag text with an accessible four-way arrows icon.
+
 ## 0.3.1 - Unreleased
 
 - Default unset traffic blocks to compact mode with the channel name centered above the graph.

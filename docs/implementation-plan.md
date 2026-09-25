@@ -91,7 +91,7 @@ query examples belong in documentation/provisioning, not the adapter implementat
 
 ## M3 - Compact traffic rendering
 
-Implemented locally in 0.3.1; owner validation pending. Follow [M3 validation](m3-validation.md) and
+Implemented locally in 0.3.2; owner validation pending. Follow [M3 validation](m3-validation.md) and
 [current state](current-state.md) for actual verification evidence. M4 query presets are the next implementation step after acceptance.
 
 1. Implement the plot and right-hand information block using the normalized model, independently of datasource code.
@@ -172,3 +172,11 @@ changes; run mock tests when their behavior changes. Documentation-only edits ne
 checks, not the full runtime suite. Record verification dates and distinguish local from remote CI evidence.
 Do not mark a milestone complete from planned work or mockup behavior. Use the next concrete action rather
 than vague percentage-complete estimates when handing off development.
+
+### Status and movement refinement (2026-09-25)
+
+Compact heading: channel name followed by colored circle and UP/DOWN/UNKNOWN, centered above the graph.
+Keep the small status circle inside the top-right corner in BOTH compact and full modes. Full mode keeps
+its existing side heading. In the editor, use a static four-way arrows movement icon, not a text drag label
+or animated image. Preserve an accessible Move <channel> label. This supersedes earlier heading-only and
+compact-only corner-indicator wording. Verify both indicators and movement at different zoom levels.

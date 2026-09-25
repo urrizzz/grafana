@@ -76,7 +76,7 @@ These are future implementation checks, not tests already passed. The custom dia
 | ID | Scenario | Expected behavior |
 | --- | --- | --- |
 | AC-53 | Per-block Show interface details | Defaults off when no explicit value is saved; explicitly saved choices are respected; each block independently hides the complete side block and spacing when off |
-| AC-54 | Compact footprint/status | Hidden details leave the configured graph footprint plus a centered channel-name heading above; graph position/size unchanged; green/red/gray status circle inside top-right, accessible label, no rate overlap; border and hover remain |
+| AC-54 | Compact footprint/status | Hidden details leave the configured graph footprint plus a centered channel-name/circle/status heading above; graph position/size unchanged; green/red/gray status circle inside top-right in BOTH modes, accessible label, no rate overlap; border and hover remain |
 | AC-55 | Toggle persistence/isolation | Re-enable restores metadata preferences; save/reload and duplication retain the setting; other blocks, selection and queries are unaffected |
 
 ## Configuration-first setup
@@ -104,3 +104,11 @@ Documentation checks do not constitute plugin compatibility or implementation te
 Use the [accepted design reference](design-reference.md) for visual and interaction checks at native
 120 x 70, larger sizes, all operational states, and hover. Keep both mockup HTML files and their screenshots tracked
 and synchronized with approved changes. Older illustrations and community previews are not the baseline.
+
+### Status and movement refinement (2026-09-25)
+
+Compact heading: channel name followed by colored circle and UP/DOWN/UNKNOWN, centered above the graph.
+Keep the small status circle inside the top-right corner in BOTH compact and full modes. Full mode keeps
+its existing side heading. In the editor, use a static four-way arrows movement icon, not a text drag label
+or animated image. Preserve an accessible Move <channel> label. This supersedes earlier heading-only and
+compact-only corner-indicator wording. Verify both indicators and movement at different zoom levels.

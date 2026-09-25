@@ -11,9 +11,8 @@ interface Props {
   from: number;
   to: number;
   timeZone: string;
-  showDetails: boolean;
 }
-export function TrafficPlot({ channel, width, from, to, timeZone, showDetails }: Props) {
+export function TrafficPlot({ channel, width, from, to, timeZone }: Props) {
   const theme = useTheme2();
   const background = theme.colors.background.primary;
   const foreground = theme.colors.text.primary;
@@ -222,18 +221,16 @@ export function TrafficPlot({ channel, width, from, to, timeZone, showDetails }:
             {formatRate(channel?.current.out)}
           </text>
         </g>
-        {!showDetails && (
-          <circle
-            data-testid="internal-status"
-            aria-label={state}
-            cx="113"
-            cy="7"
-            r="3"
-            fill={statusColors[state]}
-            stroke={background}
-            strokeWidth="1"
-          />
-        )}
+        <circle
+          data-testid="internal-status"
+          aria-label={state}
+          cx="113"
+          cy="7"
+          r="3"
+          fill={statusColors[state]}
+          stroke={background}
+          strokeWidth="1"
+        />
         {channel?.issues.length ? (
           <text
             aria-label="Data quality warning"

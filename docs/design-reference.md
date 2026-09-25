@@ -82,3 +82,11 @@ The accepted default is compact mode, with the channel name centered above the g
 optionally restores the side-information variant with a status circle inside the top-right corner and no reserved side-information
 space. Both HTML references now offer Show interface details controls, defaulting to compact mode.
 The M3 plugin implements the same variant; validate native-size readability using [M3 validation](m3-validation.md).
+
+### Status and movement refinement (2026-09-25)
+
+Compact heading: channel name followed by colored circle and UP/DOWN/UNKNOWN, centered above the graph.
+Keep the small status circle inside the top-right corner in BOTH compact and full modes. Full mode keeps
+its existing side heading. In the editor, use a static four-way arrows movement icon, not a text drag label
+or animated image. Preserve an accessible Move <channel> label. This supersedes earlier heading-only and
+compact-only corner-indicator wording. Verify both indicators and movement at different zoom levels.

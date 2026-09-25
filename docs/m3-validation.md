@@ -1,6 +1,6 @@
 # M3 compact traffic validation
 
-Running version: 0.3.1 on Grafana 13.2.2, port 3001. Owner validation pending.
+Running version: 0.3.2 on Grafana 13.2.2, port 3001. Owner validation pending.
 Open your [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and reload the page.
 Its saved layout, queries and selections are preserved. Keep the fixed fixture time range and the
 Network Map Mock Frames datasource; switching datasources can replace queries (see M2 guide).
@@ -13,9 +13,9 @@ For a repeatable UP/DOWN comparison, the browser tests also create
    the graph. Central values stay fixed. Moving away or dragging clears the tooltip.
 3. DOWN has a red border and current dashes but retains bars; red center segments cover only known
    historical outages (hover an outage to see its start/end times). UNKNOWN has a gray border, dashes and retained available history.
-4. Compact mode is the default: the channel name is centered above the graph, with no tiny 5m caption.
+4. Compact mode is the default: the channel name, colored circle and status are centered above the graph, with no tiny 5m caption.
    Panel menu > Edit, select traffic by its Move handle. Enable then disable Show interface details: the side block
-   and its space disappear; a status circle appears inside the graph's top-right. Graph size and location
+   and its space disappear; the status circle remains inside the graph's top-right in both modes. Graph size and location
    stay fixed. Restore details and verify the selected Visible details fields are remembered.
 5. Try 180 and 240 px widths. Hover remains readable and accurate after resizing or zooming. Return to
    120 px to judge the main use case at normal browser zoom.
@@ -40,3 +40,11 @@ wholly inside an outage is zero. Status is sampled each minute and no longer sta
 range on the branch channel. Tunnel99 remains metadata-only/UNKNOWN.
 
 These are synthetic Grafana frames, not verification of VictoriaMetrics counter-rate behavior.
+
+### Status and movement refinement (2026-09-25)
+
+Compact heading: channel name followed by colored circle and UP/DOWN/UNKNOWN, centered above the graph.
+Keep the small status circle inside the top-right corner in BOTH compact and full modes. Full mode keeps
+its existing side heading. In the editor, use a static four-way arrows movement icon, not a text drag label
+or animated image. Preserve an accessible Move <channel> label. This supersedes earlier heading-only and
+compact-only corner-indicator wording. Verify both indicators and movement at different zoom levels.

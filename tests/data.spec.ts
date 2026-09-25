@@ -70,6 +70,12 @@ test('returned router/channel selection, automatic metadata, missing data and pe
   const saved = await (await request.get(`/api/dashboards/uid/${uid}`)).json();
   expect(saved.dashboard.panels[0].options.diagram.traffic[0].routerId).toBe('r2');
   expect(saved.dashboard.panels[0].options.mapping.sourceTime).toBe('sourceTimestamp');
+  expect(saved.dashboard.panels[0].targets.map((target: { refId: string }) => target.refId)).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']);
+  for (const target of saved.dashboard.panels[0].targets) {
+    expect(target.scenarioId).toBe('raw_frame');
+    expect(target.rawFrameContent).toBe(demo.panels[0].targets.find(original => original.refId === target.refId)!.rawFrameContent);
+  }
+
 });
 
 test('single-valued dashboard variables select data and All is rejected', async ({ page, request }) => {

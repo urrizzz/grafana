@@ -7,7 +7,7 @@ for commands/environment. Update this document with every meaningful development
 
 ## Current position
 
-**M2 is implemented and locally verified; owner validation is pending. M1 remains accepted.**
+**M2 is implemented; owner checks 1-6 passed. Query loss after datasource switching was diagnosed and repaired; owner recheck pending. M1 remains accepted.**
 Running version: **0.2.0**, Grafana 13.2.2 on port 3001. The adapter consumes Grafana query results,
 indexes routers/channels, reads interface metadata automatically, and previews current rates/status/capacity.
 Panel options configure identity/quality fields and query-role mappings. Elements select returned data
@@ -290,3 +290,20 @@ the higher hard ceiling provides headroom for process/native/cache memory. Docke
 Memory verification: live inspect reports 1073741824 bytes RAM, the same container ID, and healthy status.
 Usage sampled at 236.7 MiB / 1 GiB; docker compose config --quiet passed. M2 and this configuration update
 are saved in a local development commit; no push was requested for this increment.
+
+### Owner M2 save/reload report (2026-09-25)
+
+Owner confirmed validation steps 1-6, then reported all channels UNKNOWN after Save/reload. Inspected
+network-map-data-dev version 2: its eight raw-frame queries had been replaced by one Random Walk query A;
+layout, options, datasource and fixed time range remained. Saved an encrypted diagnostic snapshot under
+ignored data/, then restored only targets from the checked-in fixture through Grafana's API (version 3).
+Verified options and time range identical before/after. Fresh browser shows 2 routers / 4 channels,
+CORE-01 GigabitEthernet0/1 UP with Uplink/Physical uplink/1 Gbit/s, and BRANCH-01 Tunnel99 correctly UNKNOWN
+with metadata (no rates/status by design). Owner confirmed changing to another datasource and then selecting the mock datasource again.
+This reset queries; reselecting a datasource does not restore its old queries. Save persisted that changed
+query configuration. No plugin runtime change was needed. Extended save/reload browser coverage to assert all eight
+query IDs, Raw Frames scenarios and exact rawFrameContent survive, rather than only the resulting display.
+
+The strengthened browser save/reload test passed with all eight query definitions preserved exactly.
+Documented datasource-switch behavior and advised reloading the repaired dashboard before further edits.
+Owner should repeat save/reload without switching the demo datasource; M2 overall approval remains pending.

@@ -20,7 +20,9 @@ fixture timestamps will deliberately produce missing-current/stale diagnostics. 
    but becomes unavailable/UNKNOWN; it must not silently select another channel or retain old metadata.
 6. Select Tunnel99. Metadata only / No rates or status appears; status stays UNKNOWN and rates are dashes.
 7. Back > Save > reload. Channel/router selection, mappings and layout remain.
-8. In Grafana panel options, inspect **Identity and quality mappings** and **Query result mappings**.
+8. Keep Network Map Mock Frames selected for this demo. Switching datasources can replace its queries;
+   selecting it again does not restore the A-H fixtures. Use a duplicate dashboard to explore other sources.
+   In Grafana panel options, inspect **Identity and quality mappings** and **Query result mappings**.
    They apply to the panel. Metric expressions belong in the normal query editor, not individual blocks.
 
 ## Default mappings and query authoring
@@ -72,3 +74,17 @@ exact time is also acceptable; simply using the last bar before the end is not.
   metadata are a data-integration preview, not the final compact renderer.
 
 Automated coverage is recorded in current-state.md. Owner results are pending until reported.
+
+## Owner validation and query-loss troubleshooting (2026-09-25)
+
+Owner passed checks 1-6. At check 7 the saved dashboard contained only a default Random Walk query A,
+instead of raw-frame queries A-H. Its saved layout, mappings and time range were intact. Restoring only
+the eight query definitions recovered the data without resetting the layout. Owner confirmed switching to another datasource and then selecting Network Map Mock Frames again.
+The datasource switch reset queries; selecting it again did not restore them. This was not adapter or
+save corruption.
+
+If all blocks lose data after saving, inspect the normal Queries tab: this demo requires eight queries
+A-H using Raw Frames. Random Walk has no instance/ifName labels and cannot feed this diagram. Changing
+the datasource can reset its queries; preserve/recreate the fixture queries when doing so. Reload the
+page after a server-side repair before editing again, to avoid re-saving stale query definitions.
+Tunnel99 is metadata-only and remains UNKNOWN even with working queries; its metadata should be visible.

@@ -1,6 +1,6 @@
 # M3 compact traffic validation
 
-Running version: 0.3.3 on Grafana 13.2.2, port 3001. Owner validation pending.
+Running version: 0.3.4 on Grafana 13.2.2, port 3001. Owner validation pending.
 Open your [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and reload the page.
 Its saved layout, queries and selections are preserved. Keep the fixed fixture time range and the
 Network Map Mock Frames datasource; switching datasources can replace queries (see M2 guide).

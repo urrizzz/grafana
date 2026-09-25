@@ -655,13 +655,13 @@ function DiagramEditor({
                         {visible('alias') && <div>{current?.alias || '--'}</div>}
                         {visible('description') && <div>{current?.description || '--'}</div>}
                         {visible('capacity') && <div>Capacity {formatRate(current?.capacity)}</div>}
-                        <div aria-label="Channel diagnostics">
-                          {current
-                            ? current.issues.length
+                        {(!current || current.issues.length > 0) && (
+                          <div aria-label="Channel diagnostics">
+                            {current
                               ? `${current.issues[0]}${current.issues.length > 1 ? ` (+${current.issues.length - 1} checks)` : ''}`
-                              : 'Data available'
-                            : 'Selected channel unavailable or invalid variable; no data'}
-                        </div>
+                              : 'Selected channel unavailable or invalid variable; no data'}
+                          </div>
+                        )}
                       </div>
                     )}
                     {editing && selected === t.id && (

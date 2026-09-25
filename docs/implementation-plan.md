@@ -91,7 +91,7 @@ query examples belong in documentation/provisioning, not the adapter implementat
 
 ## M3 - Compact traffic rendering
 
-Implemented locally in 0.3.3; owner validation pending. Follow [M3 validation](m3-validation.md) and
+Implemented locally in 0.3.4; owner validation pending. Follow [M3 validation](m3-validation.md) and
 [current state](current-state.md) for actual verification evidence. M4 query presets are the next implementation step after acceptance.
 
 1. Implement the plot and right-hand information block using the normalized model, independently of datasource code.

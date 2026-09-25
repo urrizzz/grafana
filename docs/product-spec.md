@@ -262,3 +262,6 @@ edge of the router/graph, in both compact and full modes. Click a body to select
 Body/label/graph gestures must not move elements. View mode has no handles. Connections automatically
 follow their routers rather than being independently draggable. Validate both element types at all zooms.
 This supersedes earlier whole-router dragging and mode-specific handle placement.
+
+The side information block must not show a routine Data available success message or reserve space for it.
+Keep actionable missing-data/quality warnings and the editor Data quality diagnostics.

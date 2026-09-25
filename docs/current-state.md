@@ -8,9 +8,10 @@ for commands/environment. Update this document with every meaningful development
 ## Current position
 
 **M3 compact renderer implemented and verified locally; owner acceptance pending. M1 and M2 remain accepted.**
-Running version: **0.3.3**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
+Running version: **0.3.4**, Grafana 13.2.2 on port 3001. Native 120 x 70 SVG graphs show blue IN,
 purple OUT, shared automatic axes, matching range-end values and status borders. Historical outages
 appear only over known DOWN intervals; DOWN/UNKNOWN retain available history with current dashes.
+The side information block omits the routine Data available success message; warnings and editor diagnostics remain.
 Hover snaps to complete five-minute buckets and reads actual samples in an external tooltip.
 Per-block Show interface details defaults to false. Turning it off collapses the side block and centers the channel name plus colored circle/status above the graph.
 Routers and traffic use the same four-way handle above the top-right edge in edit mode; body clicks select without dragging.
@@ -396,3 +397,11 @@ Verification: typecheck/lint, 35 unit tests and build passed. All seven layout/t
 passed, including body non-movement and identical handle movement for both types at six zoom levels,
 connection routing, resize, save/reload and discard. Diagram-reference smoke check passed.
 Changes committed locally, not pushed; owner validation pending.
+
+### Remove success diagnostic from side information (2026-09-25)
+
+Version 0.3.4 omits the Data available success row entirely, including its empty space. Existing missing-data
+and quality warnings remain; the editor Data quality section is unchanged. Production build passed.
+A Grafana browser check confirmed the success row and its space are absent, metadata remains, and the
+editor diagnostics section is still available. No dashboard was saved during validation.
+Changes local, not pushed; M3 owner review remains pending.

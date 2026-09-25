@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.4 - Unreleased
+
+- Remove the routine Data available success row from side information.
+
 ## 0.3.3 - Unreleased
 
 - Unify router and traffic dragging with the same four-way handle and placement in both display modes.

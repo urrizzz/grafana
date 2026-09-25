@@ -73,7 +73,8 @@ exact time is also acceptable; simply using the last bar before the end is not.
 - M3 traffic bars, axes, hover and Show interface details are not implemented yet. Current values and
   metadata are a data-integration preview, not the final compact renderer.
 
-Automated coverage is recorded in current-state.md. Owner results are pending until reported.
+Automated coverage is recorded in current-state.md. Owner accepted M2 on 2026-09-25 after the query
+recovery and configuration discussion; this checklist remains the regression reference.
 
 ## Owner validation and query-loss troubleshooting (2026-09-25)
 

@@ -7,7 +7,7 @@ for commands/environment. Update this document with every meaningful development
 
 ## Current position
 
-**M2 is implemented; owner checks 1-6 passed. Query loss after datasource switching was diagnosed and repaired; owner recheck pending. M1 remains accepted.**
+**M2 is complete and owner-accepted following mock-query recovery and setup clarification. M1 remains accepted; M3 is next.**
 Running version: **0.2.0**, Grafana 13.2.2 on port 3001. The adapter consumes Grafana query results,
 indexes routers/channels, reads interface metadata automatically, and previews current rates/status/capacity.
 Panel options configure identity/quality fields and query-role mappings. Elements select returned data
@@ -23,7 +23,7 @@ No production VictoriaMetrics compatibility or rate semantics are claimed.
 | --- | --- | --- |
 | M0 Foundation | Complete locally | Build/test tooling and unsigned packaging; remote CI unverified |
 | M1 Diagram model/editor | Complete; owner-validated | Saved layouts, native edit lifecycle, routing, zoom, resizing, duplication, safe removal |
-| M2 Frame adapter | Complete locally; owner review pending | 30 unit tests, eight browser scenarios across suite/targeted rerun; see guide and evidence below |
+| M2 Frame adapter | Complete locally; owner-accepted | 30 unit tests, eight browser scenarios across suite/targeted rerun; see guide and evidence below |
 | M3 Traffic renderer | Not started | Current-value data preview only; bars/axes/hover and Show interface details pending |
 | M4 Integrated diagram | Partial via M2 data selection | Final traffic renderer and visibility persistence still pending |
 | M5 Backend/quality audit | Not started | Synthetic fixtures only; production frames, rates and capacity/performance audit pending |
@@ -104,8 +104,8 @@ No production credentials are required for fixture-based implementation.
 
 ## Next concrete work
 
-Owner: follow [M2 validation](m2-validation.md), checking dependent selection, automatic metadata,
-missing-data behavior, mappings and save/reload in the separate data preview.
+Owner accepted the M2 preview after validation and query-setup clarification. Keep [M2 validation](m2-validation.md)
+as the regression checklist; no further M2 owner gate remains.
 
 Development: implement M3 using the normalized model, including the optional hidden-details/status-circle
 variant. Keep queries at panel level. Gather sanitized production frame examples for the later M5 audit.
@@ -318,3 +318,11 @@ Direct query installation needs supported-API verification; configured starter-d
 fallback. Implementation is M4 work; current 0.2.0 behavior and M3 next-step order are unchanged.
 Updated product spec, decisions, acceptance criteria, implementation plan and M2 guide. Documentation-only
 change; diff checks only, no runtime tests rerun. Saved locally, not pushed.
+
+### Owner accepts M2 (2026-09-25)
+
+Owner reports everything looks good after the query restoration and configuration-first setup discussion.
+Record M2 owner acceptance; do not infer additional individually performed checks beyond prior reports.
+Existing automated evidence remains 30 unit tests and eight browser scenarios. No runtime changes or new
+tests for this status update. M3 renderer is the next milestone; presets remain M4 and real backend
+validation remains M5. Documentation saved locally; no push requested.

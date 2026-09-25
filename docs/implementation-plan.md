@@ -68,7 +68,8 @@ Do not mark production traffic support complete because placeholders work.
 
 ## M2 - Returned-data adapter and selection
 
-Implemented locally in 0.2.0; owner validation uses [M2 validation](m2-validation.md).
+Implemented locally in 0.2.0 and owner-accepted on 2026-09-25. [M2 validation](m2-validation.md) remains
+the regression guide. M3 is next.
 Production VictoriaMetrics frame/quality evidence remains an M5 check, not a claim made by synthetic tests.
 
 1. Define normalized channel identity, history/current rates, metadata, capacity, status and quality types.

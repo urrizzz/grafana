@@ -54,7 +54,7 @@ The 120 x 70 size excludes the right-hand block. Its exact width and long-text f
 details to validate. The displayed sample labels, rates, dates, and outage times are not production defaults.
 The approved host is our own installable diagram panel on unmodified Grafana 13.2.2.
 The diagram mockup uses browser storage and static fixtures; production saves options with the dashboard
-and queries VictoriaMetrics. No live plugin compatibility is implied by either reference.
+and consumes Grafana panel-level query results from the selected datasource. No live plugin compatibility is implied by either reference.
 
 ## Superseded explorations
 

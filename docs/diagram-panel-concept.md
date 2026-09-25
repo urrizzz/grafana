@@ -44,3 +44,11 @@ It measures actual router-card dimensions and recomputes paths during movement. 
 alone does not change the router endpoints. Overlapping/touching endpoints or self-connections are not
 drawn; separating the boxes restores the line. Missing endpoints are skipped. Automatic avoidance of
 unrelated routers, traffic cards, and other lines is not demonstrated by this routing rule.
+
+## Agreed data-selection workflow
+
+Configure the datasource and one or more queries in Grafana's normal panel query editor to return all
+required routers/channels. Each traffic element then selects its router and channel from those results,
+using configurable identity fields (instance/ifName by default). Elements do not issue queries.
+An absent saved channel stays in place as UNKNOWN/no data. The mockup still uses fictional, editable
+labels; its selectors do not demonstrate real result discovery yet.

@@ -31,7 +31,7 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-21 | Hover inspection | Vertical cursor and readable tooltip show hovered five-minute interval and positive IN/OUT average rates; current values remain visible and unchanged |
 | AC-22 | Placement and resize | Element moves/resizes inside our diagram panel; traffic scales proportionally from native 120 x 70 layout; settings persist on reload |
 | AC-23 | Dashboard refresh | Data follows dashboard refresh with no independent timer or accumulating subscriptions |
-| AC-24 | Real backend | Works through the VictoriaMetrics data-source plugin with 60-second collected data |
+| AC-24 | Real backend | Consumes compatible Grafana query results without datasource-specific request code; validate generic frame fixtures and VictoriaMetrics with 60-second collected data |
 | AC-25 | Normal history load | Multiple elements remain readable and responsive over 12-24 hours |
 | AC-26 | Query failure | Visible error/staleness; no false DOWN state or cross-interface cached data |
 | AC-27 | Themes and accessibility | Foreground is legible, status has words, and colors preserve IN/OUT distinction |
@@ -59,10 +59,22 @@ These are future implementation checks, not tests already passed. The custom dia
 | AC-44 | Router change/removal | Selection changes refresh dependent traffic without old-router data; removing a router cannot silently rebind dependents |
 | AC-45 | Duplicate panel | Layout/settings survive duplication and runtime selection/query state stays isolated |
 
+## Datasource-independent query acceptance
+
+| ID | Scenario | Expected result |
+| --- | --- | --- |
+| AC-46 | Normal datasource/query editor | Author chooses a datasource and one or more queries returning the needed routers/channels and logical data roles |
+| AC-47 | Dependent selection | Router picker derives identities from results; channel picker is scoped to that router; custom identity label/field names work |
+| AC-48 | Element selection and duplication | Elements reuse returned data; choosing or duplicating a component triggers no per-element datasource request |
+| AC-49 | Selected channel disappears | Layout/selection retained, UNKNOWN/no data and current dashes; never reuse another channel's data |
+| AC-50 | Custom result mappings | Query aliases/refIds/fields map to rates, status, capacity and metadata without requiring fixed output metric names |
+| AC-51 | Incomplete/coarse results | Missing roles, insufficient resolution and unavailable quality evidence are explicit; no fabricated rates, timestamps or outages |
+| AC-52 | Query persistence | Grafana saves datasource/query definitions; plugin options save result mappings, selections and layout |
+
 ## Validation layers
 
-First prove the normal panel lifecycle and VictoriaMetrics query contracts on the target installation.
-Then test pure rate/axis/unit/state logic, query cancellation and data isolation, and browser-level diagram interactions.
+First prove the normal panel lifecycle and configurable returned-frame contract on the target installation.
+Then test pure axis/unit/state logic, Grafana query-result updates and data isolation, and browser-level diagram interactions.
 Use synthetic counter fixtures for normal rates, resets, missing samples, and state transitions; supplement them
 with sanitized production-shaped port/tunnel samples. Validate 12-24 hours and multiple independent elements.
 Validate native 120 x 70 traffic at normal browser zoom, plus 150% and 200% enlargement and independent

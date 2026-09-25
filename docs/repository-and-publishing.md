@@ -40,7 +40,7 @@ src/
   types.ts              Initial options schema; saved diagram model to follow
   components/           Development shell; editor/traffic UI to follow
   diagram/              Boundary documented; routing implementation pending
-  data/                 Boundary documented; query implementation pending
+  data/                 PanelData adapter/channel index boundary; implementation pending
   img/                  Plugin logo; actual plugin screenshots to follow
   README.md             Packaged plugin usage documentation
 tests/                  Playwright scaffold loading smoke test
@@ -109,4 +109,4 @@ The signature root URLs must match the installation configuration. See the same 
 - Decide whether first deployment is private/internal or a public Community catalog submission.
 
 Our Grafana remains unmodified; installation still requires permission to install a plugin. The custom
-diagram editor and VictoriaMetrics integration must be implemented before publishing a usable release.
+diagram editor and datasource-independent frame integration must be implemented before publishing a usable release.

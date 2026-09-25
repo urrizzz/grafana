@@ -24,10 +24,17 @@ The panel occupies a normal dashboard panel region; free placement happens withi
 Use the [accepted diagram mockup](assets/diagram-panel-mockup.html) for the editor/layout workflow and
 [traffic wireframe](assets/scalable-wireframe.html) for individual component rendering.
 
-Each display selects exactly one router (`instance`) and channel (`ifName`). Both fixed strings and
+At diagram level, choose a datasource and configure one or more queries returning the required routers and
+channels, traffic history/current rates, status, capacity and metadata. Each traffic element selects from
+those results; the router picker lists returned identities and its channel picker lists that router's channels.
+The plugin is datasource-independent subject to the [data contract](metrics-contract.md), not tied to VictoriaMetrics.
+Individual elements neither issue queries nor have their own datasource query editor.
+
+Each display selects exactly one router (`instance`) and channel (`ifName`), with configurable identity mappings. Both fixed strings and
 single-valued dashboard variables are supported. Resolve variables before selection. Proposed handling for
 empty values, multi-select/All variables, and duplicate matches is an explicit configuration error.
-Do not aggregate different interfaces or choose an arbitrary first match.
+Do not aggregate different interfaces or choose an arbitrary first match. An unavailable saved selection
+remains in place with UNKNOWN/no data and current dashes; never automatically switch to an available channel.
 
 Use the dashboard time range, time zone, and refresh interval. Normal viewing is **12-24 hours**.
 The primary traffic area is **120 x 70 CSS pixels**, excluding the information block on its right.
@@ -100,11 +107,12 @@ No dashboard-author rendering scripts are required.
 
 ## Configuration without author-written scripts
 
-Provide a purpose-built component with ordinary settings for the data source, router/channel selection,
+Configure the datasource and queries through Grafana's normal panel query editor. Provide ordinary settings for router/channel selection,
 source mappings, and field visibility. Dashboard authors must not write, paste, or maintain JavaScript,
 ECharts options, SVG rendering code, or similar scripts to obtain the required layout and behavior.
 Rendering and scaling logic belong in the component implementation. Standard configuration of the existing
-data source and selectors is still required; no production connection is inferred automatically.
+datasource, queries and selectors is required; no production connection is inferred automatically.
+Writing datasource queries is explicitly supported; the no-script requirement concerns rendering code.
 Community examples demonstrate visual possibilities but do not satisfy this requirement simply by loading
 custom chart scripts into a general-purpose panel.
 

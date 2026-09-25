@@ -32,8 +32,11 @@ remain unencrypted there. Do not apply EFS to that directory. Projects and direc
 
 2. **Inspect source data.** Capture sanitized labels/metadata for a port and tunnel and record the installed
    VictoriaMetrics data-source plugin ID/version. Collection interval and rate meaning are already confirmed.
-3. **Prove queries.** Independently select multiple channels, interpolate variables, customize mappings, and follow
-   dashboard range/refresh. Validate 300-second history, current rates, resets, freshness, cancellation, and error handling.
+3. **Implement the PanelData adapter.** Configure datasource queries once at diagram level to return all
+   required routers/channels. Map result roles and identity fields, populate dependent router/channel pickers,
+   and filter results per element without issuing requests. Validate dashboard variables/refresh, missing
+   selections, 300-second rates, status resolution and freshness. Grafana owns query execution/cancellation.
+   Test generic frames and VictoriaMetrics as the first real backend.
 4. **Implement visualization.** Design for very small placement from the start. Scale the full component,
    including traffic fonts, spacing, bars, axes and overlays, while preserving relative layout.
    Include blue/purple mirrored bars, symmetric autoscale, capacity, right-hand state, retained history,

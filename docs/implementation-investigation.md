@@ -1,5 +1,10 @@
 # Implementation investigation: Grafana 13.2.2
 
+**Query-design update:** the owner approved Grafana's normal panel-level datasource/query editor.
+The plugin consumes returned frames; each traffic element selects a router/channel from those results.
+All query-coordinator proposals below are historical and superseded, including the claim that manual
+query configuration is not the finished experience. See [current architecture](architecture.md).
+
 ## Deployment constraint confirmed by owner
 
 **Grafana itself cannot be modified.** Source patches, custom Grafana builds and runtime bundle modifications
@@ -168,6 +173,6 @@ without a deliberate decision. No full build or performance claim was made durin
 ## Approved next step without modifying Grafana
 
 The standard custom panel scaffold now exists. Next prove router/traffic/connection editing and dashboard persistence
-using fixtures, then integrate VictoriaMetrics through supported APIs. Use the diagram mockup as the editor
+using fixtures, then consume panel-level query results through the datasource-independent frame adapter. Use the diagram mockup as the editor
 reference and the traffic wireframe as the component reference. Follow [development milestones](development.md)
 and [acceptance criteria](acceptance-criteria.md). No core build or additional host-placement approval is needed.

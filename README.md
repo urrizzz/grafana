@@ -14,7 +14,8 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 ## Confirmed behavior
 
 - Prometheus collects every **60 seconds** and forwards metrics to VictoriaMetrics.
-- Grafana uses the **VictoriaMetrics data source plugin**.
+- Choose a datasource and configure one or more queries in Grafana's normal panel query editor. VictoriaMetrics is the current deployment, not a hardcoded dependency.
+- Queries return the required routers/channels; each traffic element selects from those results. No per-element queries are issued.
 - Each diagram traffic display selects `instance` and `ifName`, using fixed values or dashboard variables.
 - Put `ifName`, `ifAlias`, `ifDescr`, status and capacity in an information block to the right of the graph. Router fields stay hidden by default.
 - Source metric/label mappings and individual identity-field visibility are configurable.
@@ -66,7 +67,7 @@ the existing [traffic wireframe](docs/assets/scalable-wireframe.html) remains th
 See [diagram workflow](docs/diagram-panel-concept.md) and [architecture](docs/architecture.md).
 The [Canvas investigation](docs/implementation-investigation.md) explains why this route was selected.
 
-Representative exported series/labels and the installed VictoriaMetrics plugin version remain to be inspected.
+Representative returned frames and labels remain to be inspected, with VictoriaMetrics as the first integration example.
 No software license has been selected (`UNLICENSED` for now). The provisional plugin ID is
 `urrizzz-interfacemap-panel`; a Grafana Cloud account is not required for local development.
 Confirm the organization prefix before signing or publishing. Live traffic implementation remains pending.

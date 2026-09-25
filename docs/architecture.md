@@ -31,22 +31,33 @@ in the editor. Duplicating a dashboard panel must preserve its layout and isolat
 
 ## Query ownership
 
-Prometheus collects every 60 seconds and forwards to VictoriaMetrics. Use the existing Grafana
-VictoriaMetrics data-source plugin and its authentication path; do not collect SNMP or embed credentials.
-A panel-level query coordinator is proposed to generate requests from router/interface settings, using
-supported Grafana APIs. Verify those APIs and the actual data-source plugin version in an integration spike.
-Users configure selectors and mappings, without maintaining query expressions or rendering scripts.
+The plugin is a datasource-independent visualization. The author chooses a datasource in Grafana's normal
+panel query editor and configures one or more queries returning all required routers/channels. Grafana
+executes the queries, resolves query variables, handles authentication and cancellation, and delivers
+PanelData frames on the dashboard time range and refresh lifecycle. The plugin consumes those results;
+it does not generate datasource-specific queries, run per-element requests, or own a polling timer.
+This supersedes the earlier VictoriaMetrics-specific query coordinator proposal.
 
-Resolve fixed values/dashboard variables, uniquely identify each channel, and key results by element and
-resolved source identity. Deduplicate identical requests when useful, cancel obsolete work, ignore late
-responses, and clean up on removal/unmount. Router selection changes must refresh its dependent traffic
-without displaying the previous router's data. Follow dashboard time range, time zone, and refresh.
+VictoriaMetrics is the owner's current backend, with Prometheus collecting IF-MIB every 60 seconds.
+Other datasources can be used when queries return the documented fields, labels, units and timestamps.
+Backend query syntax and counter-rate calculation belong to query configuration, not the renderer.
 
-Keep five-minute traffic history, range-end current rates, status history, and metadata/capacity logically
-separate. Query status at collection resolution to identify time-localized DOWN intervals. The native
-120-pixel graph width must not limit requests to 120 samples: validate 300-second traffic spacing and
-60-second status spacing independently of panel width. Preserve unknown gaps and valid traffic history.
-Production metadata shape, joins, freshness, and VictoriaMetrics rate/reset semantics still need validation.
+A frame adapter maps query reference IDs/fields/labels into logical roles, then indexes the union of
+returned router/channel identities. Router and channel pickers use that index; channel choices are scoped
+to the selected router. Default identity labels are instance and ifName, both configurable. Preserve any
+additional identity keys needed to distinguish sites/jobs. Resolve optional single-valued element variables
+against the returned data; selecting another element/channel filters results without fetching data.
+
+Store selections, mappings and layout with panel options, and datasource/query definitions through normal
+Grafana dashboard configuration. A selected channel absent from the results remains in place as UNKNOWN
+with no-data indication and current dashes. Do not substitute another channel. Clear history from an old
+selection; any retained same-channel history must be visibly stale and scoped to the current range.
+
+Map five-minute IN/OUT rates (already in bit/s), range-end rates, timestamped operational status and
+capacity/metadata separately. Query configuration must preserve five-minute traffic and collection-resolution
+status history regardless of graph width. If returned data is too coarse, lacks required roles, or does not
+support freshness evidence, report the limitation rather than inventing samples or valid current values.
+Validate the contract against VictoriaMetrics and datasource-independent frame fixtures.
 
 ## Implementation boundaries
 
@@ -55,7 +66,7 @@ Production metadata shape, joins, freshness, and VictoriaMetrics rate/reset sema
 | Panel entry | Standard PanelPlugin registration and Grafana lifecycle |
 | Diagram editor | Router/traffic configuration, free placement, resize, connections, edit/view mode |
 | Saved options | Versioned schema, stable IDs, validation, dashboard persistence |
-| Query coordinator | Data-source requests, variables, refresh, cancellation, per-element isolation |
+| Frame adapter and channel index | Consume PanelData, map roles/identity, discover returned routers/channels and isolate element selections |
 | Normalization | Rates, metadata, capacity, freshness, errors, historical DOWN intervals |
 | Traffic renderer | SVG bars/axes, current values, status border, right-hand information, hover |
 

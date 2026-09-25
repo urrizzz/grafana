@@ -10,7 +10,10 @@
 | License | No project license selected; package marked UNLICENSED and private to prevent npm publication |
 | Repository structure | Standard root panel scaffold, .config tooling, src, tests, provisioning, dev mocks and preserved docs/assets |
 | Target | Grafana 13.2.2 |
-| Data path | Prometheus collects, forwards to VictoriaMetrics; Grafana uses the VictoriaMetrics data-source plugin |
+| Data path | Current deployment: Prometheus to VictoriaMetrics; visualization accepts compatible results from any Grafana datasource |
+| Query ownership | Datasource and one or more queries configured at diagram-panel level in Grafana; queries return all needed routers/channels; no plugin-generated or per-element requests |
+| Channel discovery | Each traffic element selects from returned routers/channels, with configurable identity mappings defaulting to instance/ifName |
+| Missing selection | Keep the element and saved identity; show UNKNOWN/no data and current dashes; never substitute another channel |
 | Collection | Every 60 seconds |
 | Rates | Five-minute average bit/s for bars and central numbers, with automatic decimal units |
 | Capacity | ifHighSpeed, displayed in the right-hand information block |
@@ -39,7 +42,8 @@
 | Design reference | Diagram mockup accepted for layout/editor workflow; original interactive wireframe accepted for component visuals; source and screenshots tracked in Git; see [design-reference.md](design-reference.md) |
 | Repository | GitHub repository urrizzz/grafana; owner authorized committing and pushing these updates |
 
-These decisions supersede the earlier built-in Canvas placement requirement, Prometheus Grafana data source,
+These decisions supersede the earlier VictoriaMetrics-specific query coordinator and no-manual-query proposal,
+built-in Canvas placement requirement, fixed Grafana datasource choice,
 hidden history while DOWN/UNKNOWN, ifDescr-only heading, capacity overrides/fallbacks. The later hover requirement supersedes the earlier no-tooltip decision.
 
 ## Proposed engineering defaults, not confirmed requirements
@@ -65,8 +69,8 @@ Very small text may become difficult to read, but shrinking must preserve compos
 
 2. **Exported data shape:** inspect full labels and channel metadata for one port and one tunnel; names alone
    do not establish whether metadata is stored as labels or separate series, or how joins remain unique.
-3. **Data-source contract:** identify VictoriaMetrics plugin version and prove queries, time steps, rate semantics,
-   dashboard events, and per-element isolation.
+3. **Returned-data contract:** prove configurable frame/label mappings, channel discovery and element isolation
+   with generic fixtures, then validate query steps/rates/freshness using the current VictoriaMetrics datasource.
 4. **Publication:** local unsigned packaging is available. Confirm the provisional ID against a future
    Grafana Cloud organization, choose a license, and decide signing/delivery before public release.
 

@@ -86,7 +86,8 @@ Example query:
 
 Tests cover byte/bit conversion, counter growth, DOWN history, missing fields, reset/gap behavior, and
 history/live consistency. The exporter alone is not a query backend: Grafana still needs a running
-VictoriaMetrics instance and its data-source plugin. Live custom diagram panel integration remains to be implemented and validated.
+query backend and its Grafana datasource. VictoriaMetrics is the current example; configure panel-level
+queries for all desired mock routers/channels, then select them in the diagram. Live custom diagram panel integration remains to be implemented and validated.
 
 The initial development run was started in a hidden process. Its PID is recorded in
 `data/mock-exporter.pid`; stdout/stderr logs are in the same ignored directory. Verify the PID still

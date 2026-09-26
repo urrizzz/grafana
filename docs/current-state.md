@@ -2,9 +2,10 @@
 
 Updated 2026-09-25. Plugin **0.3.8**, Grafana **13.2.2**, provisional ID **urrizzz-interfacemap-panel**.
 Accepted M3 implementation baseline: `a26210c` on `main`; cloned handoff revision `9973e41`.
-Publication: implementation, requirements and both-PC setup are committed locally in `a26210c`.
-Push to origin/main is awaiting GitHub authentication for the repository's configured `urrizzz` account;
-remote publication is not yet verified.
+Publication: implementation, requirements and both-PC setup in `a26210c` were pushed to origin/main
+using the configured `urrizzz` account. Remote main was verified at `ff03e3e`, which includes that
+implementation and its state update. This documentation follow-up records the successful publication.
+Remote CI and a signed plugin release remain unverified.
 Start with [agent handoff](agent-handoff.md), then [implementation plan](implementation-plan.md).
 The [historical log](development-history.md) preserves previous work and failure investigations.
 

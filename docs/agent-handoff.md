@@ -1,6 +1,7 @@
 # Agent handoff
 
-Updated 2026-09-25 for plugin 0.3.8; M3 owner acceptance and both-PC setup accompany this handoff atop `9973e41`.
+Updated 2026-09-25 for plugin 0.3.8; accepted M3 implementation and both-PC setup were pushed in `a26210c`.
+See [current state](current-state.md) for publication verification and remaining validation limits.
 Read repository AGENTS.md, [current state](current-state.md), [plan](implementation-plan.md), then
 [product spec](product-spec.md) and [metrics contract](metrics-contract.md). This file is the startup guide,
 not a competing requirements source. M3 is owner-accepted; M4 is the next implementation milestone.

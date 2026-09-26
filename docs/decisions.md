@@ -134,3 +134,30 @@ blocks, with the channel name centered above the unchanged graph footprint and t
 top-right. Preserve explicitly saved detail choices. Red outage segments retain their real timestamps;
 use stronger thickness for visibility and report observed outage start/end times on hover. This supersedes
 earlier default-on detail and visible current-window-caption decisions.
+
+## Selection handles and both development PCs (2026-09-25; hover visibility superseded below)
+
+Owner requested matching handle placement and selection-only visibility. Move is above/right and resize
+below/right, in one column with equal two-pixel vertical clearance. Both appear only on the selected
+router/traffic element in the panel editor; body clicks select and background clicks deselect.
+Both Owner and Yuri PCs remain supported via the documented machine profiles and shared deployment
+scripts. Preserve the Yuri PC EFS rules and legacy container database; no automatic recreation/migration.
+
+## Hover discoverability (2026-09-25; handle visibility superseded below)
+
+Owner accepted a subtle outline on hover in edit mode. Keep move/resize controls selection-only,
+persist selection after pointer leave, and keep dashboard view free of editing hover outlines.
+
+## Hover handle clarification (2026-09-25)
+
+Owner clarified that the hover hint must include subtle move/resize buttons, not only an outline.
+Use 50% opacity on unselected hovered elements and full opacity on selection. Both hover buttons can
+be dragged directly, selecting the element. This supersedes selection-only handle visibility.
+
+## M3 owner acceptance (2026-09-25)
+
+Owner explicitly accepted M3 at 0.3.8 and authorized reconciling all requirements/current state and pushing
+the accumulated code and documentation. The final interaction is faint (50%) controls on hover, full
+controls on selection, direct dragging from either hover control, and mirrored move/resize placement.
+Both development PCs remain supported with their own tool paths and storage constraints. M4 query
+presets/lifecycle is next; M5 real-backend/performance and M6 distribution remain uncompleted.

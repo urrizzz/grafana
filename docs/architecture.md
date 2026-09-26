@@ -99,4 +99,5 @@ src/data/model.ts and adapter.ts provide query-role mappings, composite router/c
 normalization and diagnostics. InterfaceMapPanel consumes this index for dependent pickers and a
 current-value preview. Grafana panel option editors configure mappings; legacy layouts remain schema 1.
 See m2-validation.md for supported labelled-series/table shapes, exact timestamp requirements, variable
-constraints and ambiguity handling. The SVG traffic renderer and hidden-details variant remain M3 work.
+constraints and ambiguity handling. The SVG traffic renderer, optional details and hover/selection handles are implemented and owner-accepted
+in M3 (0.3.8). M4 presets/lifecycle and M5 backend/performance evidence remain outstanding.

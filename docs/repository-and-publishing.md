@@ -1,6 +1,6 @@
 # Repository reference and publishing plan
 
-Researched 2026-09-25. The root panel scaffold now exists; the M1-M3 editor, adapter and renderer are implemented and locally tested; real backend validation and publication remain pending.
+Researched 2026-09-25. The root panel scaffold now exists; the M1-M3 editor, adapter and renderer are implemented, locally tested and owner-accepted; real backend validation and publication remain pending.
 
 ## Inspected references
 
@@ -59,8 +59,8 @@ The original documentation, mockups, mock metrics and Git history are preserved.
 of source control. Put downloadable plugin ZIPs in GitHub Releases rather than committing them to main.
 
 CI runs npm ci, type checking, lint, meaningful unit tests, a production build, and browser checks
-against Grafana 13.2.2. The current browser check verifies scaffold loading only. Extend it with connection routing, saved layout
-reload, native 120x70 rendering, and real VictoriaMetrics queries as those features are implemented. Use one browser worker locally and keep existing WSL memory limits.
+against Grafana 13.2.2. Browser coverage includes loading, editor/routing, saved layouts, compact rendering and synthetic data.
+Real VictoriaMetrics query validation remains M5 work. Use one browser worker locally and keep existing WSL memory limits.
 
 ## Two publishing destinations
 
@@ -109,4 +109,5 @@ The signature root URLs must match the installation configuration. See the same 
 - Decide whether first deployment is private/internal or a public Community catalog submission.
 
 Our Grafana remains unmodified; installation still requires permission to install a plugin. The custom
-diagram editor and datasource-independent frame integration must be implemented before publishing a usable release.
+diagram editor, datasource-independent adapter and renderer are implemented. M4-M5 validation and the
+identity/license/distribution decisions remain prerequisites to a release.

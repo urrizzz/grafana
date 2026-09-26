@@ -8,7 +8,8 @@ returned router/channel; alias and description come from data. Back > Save persi
 
 M3 adds mirrored bars, shared axes, status borders, hover values and per-block Show interface details.
 Compact mode defaults to a centered channel/status heading above the graph. Corner status circles remain in both modes.
-Move routers/traffic by their four-way handles; selected elements have diagonal resize handles. Router sizes persist. Query presets remain M4 work. The local M2 dashboard uses synthetic TestData frames, not
+Hover a router/traffic body to reveal faint move and resize handles; select it for full-opacity handles. The matching buttons
+sit above/right and below/right; clicking the background hides them. Router sizes persist. Query presets remain M4 work. The local M2 dashboard uses synthetic TestData frames, not
 production traffic. No custom per-element requests or Grafana backend plugin are used.
 
 Source, requirements and validation guides: https://github.com/urrizzz/grafana

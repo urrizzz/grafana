@@ -8,7 +8,7 @@ selection are intentionally absent until M2/M3. Fixture identity fields are edit
 
 ## Open the editor
 
-Start the development server with `npm run server` after `npm run build` and open
+Start the development server with `dev/Start-Review.ps1` (see [both PC profiles](development-pcs.md)) and open
 [Network Traffic Map development](http://localhost:3001/d/interface-map-dev). Open the panel's three-dot menu and choose **Edit**. Layout controls appear automatically. Choose **Load fixture layout** on an empty diagram.
 The fixture contains two routers, one traffic placeholder and a connection. Alternatively add each element
 using the toolbar. The provisioned dashboard allows UI updates; normal Grafana dashboard Save persists them.
@@ -53,9 +53,9 @@ Traffic shows UNKNOWN and dashes because no metrics are connected. No bars or hi
 in M1. Fixture names do not query any router. Deleting all routers offers the fixture button again; it never
 replaces a nonempty diagram. Unsupported/malformed saved options show an error rather than overwrite data.
 
-Save a wanted dashboard externally before removing the disposable development container (`npm run server:stop`);
-its database is not a durable deployment. Normal browser reload and server restart are different checks from
-recreating the container. The existing Grafana on port 3000 is separate.
+Export wanted dashboards before changing provisioning. The current PC uses a named Docker volume for
+the database; never delete it or use `compose down -v`. Normal browser reload and server restart are
+different checks from recreating the container. The development service uses loopback port 3001.
 
 Report the checklist item, expected/actual behavior and whether it occurred before or after save/reload.
 User validation is pending until the owner reports the result; automated checks are recorded in current-state.md.

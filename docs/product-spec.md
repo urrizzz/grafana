@@ -2,7 +2,7 @@
 
 Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
 M2 consumes returned query data for router/channel selection, automatic metadata and current-value previews.
-M3 traffic bars, hover and Show interface details are implemented locally; owner review remains pending.
+M3 traffic bars, hover, Show interface details and editor refinements are implemented and owner-accepted in 0.3.8.
 See [current state](current-state.md) for verification and [M3 validation](m3-validation.md) for review.
 
 ## Placement and selection
@@ -257,7 +257,7 @@ compact-only corner-indicator wording. Verify both indicators and movement at di
 
 ### Consistent movement (2026-09-25)
 
-In panel edit mode, routers and traffic blocks use the same four-way arrow handle above the top-right
+In panel edit mode, hovered or selected routers and traffic blocks show their four-way arrow handle above the top-right
 edge of the router/graph, in both compact and full modes. Click a body to select; drag only its handle.
 Body/label/graph gestures must not move elements. View mode has no handles. Connections automatically
 follow their routers rather than being independently draggable. Validate both element types at all zooms.
@@ -269,8 +269,15 @@ Keep actionable missing-data/quality warnings and the editor Data quality diagno
 ### Router sizing and resize handles (2026-09-25)
 
 Selected routers and traffic blocks expose a 22 px diagonal-arrow resize button styled like the move
-button, beside the bottom-right corner of the router/graph. Router width and height resize independently
+button, below/right of the router/graph, in the same column as the move button with a matching two-pixel vertical gap. Router width and height resize independently
 within 120-600 x 48-320 px. Old layouts default to 150 x 64; optional dimensions persist with Save,
 reload and duplication. Top-left position stays fixed. Connections and diagram bounds use current router
-sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Handles are edit-mode only.
+sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Both handles appear faintly on hover and at full opacity on the selected element in edit mode. Click the body to select; click the background to clear selection.
 Validate router resizing at different zooms, live connector attachment and Save/reload.
+
+### Hover selection hint (2026-09-25)
+
+In the panel editor, hovering an unselected router or traffic block shows a subtle solid outline and both handles at 50% opacity.
+Hover does not select. Dragging either faint handle selects the element and performs the operation. Clicking selects and keeps both move/resize handles visible
+until another element is selected or the background is clicked. Selected elements retain the stronger
+dashed outline; dashboard viewing and grid editing show no hover selection outline.

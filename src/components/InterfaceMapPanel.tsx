@@ -116,6 +116,39 @@ const styles = css`
     outline: 1px dashed #77adff;
     outline-offset: 5px;
   }
+  .world[data-editing='true'] .node:not(.selected):hover {
+    outline: 1px solid #70839a80;
+    outline-offset: 5px;
+  }
+  .node .grip,
+  .node .resize {
+    z-index: 1;
+  }
+  .node:not(.selected) .grip,
+  .node:not(.selected) .resize {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .node:not(.selected):hover .grip,
+  .node:not(.selected):hover .resize {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  /* Bridge the gap to the external buttons without covering the graph itself. */
+  .world[data-editing='true'] .node:not(.selected):hover::before,
+  .world[data-editing='true'] .node:not(.selected):hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: calc(100% + 28px);
+    height: 26px;
+  }
+  .world[data-editing='true'] .node:not(.selected):hover::before {
+    top: -26px;
+  }
+  .world[data-editing='true'] .node:not(.selected):hover::after {
+    bottom: -26px;
+  }
   .router {
     width: 150px;
     height: 64px;
@@ -350,8 +383,9 @@ function DiagramEditor({
       aria-label={`Move ${label}`}
       title="Move element"
       style={{
-        top: -24,
-        left: width + 4,
+        // Router absolute coordinates start inside its one-pixel border.
+        top: 'ifName' in node ? -24 : -25,
+        left: width + ('ifName' in node ? 4 : 3),
         width: 22,
         height: 22,
         padding: 2,
@@ -384,8 +418,8 @@ function DiagramEditor({
       aria-label={`Resize ${kind}`}
       title="Resize element"
       style={{
-        left: width + 4,
-        top: height - 22,
+        left: width + ('ifName' in node ? 4 : 3),
+        top: height + ('ifName' in node ? 2 : 1),
         right: 'auto',
         bottom: 'auto',
         width: 22,
@@ -597,8 +631,14 @@ function DiagramEditor({
           <div style={{ width: worldWidth * zoom, height: worldHeight * zoom }}>
             <div
               className="world"
+              data-editing={editing}
               data-testid="diagram-world"
               style={{ width: worldWidth, height: worldHeight, transform: `scale(${zoom})` }}
+              onClick={(event) => {
+                if (editing && !(event.target as Element).closest('.node')) {
+                  selectElement('');
+                }
+              }}
               onPointerMove={move}
               onPointerUp={end}
               onPointerCancel={() => {
@@ -656,7 +696,7 @@ function DiagramEditor({
                   {editing && moveHandle(r, r.width ?? 150, r.name)}
                   <strong title={r.name}>{r.name}</strong>
                   <span className="muted">{r.instance || 'Instance not set'}</span>
-                  {editing && selected === r.id && resizeHandle(r, r.width ?? 150, r.height ?? 64, 'router')}
+                  {editing && resizeHandle(r, r.width ?? 150, r.height ?? 64, 'router')}
                 </div>
               ))}
               {diagram.traffic.map((t) => {
@@ -718,7 +758,7 @@ function DiagramEditor({
                         )}
                       </div>
                     )}
-                    {editing && selected === t.id && resizeHandle(t, t.width, (t.width * 70) / 120, 'traffic')}
+                    {editing && resizeHandle(t, t.width, (t.width * 70) / 120, 'traffic')}
                   </div>
                 );
               })}

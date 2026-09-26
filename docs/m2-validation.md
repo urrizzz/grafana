@@ -12,7 +12,7 @@ fixture timestamps will deliberately produce missing-current/stale diagnostics. 
 1. The data summary reports **2 routers / 4 channels**. CORE-01 Tunnel10 shows Primary WAN and UP;
    BRANCH-01 Tunnel10 shows Backup WAN and DOWN with current dashes. Capacity comes from returned data.
 2. Open panel menu > Edit. Select CORE-01: Router instance lists the two returned router identities.
-3. Select its traffic using the Move handle. Channel offers Tunnel10 and GigabitEthernet0/1; Tunnel99
+3. Select its traffic by clicking the graph. Channel offers Tunnel10 and GigabitEthernet0/1; Tunnel99
    belongs to BRANCH-01 and must not appear as a returned CORE-01 channel.
 4. Select GigabitEthernet0/1. Side metadata changes to Uplink / Physical uplink and capacity to 1 Gbit/s.
    No manual alias/description fields are present.

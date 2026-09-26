@@ -2,20 +2,21 @@
 
 Project status: the M1 layout editor is implemented under provisional ID `urrizzz-interfacemap-panel`.
 M2 consumes returned query data for router/channel selection, automatic metadata and current-value previews.
-Final traffic bars, hover and Show interface details remain M3/M4 work.
+Traffic bars, hover, Show interface details and editor refinements are implemented and owner-accepted
+in M3 (0.3.8). The HTML below remains a design reference with fictional data.
 See [current state](current-state.md) for verification and [M1 validation](m1-validation.md) for review.
 
 Open [the interactive mockup](assets/diagram-panel-mockup.html) in a browser.
 The owner approved this custom diagram approach. It supersedes the original built-in Canvas host
 requirement and complements the [accepted traffic component reference](design-reference.md).
 
-The agreed approach is one installable Grafana panel providing its own free-placement diagram. It would contain router
+The agreed approach is one installable Grafana panel providing its own free-placement diagram. It contains router
 representations and multiple compact traffic displays without modifying Grafana core. It is not an extension
-inside Grafana's built-in Canvas. No plugin code, live backend, or Grafana installation change is included here.
+inside Grafana's built-in Canvas. The HTML reference itself contains no live backend or Grafana integration; the actual plugin is in src/.
 
 ## Try it
 
-- Drag a router card or the grip above a traffic element; the background grid is visual, not a placement constraint.
+- Hover a router/traffic element for faint move and resize buttons; select for full opacity. Drag its move button; the background grid is visual, not a placement constraint.
 - Select an element to edit its name and settings on the right.
 - Resize a traffic plot with its selected corner handle or width slider (120-240 pixels).
 - Change the mock status to compare UP, DOWN and UNKNOWN. Hover a graph to inspect a five-minute interval.
@@ -30,7 +31,7 @@ from static SVG geometry only in this mockup; the implementation must use normal
 
 The implemented plugin must save options and positions with the Grafana dashboard rather than browser storage.
 Connections here are simple router-to-router lines with configured endpoints, not a full network editor.
-The current scope is a visual/interaction mockup, not a promise of all Canvas features.
+This reference is a visual/interaction mockup, not a promise of all Canvas features.
 
 The original component wireframe remains the accepted component reference. Both mockups now share the
 status-colored graph border: green UP, red DOWN, gray UNKNOWN. The border reflects current status;

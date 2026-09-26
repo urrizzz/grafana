@@ -2,6 +2,7 @@ name: interface-map-dev
 services:
   grafana:
     image: grafana/grafana-enterprise:13.2.2
+    restart: unless-stopped
     ports:
       - '127.0.0.1:3001:3000'
     environment:
@@ -15,6 +16,7 @@ services:
       GF_ANALYTICS_REPORTING_ENABLED: 'false'
       GF_ANALYTICS_CHECK_FOR_UPDATES: 'false'
     volumes:
+      - grafana-data:/var/lib/grafana
       - ./dist:/var/lib/grafana/plugins/urrizzz-interfacemap-panel:ro
       - ./provisioning:/etc/grafana/provisioning:ro
     mem_limit: 1g
@@ -24,3 +26,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 24
+
+volumes:
+  grafana-data:

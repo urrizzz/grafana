@@ -48,7 +48,7 @@ a committed CI workflow is not evidence that a remote CI run passed.
 
 ## M1 - Diagram model and editor
 
-Implementation and owner validation are complete, including zoom and warning refinements. M2 is owner-accepted; M3 implementation is awaiting owner validation. See [current state](current-state.md) for verification and
+Implementation and owner validation are complete, including zoom and warning refinements. M2 is owner-accepted; M3 is owner-accepted in 0.3.8. See [current state](current-state.md) for verification and
 [M1 validation](m1-validation.md) for the owner checklist; do not infer full traffic support from this milestone.
 
 1. Extend src/types.ts with versioned router, traffic and connection records, stable IDs, geometry and mappings.
@@ -91,8 +91,8 @@ query examples belong in documentation/provisioning, not the adapter implementat
 
 ## M3 - Compact traffic rendering
 
-Implemented locally in 0.3.5; owner validation pending. Follow [M3 validation](m3-validation.md) and
-[current state](current-state.md) for actual verification evidence. M4 query presets are the next implementation step after acceptance.
+Implemented and owner-accepted in 0.3.8 on 2026-09-25. Follow [M3 validation](m3-validation.md) and
+[current state](current-state.md) for actual verification evidence. M4 query presets are the next implementation step.
 
 1. Implement the plot and right-hand information block using the normalized model, independently of datasource code.
 2. Render blue IN above and purple OUT below zero, a shared symmetric scale, decimal units and readable
@@ -130,7 +130,7 @@ adapter mappings with standard defaults; provide preview and explicit apply/rege
 query edits and explain unsupported preset datasource formats. The visualization adapter stays generic.
 Test escaping, aliases, variable filters, historical range end, query persistence and duplicated-panel
 independence. Actual VictoriaMetrics rate/quality semantics remain M5 verification. This setup feature
-is not part of the implemented M2 adapter. Begin it after final M3 owner acceptance.
+is not part of the implemented M2 adapter. M3 owner acceptance is recorded; this is the next implementation deliverable.
 
 ## M5 - Real backend, performance and acceptance audit
 
@@ -183,7 +183,7 @@ compact-only corner-indicator wording. Verify both indicators and movement at di
 
 ### Consistent movement (2026-09-25)
 
-In panel edit mode, routers and traffic blocks use the same four-way arrow handle above the top-right
+In panel edit mode, hovered or selected routers and traffic blocks show their four-way arrow handle above the top-right
 edge of the router/graph, in both compact and full modes. Click a body to select; drag only its handle.
 Body/label/graph gestures must not move elements. View mode has no handles. Connections automatically
 follow their routers rather than being independently draggable. Validate both element types at all zooms.
@@ -192,8 +192,22 @@ This supersedes earlier whole-router dragging and mode-specific handle placement
 ### Router sizing and resize handles (2026-09-25)
 
 Selected routers and traffic blocks expose a 22 px diagonal-arrow resize button styled like the move
-button, beside the bottom-right corner of the router/graph. Router width and height resize independently
+button, below/right of the router/graph, in the same column as the move button with a matching two-pixel vertical gap. Router width and height resize independently
 within 120-600 x 48-320 px. Old layouts default to 150 x 64; optional dimensions persist with Save,
 reload and duplication. Top-left position stays fixed. Connections and diagram bounds use current router
-sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Handles are edit-mode only.
+sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Both handles appear faintly on hover and at full opacity on the selected element in edit mode. Click the body to select; click the background to clear selection.
 Validate router resizing at different zooms, live connector attachment and Save/reload.
+
+### Two-PC setup and deployment (2026-09-25)
+
+Keep both Owner and Yuri development profiles supported in dev/Use-DevTools.ps1 and
+dev/Start-Review.ps1. Use the same Grafana 13.2.2 image and committed mock fixtures. Restart existing
+containers without recreation, particularly the Yuri PC legacy database. See development-pcs.md for
+EFS rules, installation, deployment, backups and verification limits. This does not start M4.
+
+### Hover selection hint (2026-09-25)
+
+In the panel editor, hovering an unselected router or traffic block shows a subtle solid outline and both handles at 50% opacity.
+Hover does not select. Dragging either faint handle selects the element and performs the operation. Clicking selects and keeps both move/resize handles visible
+until another element is selected or the background is clicked. Selected elements retain the stronger
+dashed outline; dashboard viewing and grid editing show no hover selection outline.

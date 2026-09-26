@@ -1,10 +1,10 @@
 # Acceptance criteria
 
-Project status: 0.3.5 implements the diagram editor, returned-data adapter and compact SVG renderer.
+Project status: 0.3.8 implements the diagram editor, returned-data adapter and compact SVG renderer.
 See [current state](current-state.md) for evidence and remaining work, and [M3 validation](m3-validation.md) for review.
 
-These are product acceptance criteria, not a blanket claim that all checks have passed. M1/M2 are owner-accepted;
-M3 final review, real backend/performance validation and distribution remain outstanding.
+These are product acceptance criteria, not a blanket claim that all checks have passed. M1/M2/M3 are owner-accepted. M4 setup/lifecycle work, real backend/performance validation and distribution
+remain outstanding. M3 approval does not assert that every product criterion has been verified.
 
 | ID | Scenario | Expected result |
 | --- | --- | --- |
@@ -115,7 +115,7 @@ compact-only corner-indicator wording. Verify both indicators and movement at di
 
 ### Consistent movement (2026-09-25)
 
-In panel edit mode, routers and traffic blocks use the same four-way arrow handle above the top-right
+In panel edit mode, hovered or selected routers and traffic blocks show their four-way arrow handle above the top-right
 edge of the router/graph, in both compact and full modes. Click a body to select; drag only its handle.
 Body/label/graph gestures must not move elements. View mode has no handles. Connections automatically
 follow their routers rather than being independently draggable. Validate both element types at all zooms.
@@ -124,8 +124,15 @@ This supersedes earlier whole-router dragging and mode-specific handle placement
 ### Router sizing and resize handles (2026-09-25)
 
 Selected routers and traffic blocks expose a 22 px diagonal-arrow resize button styled like the move
-button, beside the bottom-right corner of the router/graph. Router width and height resize independently
+button, below/right of the router/graph, in the same column as the move button with a matching two-pixel vertical gap. Router width and height resize independently
 within 120-600 x 48-320 px. Old layouts default to 150 x 64; optional dimensions persist with Save,
 reload and duplication. Top-left position stays fixed. Connections and diagram bounds use current router
-sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Handles are edit-mode only.
+sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Both handles appear faintly on hover and at full opacity on the selected element in edit mode. Click the body to select; click the background to clear selection.
 Validate router resizing at different zooms, live connector attachment and Save/reload.
+
+### Hover selection hint (2026-09-25)
+
+In the panel editor, hovering an unselected router or traffic block shows a subtle solid outline and both handles at 50% opacity.
+Hover does not select. Dragging either faint handle selects the element and performs the operation. Clicking selects and keeps both move/resize handles visible
+until another element is selected or the background is clicked. Selected elements retain the stronger
+dashed outline; dashboard viewing and grid editing show no hover selection outline.

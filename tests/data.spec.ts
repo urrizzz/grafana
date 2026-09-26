@@ -40,8 +40,8 @@ test('returned router/channel selection, automatic metadata, missing data and pe
   await panel.getByRole('combobox', { name: 'Router instance', exact: true }).click();
   await expect(page.getByRole('option', { name: '192.0.2.21', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
-  // Select by the traffic movement handle; duplicate channel names are valid across routers.
-  await panel.getByTestId('traffic-t1').getByRole('button', { name: 'Move Tunnel10', exact: true }).click();
+  // Select through the body; duplicate channel names are valid across routers.
+  await panel.getByTestId('traffic-t1').getByTestId('bandwidth-plot').click();
   await expect(panel.getByLabel('Alias', { exact: true })).toHaveCount(0);
   await expect(panel.getByLabel('Description', { exact: true })).toHaveCount(0);
   await panel.getByRole('combobox', { name: 'Channel', exact: true }).click();

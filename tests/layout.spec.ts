@@ -77,6 +77,7 @@ test('edit layout, route connections, resize and protect references', async ({ p
 });
 
 test('pointer movement respects zoom, resize and view mode', async ({ page, request }) => {
+  test.setTimeout(60_000);
   await page.setViewportSize({ width: 1800, height: 1200 });
   const uid = 'interface-map-m1-pointer';
   await request.post('/api/dashboards/db', {
@@ -100,6 +101,8 @@ test('pointer movement respects zoom, resize and view mode', async ({ page, requ
         el.scrollLeft = 60 * scale;
       }, zoom);
       const node = panel.getByTestId(id);
+      const otherNodes = panel.locator('.node:not(.selected)');
+      await expect(otherNodes.locator('.grip:visible, .resize:visible')).toHaveCount(0);
       const box = (await node.boundingBox())!;
       await page.mouse.move(box.x + 30 * zoom, box.y + 20 * zoom);
       await page.mouse.down();
@@ -108,6 +111,11 @@ test('pointer movement respects zoom, resize and view mode', async ({ page, requ
       await expect(node).toHaveCSS('left', '400px');
       await expect(node).toHaveCSS('top', '100px');
       const handle = (await node.getByRole('button', { name: `Move ${label}`, exact: true }).boundingBox())!;
+      const resize = (await node.locator('.resize').boundingBox())!;
+      expect(resize.x).toBeCloseTo(handle.x, 0);
+      expect(resize.width).toBeCloseTo(handle.width, 0);
+      expect(resize.height).toBeCloseTo(handle.height, 0);
+      expect(box.y - (handle.y + handle.height)).toBeCloseTo(resize.y - (box.y + box.height), 0);
       await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
       await page.mouse.down();
       await page.mouse.move(handle.x + handle.width / 2 + 70 * zoom, handle.y + handle.height / 2 + 40 * zoom, {
@@ -126,6 +134,10 @@ test('pointer movement respects zoom, resize and view mode', async ({ page, requ
   await page.mouse.move(handle!.x + 65, handle!.y + 5, { steps: 6 });
   await page.mouse.up();
   await expect(panel.getByText('180 x 105 px graph')).toBeVisible();
+  await panel.getByTestId('diagram-world').click({ position: { x: 20, y: 20 } });
+  await expect(panel.locator('.node .grip:visible, .node .resize:visible')).toHaveCount(0);
+  await panel.getByTestId('router-r1').click({ position: { x: 20, y: 20 } });
+  await expect(panel.getByTestId('router-r1').locator('.grip, .resize')).toHaveCount(2);
   await page.getByRole('button', { name: 'Back', exact: true }).click();
   const box = await panel.getByTestId('router-r2').boundingBox();
   await page.mouse.move(box!.x + 20, box!.y + 20);

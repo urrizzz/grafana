@@ -1,8 +1,11 @@
 # M3 compact traffic validation
 
-Running version: 0.3.5 on Grafana 13.2.2, port 3001. Owner validation pending.
+Running version: 0.3.8 on Grafana 13.2.2, port 3001. Owner accepted M3 on 2026-09-25.
+The current PC uses `C:\code\grafana` and Docker Desktop. Open the dashboard below without a login.
+It was restored from the committed mock fixture; custom layouts saved only on the previous PC were not transferred.
+Keep the fixed 2026-09-25 00:00-12:00 UTC range. Current dates/Last 12 hours will not match these historical fixtures.
 Open your [existing data dashboard](http://localhost:3001/d/network-map-data-dev) and reload the page.
-Its saved layout, queries and selections are preserved. Keep the fixed fixture time range and the
+Subsequent saved layouts, queries and selections persist in the named Docker volume. Keep the fixed fixture time range and the
 Network Map Mock Frames datasource; switching datasources can replace queries (see M2 guide).
 For a repeatable UP/DOWN comparison, the browser tests also create
 [M3 graph checks](http://localhost:3001/d/network-map-m3-render-check) independently of your dashboard.
@@ -14,7 +17,7 @@ For a repeatable UP/DOWN comparison, the browser tests also create
 3. DOWN has a red border and current dashes but retains bars; red center segments cover only known
    historical outages (hover an outage to see its start/end times). UNKNOWN has a gray border, dashes and retained available history.
 4. Compact mode is the default: the channel name, colored circle and status are centered above the graph, with no tiny 5m caption.
-   Panel menu > Edit, select traffic by its Move handle. Enable then disable Show interface details: the side block
+   Panel menu > Edit, select traffic by clicking its graph. Enable then disable Show interface details: the side block
    and its space disappear; the status circle remains inside the graph's top-right in both modes. Graph size and location
    stay fixed. Restore details and verify the selected Visible details fields are remembered.
 5. Try 180 and 240 px widths. Hover remains readable and accurate after resizing or zooming. Return to
@@ -24,7 +27,7 @@ For a repeatable UP/DOWN comparison, the browser tests also create
 7. Check light/dark themes and your longest channel descriptions. Side text should wrap without entering
    the graph; the status circle must not overlap central values in compact mode.
 
-Report failures by number. These checks accept M3 visuals only; configuration-first IF-MIB query presets
+This checklist is retained for regression review after M3 acceptance; configuration-first IF-MIB query presets
 are planned for M4. Production VictoriaMetrics behavior and 10/50-element performance remain M5 work.
 The renderer consumes normalized bit/s rates; it does not query a datasource or calculate counter rates.
 Axis abbreviations b/k/M/G are bit/s, kbit/s, Mbit/s and Gbit/s. Empty/invalid values use --, not zero.
@@ -51,7 +54,7 @@ compact-only corner-indicator wording. Verify both indicators and movement at di
 
 ### Consistent movement (2026-09-25)
 
-In panel edit mode, routers and traffic blocks use the same four-way arrow handle above the top-right
+In panel edit mode, hovered or selected routers and traffic blocks show their four-way arrow handle above the top-right
 edge of the router/graph, in both compact and full modes. Click a body to select; drag only its handle.
 Body/label/graph gestures must not move elements. View mode has no handles. Connections automatically
 follow their routers rather than being independently draggable. Validate both element types at all zooms.
@@ -60,8 +63,23 @@ This supersedes earlier whole-router dragging and mode-specific handle placement
 ### Router sizing and resize handles (2026-09-25)
 
 Selected routers and traffic blocks expose a 22 px diagonal-arrow resize button styled like the move
-button, beside the bottom-right corner of the router/graph. Router width and height resize independently
+button, below/right of the router/graph, in the same column as the move button with a matching two-pixel vertical gap. Router width and height resize independently
 within 120-600 x 48-320 px. Old layouts default to 150 x 64; optional dimensions persist with Save,
 reload and duplication. Top-left position stays fixed. Connections and diagram bounds use current router
-sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Handles are edit-mode only.
+sizes. Traffic retains its proportional 120:70 shape and 120-360 px width. Both handles appear faintly on hover and at full opacity on the selected element in edit mode. Click the body to select; click the background to clear selection.
 Validate router resizing at different zooms, live connector attachment and Save/reload.
+
+### Hover selection hint (2026-09-25)
+
+In the panel editor, hovering an unselected router or traffic block shows a subtle solid outline and both handles at 50% opacity.
+Hover does not select. Dragging either faint handle selects the element and performs the operation. Clicking selects and keeps both move/resize handles visible
+until another element is selected or the background is clicked. Selected elements retain the stronger
+dashed outline; dashboard viewing and grid editing show no hover selection outline.
+
+## Owner acceptance (2026-09-25)
+
+The owner explicitly confirmed "m3 is done" after reviewing 0.3.8. M3 is complete, including the latest
+hover hint, faint move/resize controls, full-opacity selected controls and consistent corner placement.
+This records milestone acceptance, not an assertion that the owner independently repeated every checklist
+item. Automated evidence is recorded in current-state.md. M4 is next; real backend/performance and
+distribution evidence remain separate milestones.

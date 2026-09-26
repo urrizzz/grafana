@@ -1,33 +1,35 @@
 # Agent handoff
 
-Updated 2026-09-25 for plugin 0.3.5, implementation `48123ec` and the accompanying documentation commit.
+Updated 2026-09-25 for plugin 0.3.8; M3 owner acceptance and both-PC setup accompany this handoff atop `9973e41`.
 Read repository AGENTS.md, [current state](current-state.md), [plan](implementation-plan.md), then
 [product spec](product-spec.md) and [metrics contract](metrics-contract.md). This file is the startup guide,
-not a competing requirements source. M3 final owner acceptance remains pending; M4 is the next implementation milestone.
+not a competing requirements source. M3 is owner-accepted; M4 is the next implementation milestone.
 
 ## Workspace and tools
 
-Checkout: `C:\Codex\projects\grafana`, branch main, origin `https://github.com/urrizzz/grafana.git`.
-Files are EFS encrypted. Use supported approved execution as Yuri when sandbox access fails; verify
-`whoami` returns `DESKTOP-F40GD5I\Yuri` before access. Do not decrypt, export keys or stage plaintext copies.
-Docker-managed storage under `C:\Codex\docker-storage` is the authorized unencrypted exception.
+Current PC checkout: `C:\code\grafana`, branch main, origin `https://github.com/urrizzz/grafana.git`.
+Repository-local Git credentials select `urrizzz`. Both PCs remain supported; see
+[development PC profiles](development-pcs.md) for setup and deployment. The Yuri PC's EFS/account
+rules apply on that PC only. Use dev/Start-Review.ps1 to preserve its legacy container/database.
+Use the dedicated Node 24 installation below; the system Node 20 remains available to other projects.
 
 ```powershell
-$env:PATH='C:\Codex\tools\node;'+$env:PATH
-$env:PLAYWRIGHT_BROWSERS_PATH='C:\Codex\tools\playwright'
-& C:\Codex\tools\git\cmd\git.exe status --short
-& C:\Codex\tools\node\npm.cmd run check
-& C:\Codex\.venv\Scripts\python.exe -m unittest discover -s dev -p 'test_*.py'
-& C:\Codex\tools\node\npm.cmd run e2e
+Set-Location C:\code\grafana
+$env:PATH='C:\code\.tools\grafana\node-v24.21.0-win-x64;'+$env:PATH
+$env:PLAYWRIGHT_BROWSERS_PATH='C:\code\.tools\playwright'
+git status --short
+npm.cmd run check
+python -m unittest discover -s dev -p 'test_*.py'
+npm.cmd run e2e
 ```
 
 Commands assume the checkout working directory and installed dependencies. Run heavy commands sequentially;
 browser config already uses one worker. Do not reinstall the available browser unnecessarily.
-Build before loading Grafana. Use the existing Docker binary at
-`C:\Program Files\Docker\Docker\resources\bin\docker.exe` and container `interface-map-dev-grafana-1`.
+Build before loading Grafana. Use Docker Desktop's `docker` command and container `interface-map-dev-grafana-1`.
 Restart (do not recreate) after changing plugin metadata/version, then wait for
-`http://127.0.0.1:3001/api/health` to report database ok. The disposable container has saved owner dashboards;
-`compose down` or recreation can lose them. Preserve backups before any such operation.
+`http://127.0.0.1:3001/api/health` to report database ok. The current PC uses the named volume
+`interface-map-dev_grafana-data` for saved dashboards. Never remove that volume or use `compose down -v`.
+Use `docker compose stop` / `docker compose start` for routine stop/start. Back up before provisioning changes.
 
 ## Code map
 
@@ -65,8 +67,9 @@ Restart (do not recreate) after changing plugin metadata/version, then wait for
 
 ## Next work and verification
 
-Current owner checklist: [M3 validation](m3-validation.md). The accepted M1/M2 history does not imply final
-M3 approval. After acceptance, follow M4 query-preset API investigation and implementation in the plan.
+M1, M2 and M3 are owner-accepted. Keep [M3 validation](m3-validation.md) as a regression guide.
+Next: investigate supported Grafana APIs for M4 query presets, then implement the configured setup route
+and remaining lifecycle audit. No M4 implementation has started.
 Do not start signing/publication, change the permanent ID or claim real-backend readiness without evidence.
 See the current-state verification table before repeating tests. Run relevant checks for new code changes;
 report actual failures and focused reruns. Historical results live in [development history](development-history.md).

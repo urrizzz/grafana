@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.8 - Unreleased
+
+- Owner accepted M3; configuration-first IF-MIB presets and the remaining lifecycle audit are next in M4.
+
+- Show move and resize buttons faintly on hover and fully when selected.
+- Keep external buttons reachable from the hovered element for direct dragging.
+
+## 0.3.7 - Unreleased
+
+- Add a subtle hover outline to unselected elements in the panel editor; handles remain selection-only.
+
+## 0.3.6 - Unreleased
+
+- Show matching move/resize buttons only for the selected element; mirror their corner offsets.
+- Clear selection when clicking the diagram background.
+- Preserve setup and deployment profiles for both development PCs, including safe legacy-container restart.
+
 ## 0.3.5 - Unreleased
 
 - Add saved router dimensions and resize-aware connection geometry.

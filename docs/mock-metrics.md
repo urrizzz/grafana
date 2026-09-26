@@ -1,6 +1,6 @@
 # Synthetic IF-MIB development data
 
-Project status: 0.3.5 implements the diagram editor, returned-data adapter and compact SVG renderer.
+Project status: owner-accepted M3 version 0.3.8 implements the diagram editor, returned-data adapter and compact SVG renderer.
 See [current state](current-state.md) for evidence and remaining work, and [M3 validation](m3-validation.md) for review.
 
 `dev/mock_metrics.py` provides a Python standard-library exporter and a 24-hour history generator.
@@ -9,10 +9,10 @@ All series carry `mock="true"`, `job="cisco-mock"`, and a scenario label.
 
 ## Run locally
 
-From `C:\Codex\projects\grafana`, as Yuri (EFS access required):
+From `C:\code\grafana` on the current PC:
 
 ```powershell
-& C:\Codex\.venv\Scripts\python.exe dev/mock_metrics.py serve
+python dev/mock_metrics.py serve
 ```
 
 Endpoint: `http://127.0.0.1:9187/metrics`; health: `/health`. Stop the foreground process with Ctrl+C.
@@ -54,7 +54,7 @@ Default anchor lives in ignored `data/mock-anchor.json`. Explicit `--anchor` doe
 ## Generate history without waiting 24 hours
 
 ```powershell
-& C:\Codex\.venv\Scripts\python.exe dev/mock_metrics.py history --hours 24
+python dev/mock_metrics.py history --hours 24
 ```
 
 Writes ignored `data/mock-history.jsonl`, sampled at 60 seconds, with millisecond timestamps.
@@ -80,7 +80,7 @@ Example query:
 ## Checks and limits
 
 ```powershell
-& C:\Codex\.venv\Scripts\python.exe -m unittest discover -s dev -p test_mock_metrics.py
+python -m unittest discover -s dev -p test_mock_metrics.py
 ```
 
 Tests cover byte/bit conversion, counter growth, DOWN history, missing fields, reset/gap behavior, and
@@ -88,7 +88,7 @@ history/live consistency. The exporter alone is not a query backend: Grafana sti
 query backend and its Grafana datasource. VictoriaMetrics is the current example; configure panel-level
 queries for all desired mock routers/channels, then select them in the diagram. Live custom diagram panel integration remains to be implemented and validated.
 
-The initial development run was started in a hidden process. Its PID is recorded in
+On the previous PC, the initial development run was started in a hidden process. Its PID was recorded in
 `data/mock-exporter.pid`; stdout/stderr logs are in the same ignored directory. Verify the PID still
 belongs to this exporter before stopping it. The exporter does not start automatically after a PC restart.
 
@@ -97,6 +97,7 @@ development database when switching models to avoid mixing counter histories. No
 
 ## M2 Grafana-frame fixture
 
+The current PC's review dashboard requires no exporter or VictoriaMetrics service.
 The independent M2 data preview uses dev/generate_frame_demo.py and Grafana TestData rather than the
 exporter/backend pipeline. It supplies rates/status/capacity/metadata as returned data frames at a fixed
 historical range. See [M2 validation](m2-validation.md). It validates the panel adapter and selection;

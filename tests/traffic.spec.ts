@@ -84,10 +84,19 @@ test('details collapse, status moves inside, size and visibility persist indepen
   await page.goto(`/d/${uid}?editPanel=1`);
   const panel = page.getByRole('region', { name: 'Network Traffic Map diagram' });
   const traffic = panel.getByTestId('traffic-t1');
-  await traffic.getByRole('button', { name: 'Move Tunnel10', exact: true }).click();
+  await expect(traffic.getByRole('button', { name: 'Move Tunnel10', exact: true })).toHaveCount(0);
+  await traffic.getByTestId('bandwidth-plot').click();
   await expect(panel.getByRole('checkbox', { name: 'Show interface details', exact: true })).not.toBeChecked();
   await expect(traffic.getByTestId('compact-channel-name')).toHaveText(/Tunnel10.*UP/);
   await panel.getByRole('checkbox', { name: 'Show interface details', exact: true }).check();
+  const fullGraph = (await traffic.getByTestId('bandwidth-plot').boundingBox())!;
+  const fullMove = (await traffic.getByRole('button', { name: 'Move Tunnel10', exact: true }).boundingBox())!;
+  const fullResize = (await traffic.getByRole('button', { name: 'Resize traffic', exact: true }).boundingBox())!;
+  expect(fullResize.x).toBeCloseTo(fullMove.x, 0);
+  expect(fullGraph.y - fullMove.y - fullMove.height).toBeCloseTo(
+    fullResize.y - fullGraph.y - fullGraph.height,
+    0
+  );
   await expect(traffic.getByTestId('internal-status')).toHaveAttribute('aria-label', 'UP');
   await expect(traffic.getByTestId('compact-channel-name')).toHaveCount(0);
   await expect(traffic.getByRole('button', { name: 'Move Tunnel10', exact: true })).toHaveText('');

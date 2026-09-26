@@ -3,7 +3,7 @@
 An installable **custom Grafana diagram panel** containing router representations, connections, and compact Cisco port/tunnel traffic displays.
 Each display has its own router/interface selection and can be positioned and resized next to a router representation.
 
-**Target:** Grafana **13.2.2**. **Status:** M3 compact renderer implemented locally: mirrored traffic bars, shared axes, hover, status borders and optional hidden details. Owner validation pending; IF-MIB query presets remain M4 work.
+**Target:** Grafana **13.2.2**. **Status:** M3 compact renderer implemented locally: mirrored traffic bars, shared axes, hover, status borders and optional hidden details. Owner accepted M3 at version 0.3.8; IF-MIB query presets are next in M4.
 **Repository:** [urrizzz/grafana](https://github.com/urrizzz/grafana). Documentation and accepted mockups are maintained in this repository.
 
 ![Proposed scalable traffic component](docs/assets/compact-component.svg)
@@ -31,7 +31,7 @@ See [reference files and implementation guidance](docs/design-reference.md); the
 - Keep current information visible; hovering the graph adds a vertical cursor and time-specific IN/OUT rates.
 - Design the traffic area at **120 x 70 pixels**, with readable IN/OUT values; scale it proportionally upward.
 - Optional side details use additional space; the corner status circle remains visible in both modes.
-- Use four-way move handles and diagonal resize handles in the panel editor. Router sizes and connection endpoints persist.
+- Hover an element for faint move/resize handles; select it to keep both fully visible in the panel editor. Router sizes and connection endpoints persist.
 - Configure through normal settings; dashboard authors do not write or paste scripts.
 
 ## Documentation
@@ -77,11 +77,14 @@ The [Canvas investigation](docs/implementation-investigation.md) explains why th
 Representative returned frames and labels remain to be inspected, with VictoriaMetrics as the first integration example.
 No software license has been selected (`UNLICENSED` for now). The provisional plugin ID is
 `urrizzz-interfacemap-panel`; a Grafana Cloud account is not required for local development.
-Confirm the organization prefix before signing or publishing. Live traffic implementation remains pending.
+Confirm the organization prefix before signing or publishing. Real VictoriaMetrics backend validation remains M5 work.
 
 ## Run the development panel
 
-Use Node 24 and Docker Compose. From the repository root:
+Both development PCs have [documented profiles and setup/deployment commands](docs/development-pcs.md).
+Use `dev/Start-Review.ps1` to rebuild and restart an existing instance without recreating its database.
+
+Use Node 24 and Docker Compose. For a fresh instance, from the repository root:
 
 ```sh
 npm ci
@@ -90,9 +93,13 @@ npm run server
 npm run e2e
 ```
 
+For either existing development PC, use `dev/Start-Review.ps1` to deploy instead of `npm run server`;
+it preserves the Yuri PC's legacy container database. See the machine profiles above.
+
 Open [the M2 data preview](http://localhost:3001/d/network-map-data-dev) and follow [M2 validation](docs/m2-validation.md). It uses synthetic frames via Grafana TestData. The original [layout dashboard](http://localhost:3001/d/interface-map-dev) is preserved. The separate development container uses port 3001 and a 1 GiB limit.
-Stop it with `npm run server:stop` when finished. Your existing port-3000 Grafana remains separate.
-See [development instructions](docs/development.md) for the full workflow and encrypted workspace access.
+Stop/start it with `docker compose stop` / `docker compose start`. Saved dashboards persist in a named
+Docker volume; never remove that volume or use `docker compose down -v`.
+See [development instructions](docs/development.md) for the current PC's Node 24 setup and full workflow.
 
 Source is in `src/`; build configuration in `.config/`; demo provisioning in `provisioning/`; browser tests
 in `tests/`; mock metrics in `dev/`; approved mockups and requirements in `docs/`. `dist/` is generated.
